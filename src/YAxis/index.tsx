@@ -11,12 +11,19 @@ const YAxis: React.FC<YAxisProps> = ({ height, maxValue }) => {
 
   for (let i = 0; i <= maxValue; i += tickInterval) {
     ticks.push(
-      <text key={`y-axis-${i}`} x={-10} y={height - (i / maxValue) * height + 5} textAnchor="end">
-        {i}
-      </text>
+      <g key={`y-axis-${i}`} transform={`translate(0, ${height - (i / maxValue) * height})`}>
+        <line x1="0" x2="-6" stroke="black" />
+        <text x="-10" y="5" textAnchor="end" fontSize="10">
+          {i}
+        </text>
+      </g>
     );
   }
-  return <>{ticks}</>;
+  return (
+    <g>
+      {ticks}
+    </g>
+  );
 };
 
 export default YAxis;

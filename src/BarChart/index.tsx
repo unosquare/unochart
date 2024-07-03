@@ -6,7 +6,6 @@ import Tooltip from '../Tooltip';
 import Legend from '../Legend';
 import Bar from '../Bar';
 
-// Define the props interface for BarChart
 interface BarChartProps {
   data: Array<{ [key: string]: any }>;
   width?: number;
@@ -15,20 +14,19 @@ interface BarChartProps {
   children?: React.ReactNode;
 }
 
+const roundMaxValue = (value: number): number => {
+  const magnitude = Math.pow(10, Math.floor(Math.log10(value)));
+  return Math.ceil(value / magnitude) * magnitude;
+};
+
 const BarChart: React.FC<BarChartProps> = ({ data, width = 400, height = 300, barColor = '#8884d8', children }) => {
-  // State to hold tooltip data
   const [tooltipData, setTooltipData] = useState<{ name: string; values: { key: string; value: number, color: string }[] } | null>(null);
-  // State to hold the position of the tooltip
   const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  // Calculate the maximum value from the data for scaling the bars
   const maxValue = Math.max(...data.map(d => Math.max(...Object.values(d).filter(v => typeof v === 'number'))));
-
-  // Separate the Bar components from other components
+  const roundedMaxValue = roundMaxValue(maxValue);
   const barComponents = React.Children.toArray(children).filter(child => (child as React.ReactElement).type === Bar);
-  const otherComponents = React.Children.toArray(children).filter(child => (child as React.ReactElement).type !== Bar);
 
-  // Create legend items based on the Bar components
   const legendItems = barComponents.map((child, index) => {
     if (React.isValidElement(child)) {
       return { color: child.props.fill, label: child.props.dataKey };
@@ -36,7 +34,6 @@ const BarChart: React.FC<BarChartProps> = ({ data, width = 400, height = 300, ba
     return { color: '', label: '' };
   });
 
-  // Handle mouse over event for bars to show the tooltip
   const handleMouseOver = (event: React.MouseEvent, entry: { name: string }) => {
     const values = barComponents.map((child) => {
       if (React.isValidElement(child)) {
@@ -51,7 +48,6 @@ const BarChart: React.FC<BarChartProps> = ({ data, width = 400, height = 300, ba
     setPosition({ x: event.clientX, y: event.clientY });
   };
 
-  // Handle mouse out event to hide the tooltip
   const handleMouseOut = () => {
     setTooltipData(null);
   };
@@ -59,31 +55,30 @@ const BarChart: React.FC<BarChartProps> = ({ data, width = 400, height = 300, ba
   return (
     <div className="relative inline-block">
       <svg width={width} height={height + 50} className="border border-gray-300">
-        {/* Render non-Bar components with additional props */}
-        {otherComponents.map((child) =>
-          React.isValidElement(child) ? React.cloneElement(child, { data, width, height, maxValue }) : child
-        )}
-        {/* Render Bar components grouped by data entries */}
-        {data.map((entry, index) => (
-          <g key={index} transform={`translate(${(index * width) / data.length}, 0)`}>
-            {barComponents.map((child, barIndex) =>
-              React.isValidElement(child) ? React.cloneElement(child, {
-                data: [entry],
-                width: width / data.length,
-                height,
-                maxValue,
-                barIndex,
-                totalBars: barComponents.length,
-                onMouseOver: (event: React.MouseEvent) => handleMouseOver(event, entry),
-                onMouseOut: handleMouseOut,
-              }) : null
-            )}
-          </g>
-        ))}
+        <g transform="translate(40, 10)">
+          <YAxis height={height} maxValue={roundedMaxValue} />
+          <CartesianGrid width={width - 40} height={height} maxValue={roundedMaxValue} />
+          <XAxis data={data} width={width - 40} height={height} dataKey="name" />
+
+          {data.map((entry, index) => (
+            <g key={index} transform={`translate(${(index * (width - 40)) / data.length}, 0)`}>
+              {barComponents.map((child, barIndex) =>
+                React.isValidElement(child) ? React.cloneElement(child, {
+                  data: [entry],
+                  width: (width - 40) / data.length,
+                  height,
+                  maxValue: roundedMaxValue,
+                  barIndex,
+                  totalBars: barComponents.length,
+                  onMouseOver: (event: React.MouseEvent) => handleMouseOver(event, entry),
+                  onMouseOut: handleMouseOut,
+                }) : null
+              )}
+            </g>
+          ))}
+        </g>
       </svg>
-      {/* Render Legend below the SVG */}
       <Legend items={legendItems} />
-      {/* Render Tooltip outside the SVG */}
       <Tooltip tooltipData={tooltipData} position={position} />
     </div>
   );
