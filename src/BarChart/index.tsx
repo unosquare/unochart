@@ -14,11 +14,19 @@ interface BarChartProps {
   children?: React.ReactNode;
   margin?: { top?: number; right?: number; bottom?: number; left?: number };
   barCategoryGap?: string | number;
+  barGap?: string | number;
 }
 
 const roundMaxValue = (value: number): number => {
   const magnitude = Math.pow(10, Math.floor(Math.log10(value)));
   return Math.ceil(value / magnitude) * magnitude;
+};
+
+const parseGap = (gap: string | number, totalWidth: number): number => {
+  if (typeof gap === 'string' && gap.includes('%')) {
+    return (parseFloat(gap) / 100) * totalWidth;
+  }
+  return Number(gap);
 };
 
 const BarChart: React.FC<BarChartProps> = ({
@@ -29,6 +37,7 @@ const BarChart: React.FC<BarChartProps> = ({
   children,
   margin = { top: 5, right: 5, bottom: 5, left: 5 },
   barCategoryGap = '10%',
+  barGap = 4,
 }) => {
   const [tooltipData, setTooltipData] = useState<{ name: string; values: { key: string; value: number, color: string }[] } | null>(null);
   const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -48,8 +57,7 @@ const BarChart: React.FC<BarChartProps> = ({
     const values = barComponents.map((child) => {
       if (React.isValidElement(child)) {
         const dataKey = child.props.dataKey;
-        const entryData = data.find((d) => d.name === entry.name);
-        const value = entryData ? entryData[dataKey] : undefined;
+        const value = data.find((d) => d.name === entry.name)?.[dataKey] ?? 0;
         return { key: dataKey, value, color: child.props.fill };
       }
       return null;
@@ -63,28 +71,24 @@ const BarChart: React.FC<BarChartProps> = ({
     setTooltipData(null);
   };
 
-  const parseGap = (gap: string | number, totalWidth: number): number => {
-    if (typeof gap === 'string' && gap.includes('%')) {
-      return (parseFloat(gap) / 100) * totalWidth;
-    }
-    return Number(gap);
-  };
 
-  const gap = parseGap(barCategoryGap, width - (margin.left ?? 0) - (margin.right ?? 0) - 40);
-  const adjustedGap = gap / data.length;
-  const barZoneWidth = (width - (margin.left ?? 0) - (margin.right ?? 0) - 40) / data.length;
-  const barWidth = barZoneWidth - adjustedGap;
+  const categoryGap = parseGap(barCategoryGap, width - margin.left - margin.right - 40);
+  const adjustedCategoryGap = categoryGap / data.length;
+  const barZoneWidth = (width - margin.left - margin.right - 40) / data.length;
+  const adjustedBarGap = parseGap(barGap, barZoneWidth - adjustedCategoryGap);
+
+  const barWidth = (barZoneWidth - adjustedCategoryGap - (adjustedBarGap * (barComponents.length - 1))) / barComponents.length;
 
   return (
     <div className="relative inline-block" style={{ margin: `${margin.top}px ${margin.right}px ${margin.bottom}px ${margin.left}px` }}>
       <svg width={width} height={height + 50} className="border border-gray-300">
         <g transform={`translate(${margin.left + 40}, ${margin.top + 10})`}>
-          <YAxis height={height - (margin.top ?? 0) - margin.bottom} maxValue={roundedMaxValue} />
+          <YAxis height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} />
           <CartesianGrid width={width - margin.left - margin.right - 40} height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} />
           <XAxis data={data} width={width - margin.left - margin.right - 40} height={height - margin.top - margin.bottom} dataKey="name" />
 
           {data.map((entry, index) => (
-            <g key={index} transform={`translate(${index * barZoneWidth + adjustedGap / 2}, 0)`}>
+            <g key={index} transform={`translate(${index * barZoneWidth + adjustedCategoryGap / 2}, 0)`}>
               {barComponents.map((child, barIndex) =>
                 React.isValidElement(child) ? React.cloneElement(child, {
                   data: [entry],
@@ -93,6 +97,7 @@ const BarChart: React.FC<BarChartProps> = ({
                   maxValue: roundedMaxValue,
                   barIndex,
                   totalBars: barComponents.length,
+                  barGap: adjustedBarGap,
                   onMouseOver: (event: React.MouseEvent) => handleMouseOver(event, entry),
                   onMouseOut: handleMouseOut,
                 }) : null

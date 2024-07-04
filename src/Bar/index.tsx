@@ -9,38 +9,30 @@ interface BarProps {
   maxValue: number;
   barIndex: number;
   totalBars: number;
-  onMouseOver: (event: React.MouseEvent, entry: { name: string; value: number }) => void;
+  barGap: number;
+  onMouseOver: (event: React.MouseEvent, entry: { name: string }) => void;
   onMouseOut: () => void;
 }
 
-const Bar: React.FC<BarProps> = ({
-  data,
-  dataKey,
-  fill,
-  width,
-  height,
-  maxValue,
-  barIndex,
-  totalBars,
-  onMouseOver,
-  onMouseOut,
-}) => {
-  const barWidth = width / totalBars;
-
+const Bar: React.FC<BarProps> = ({ data, dataKey, fill, width, height, maxValue, barIndex, totalBars, barGap, onMouseOver, onMouseOut }) => {
   return (
     <>
-      {data.map((entry, index) => (
-        <rect
-          key={`bar-${index}-${barIndex}`}
-          x={barIndex * barWidth}
-          y={height - (entry[dataKey] / maxValue) * height}
-          width={barWidth - 1}
-          height={(entry[dataKey] / maxValue) * height}
-          fill={fill}
-          onMouseOver={(event) => onMouseOver(event, { name: entry.name, value: entry[dataKey] })}
-          onMouseOut={onMouseOut}
-        />
-      ))}
+      {data.map((entry, index) => {
+        const barHeight = (entry[dataKey] / maxValue) * height;
+        const x = barIndex * (width + barGap);
+        return (
+          <rect
+            key={`bar-${index}-${barIndex}`}
+            x={x}
+            y={height - barHeight}
+            width={width}
+            height={barHeight}
+            fill={fill}
+            onMouseOver={(event) => onMouseOver(event, entry)}
+            onMouseOut={onMouseOut}
+          />
+        );
+      })}
     </>
   );
 };
