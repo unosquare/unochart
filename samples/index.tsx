@@ -31,7 +31,7 @@ const App = () => (
       </BarChart>
 
       <div>
-        <h1 className="text-2xl font-bold">BarChart Stacked</h1>
+        <h1 className="text-2xl font-bold">BarChart 3</h1>
         <BarChart width={730} height={250} data={data} barCategoryGap="10%" barGap={2}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />

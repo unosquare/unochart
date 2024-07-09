@@ -5,21 +5,46 @@ interface XAxisProps {
   width: number;
   height: number;
   dataKey: string;
+  maxValue?: number;
+  layout: 'horizontal' | 'vertical';
 }
 
-const XAxis: React.FC<XAxisProps> = ({ data, width, height, dataKey }) => {
-  const ticks = data.map((entry, index) => (
-    <g key={`x-axis-${index}`} transform={`translate(${(index * width) / data.length + (width / data.length) / 2}, 0)`}>
-      <line x1="0" x2="0" y1={height} y2={height + 6} stroke="black" />
-      <text x="0" y={height + 20} textAnchor="middle" fontSize="10">
-        {entry[dataKey]}
-      </text>
-    </g>
-  ));
+const XAxis: React.FC<XAxisProps> = ({ data, width, height, dataKey, maxValue, layout }) => {
   return (
-    <g>
-      {ticks}
-    </g>
+    <>
+      {layout === 'horizontal' ? (
+        <g className="x-axis">
+          {data.map((entry, index) => (
+            <text
+              key={`x-axis-${index}`}
+              x={(index + 0.5) * (width / data.length)}
+              y={height}
+              textAnchor="middle"
+              dominantBaseline="hanging"
+            >
+              {entry[dataKey]}
+            </text>
+          ))}
+        </g>
+      ) : (
+        <g className="x-axis">
+          {new Array(6).fill(null).map((_, index) => {
+            const value = (maxValue! / 5) * index;
+            return (
+              <text
+                key={`x-axis-${index}`}
+                x={(index * width) / 5}
+                y={height+5}
+                textAnchor="middle"
+                dominantBaseline="hanging"
+              >
+                {value}
+              </text>
+            );
+          })}
+        </g>
+      )}
+    </>
   );
 };
 

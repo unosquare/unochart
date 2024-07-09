@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import CartesianGrid from '../CartesianGrid';
 import XAxis from '../XAxis';
 import YAxis from '../YAxis';
@@ -23,9 +23,9 @@ const roundMaxValue = (value: number): number => {
   return Math.ceil(value / magnitude) * magnitude;
 };
 
-const parseGap = (gap: string | number, totalWidth: number): number => {
+const parseGap = (gap: string | number, totalSize: number): number => {
   if (typeof gap === 'string' && gap.includes('%')) {
-    return (parseFloat(gap) / 100) * totalWidth;
+    return (parseFloat(gap) / 100) * totalSize;
   }
   return Number(gap);
 };
@@ -39,10 +39,25 @@ const BarChart: React.FC<BarChartProps> = ({
   margin = { top: 5, right: 5, bottom: 5, left: 5 },
   barCategoryGap = '10%',
   barGap = 4,
-  layout = 'horizontal',
+  layout = 'vertical',
 }) => {
   const [tooltipData, setTooltipData] = useState<{ name: string; values: { key: string; value: number, color: string }[] } | null>(null);
   const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [leftMargin, setLeftMargin] = useState(40);
+  const [rightMargin, setRightMargin] = useState(margin.right);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    if (svgRef.current) {
+      const yAxisLabels = svgRef.current.querySelectorAll('.y-axis text');
+      const maxWidth = Array.from(yAxisLabels).reduce((maxWidth, text) => {
+        const width = (text as SVGTextElement).getBBox().width;
+        return Math.max(maxWidth, width);
+      }, 0);
+      setLeftMargin(maxWidth + (width * 0.025));
+      setRightMargin(layout === 'vertical' ? maxWidth + (width * 0.075) + margin.right : margin.right);
+    }
+  }, [data, layout, margin.right, width]);
 
   const maxValue = Math.max(...data.map(d => Math.max(...Object.values(d).filter(v => typeof v === 'number'))));
   const roundedMaxValue = roundMaxValue(maxValue);
@@ -73,30 +88,31 @@ const BarChart: React.FC<BarChartProps> = ({
     setTooltipData(null);
   };
 
-  const categoryGap = parseGap(barCategoryGap, layout === 'horizontal' ? width - margin.left - margin.right - 40 : height - margin.top - margin.bottom - 40);
+  const categoryGap = parseGap(barCategoryGap, layout === 'horizontal' ? width - margin.left - rightMargin - leftMargin : height - margin.top - margin.bottom);
   const adjustedCategoryGap = categoryGap / data.length;
   const barZoneSize = layout === 'horizontal'
-    ? (width - margin.left - margin.right - 40) / data.length
-    : (height - margin.top - margin.bottom - 40) / data.length;
+    ? (width - margin.left - rightMargin - leftMargin) / data.length
+    : (height - margin.top - margin.bottom) / data.length;
   const adjustedBarGap = parseGap(barGap, barZoneSize - adjustedCategoryGap);
+
   const barSize = (barZoneSize - adjustedCategoryGap - (adjustedBarGap * (barComponents.length - 1))) / barComponents.length;
 
   return (
     <div className="relative inline-block" style={{ margin: `${margin.top}px ${margin.right}px ${margin.bottom}px ${margin.left}px` }}>
-      <svg width={width} height={height + 50} className="border border-gray-300">
-        <g transform={`translate(${margin.left + 40}, ${margin.top + 10})`}>
+      <svg ref={svgRef} width={width} height={height + (height * 0.1)} className="border border-gray-300">
+        <g transform={`translate(${margin.left + leftMargin}, ${margin.top + (height * 0.025)})`}>
           {layout === 'horizontal' && (
             <>
-              <YAxis height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} />
-              <CartesianGrid width={width - margin.left - margin.right - 40} height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} />
-              <XAxis data={data} width={width - margin.left - margin.right - 40} height={height - margin.top - margin.bottom} dataKey="name" />
+              <YAxis height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} layout={layout} />
+              <CartesianGrid width={width - margin.left - rightMargin - leftMargin} height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} layout={layout} />
+              <XAxis data={data} width={width - margin.left - rightMargin - leftMargin} height={height - margin.top - margin.bottom} dataKey="name" layout={layout} />
             </>
           )}
           {layout === 'vertical' && (
             <>
-              <XAxis data={data} width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} dataKey="name" />
-              <CartesianGrid width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} />
-              <YAxis height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} />
+              <XAxis data={data} width={width - margin.left - rightMargin} height={height - margin.top - margin.bottom} dataKey="name" maxValue={roundedMaxValue} layout={layout} />
+              <CartesianGrid width={width - margin.left - rightMargin} height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} layout={layout} />
+              <YAxis data={data} width={width - margin.left - rightMargin} height={height - margin.top - margin.bottom} layout={layout} />
             </>
           )}
           {data.map((entry, index) => (
@@ -107,7 +123,7 @@ const BarChart: React.FC<BarChartProps> = ({
               {barComponents.map((child, barIndex) =>
                 React.isValidElement(child) ? React.cloneElement(child, {
                   data: [entry],
-                  width: layout === 'horizontal' ? barSize : width - margin.left - margin.right,
+                  width: layout === 'horizontal' ? barSize : width - margin.left - rightMargin,
                   height: layout === 'horizontal' ? height - margin.top - margin.bottom : barSize,
                   maxValue: roundedMaxValue,
                   barIndex,

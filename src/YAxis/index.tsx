@@ -1,28 +1,49 @@
 import React from 'react';
 
 interface YAxisProps {
+  data?: Array<{ [key: string]: any }>;
   height: number;
   maxValue: number;
+  width?: number;
+  layout: 'horizontal' | 'vertical';
 }
 
-const YAxis: React.FC<YAxisProps> = ({ height, maxValue }) => {
-  const ticks = [];
-  const tickInterval = Math.ceil(maxValue / 5);
-
-  for (let i = 0; i <= maxValue; i += tickInterval) {
-    ticks.push(
-      <g key={`y-axis-${i}`} transform={`translate(0, ${height - (i / maxValue) * height})`}>
-        <line x1="0" x2="-6" stroke="black" />
-        <text x="-10" y="5" textAnchor="end" fontSize="10">
-          {i}
-        </text>
-      </g>
-    );
-  }
+const YAxis: React.FC<YAxisProps> = ({ data, height, maxValue, width, layout }) => {
   return (
-    <g>
-      {ticks}
-    </g>
+    <>
+      {layout === 'horizontal' ? (
+        <g className="y-axis">
+          {new Array(6).fill(null).map((_, index) => {
+            const value = (maxValue / 5) * index;
+            return (
+              <text
+                key={`y-axis-${index}`}
+                x={-10}
+                y={height - (index * height) / 5}
+                textAnchor="end"
+                dominantBaseline="middle"
+              >
+                {value}
+              </text>
+            );
+          })}
+        </g>
+      ) : (
+        <g className="y-axis">
+          {data!.map((entry, index) => (
+            <text
+              key={`y-axis-${index}`}
+              x={-10}
+              y={(index + 0.5) * (height / data!.length)}
+              textAnchor="end"
+              dominantBaseline="middle"
+            >
+              {entry.name}
+            </text>
+          ))}
+        </g>
+      )}
+    </>
   );
 };
 
