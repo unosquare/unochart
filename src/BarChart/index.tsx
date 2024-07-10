@@ -39,7 +39,7 @@ const BarChart: React.FC<BarChartProps> = ({
   margin = { top: 5, right: 5, bottom: 5, left: 5 },
   barCategoryGap = '10%',
   barGap = 4,
-  layout = 'vertical',
+  layout = 'horizontal',
 }) => {
   const [tooltipData, setTooltipData] = useState<{ name: string; values: { key: string; value: number, color: string }[] } | null>(null);
   const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -55,13 +55,18 @@ const BarChart: React.FC<BarChartProps> = ({
         return Math.max(maxWidth, width);
       }, 0);
       setLeftMargin(maxWidth + (width * 0.025));
-      setRightMargin(layout === 'vertical' ? maxWidth + (width * 0.075) + margin.right : margin.right);
+      setRightMargin(layout === 'vertical' ? maxWidth + (width * 0.1) + margin.right : margin.right);
     }
   }, [data, layout, margin.right, width]);
 
   const maxValue = Math.max(...data.map(d => Math.max(...Object.values(d).filter(v => typeof v === 'number'))));
   const roundedMaxValue = roundMaxValue(maxValue);
   const barComponents = React.Children.toArray(children).filter(child => (child as React.ReactElement).type === Bar);
+  const xAxisComponent = React.Children.toArray(children).find(child => (child as React.ReactElement).type === XAxis);
+  const yAxisComponent = React.Children.toArray(children).find(child => (child as React.ReactElement).type === YAxis);
+  const cartesianGridComponent = React.Children.toArray(children).find(child => (child as React.ReactElement).type === CartesianGrid);
+  const legendComponent = React.Children.toArray(children).find(child => (child as React.ReactElement).type === Legend);
+  const tooltipComponent = React.Children.toArray(children).find(child => (child as React.ReactElement).type === Tooltip);
 
   const legendItems = barComponents.map((child, index) => {
     if (React.isValidElement(child)) {
@@ -81,7 +86,10 @@ const BarChart: React.FC<BarChartProps> = ({
     }).filter((val) => val !== null);
 
     setTooltipData({ name: entry.name, values });
-    setPosition({ x: event.clientX, y: event.clientY });
+    const svgRect = svgRef.current?.getBoundingClientRect();
+    if (svgRect) {
+      setPosition({ x: event.clientX - svgRect.left, y: event.clientY - svgRect.top });
+    }
   };
 
   const handleMouseOut = () => {
@@ -103,16 +111,16 @@ const BarChart: React.FC<BarChartProps> = ({
         <g transform={`translate(${margin.left + leftMargin}, ${margin.top + (height * 0.025)})`}>
           {layout === 'horizontal' && (
             <>
-              <YAxis height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} layout={layout} />
-              <CartesianGrid width={width - margin.left - rightMargin - leftMargin} height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} layout={layout} />
-              <XAxis data={data} width={width - margin.left - rightMargin - leftMargin} height={height - margin.top - margin.bottom} dataKey="name" layout={layout} />
+              {yAxisComponent && <YAxis height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} layout={layout} />}
+              {cartesianGridComponent && <CartesianGrid width={width - margin.left - rightMargin - leftMargin} height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} layout={layout} />}
+              {xAxisComponent && <XAxis data={data} width={width - margin.left - rightMargin - leftMargin} height={height - margin.top - margin.bottom} dataKey="name" layout={layout} />}
             </>
           )}
           {layout === 'vertical' && (
             <>
-              <XAxis data={data} width={width - margin.left - rightMargin} height={height - margin.top - margin.bottom} dataKey="name" maxValue={roundedMaxValue} layout={layout} />
-              <CartesianGrid width={width - margin.left - rightMargin} height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} layout={layout} />
-              <YAxis data={data} width={width - margin.left - rightMargin} height={height - margin.top - margin.bottom} layout={layout} />
+              {xAxisComponent && <XAxis data={data} width={width - margin.left - rightMargin} height={height - margin.top - margin.bottom} dataKey="name" maxValue={roundedMaxValue} layout={layout} />}
+              {cartesianGridComponent && <CartesianGrid width={width - margin.left - rightMargin} height={height - margin.top - margin.bottom} maxValue={roundedMaxValue} layout={layout} />}
+              {yAxisComponent && <YAxis data={data} width={width - margin.left - rightMargin} height={height - margin.top - margin.bottom} layout={layout} />}
             </>
           )}
           {data.map((entry, index) => (
@@ -138,8 +146,8 @@ const BarChart: React.FC<BarChartProps> = ({
           ))}
         </g>
       </svg>
-      <Legend items={legendItems} />
-      <Tooltip tooltipData={tooltipData} position={position} />
+      {legendComponent && <Legend items={legendItems} />}
+      {tooltipComponent && <Tooltip tooltipData={tooltipData} position={position} />}
     </div>
   );
 };

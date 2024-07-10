@@ -1,33 +1,26 @@
 import React from 'react';
 
-
 interface TooltipProps {
-  // tooltipData is an object that contains a name and an array of values, or it can be null
   tooltipData: { name: string; values: { key: string; value: number, color: string }[] } | null;
-  
   position: { x: number; y: number };
 }
 
-
 const Tooltip: React.FC<TooltipProps> = ({ tooltipData, position }) => {
-  // If tooltipData is null, return null and do not render anything
   if (!tooltipData) return null;
-  
+
   return (
     <div
-      className="absolute bg-white p-2 shadow-lg" 
-      style={{ top: position.y + 10, left: position.x + 10 }} 
+      className="absolute bg-white p-2 shadow-lg rounded border border-gray-300"
+      style={{ top: position.y + 10, left: position.x + 10, transform: 'translate(-50%, -100%)', pointerEvents: 'none' }}
     >
-      
-      <p>{tooltipData.name}</p>
-      {tooltipData.values.map((val, index) => (
-        <p key={index} style={{ color: val.color }}> 
-          {val.key} : {val.value}
+      <p className="font-bold mb-1">{tooltipData.name}</p>
+      {tooltipData.values.map((value, index) => (
+        <p key={index} className="text-sm" style={{ color: value.color }}>
+          {value.key}: {value.value}
         </p>
       ))}
     </div>
   );
 };
-
 
 export default Tooltip;
