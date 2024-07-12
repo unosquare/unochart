@@ -1,11 +1,11 @@
 import React from 'react';
 
 interface TooltipProps {
-  tooltipData: { name: string; values: { key: string; value: number, color: string }[] } | null;
-  position: { x: number; y: number };
+  tooltipData?: { name: string; values: { key: string; value: number, color: string }[] } | null;
+  position?: { x: number; y: number };
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ tooltipData, position }) => {
+const Tooltip: React.FC<TooltipProps> = ({ tooltipData = null, position = { x: 0, y: 0 } }) => {
   if (!tooltipData) return null;
 
   return (

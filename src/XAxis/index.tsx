@@ -1,15 +1,15 @@
 import React from 'react';
 
 interface XAxisProps {
-  data: Array<{ [key: string]: any }>;
-  width: number;
-  height: number;
-  dataKey: string;
+  data?: Array<{ [key: string]: any }>;
+  width?: number;
+  height?: number;
+  dataKey?: string;
   maxValue?: number;
-  layout: 'horizontal' | 'vertical';
+  layout?: 'horizontal' | 'vertical';
 }
 
-const XAxis: React.FC<XAxisProps> = ({ data, width, height, dataKey, maxValue, layout }) => {
+const XAxis: React.FC<XAxisProps> = ({ data = [], width = 0, height = 0, dataKey = 'name', maxValue = 0, layout = 'horizontal' }) => {
   return (
     <>
       {layout === 'horizontal' ? (
@@ -29,12 +29,12 @@ const XAxis: React.FC<XAxisProps> = ({ data, width, height, dataKey, maxValue, l
       ) : (
         <g className="x-axis">
           {new Array(6).fill(null).map((_, index) => {
-            const value = (maxValue! / 5) * index;
+            const value = (maxValue / 5) * index;
             return (
               <text
                 key={`x-axis-${index}`}
                 x={(index * width) / 5}
-                y={height+5}
+                y={height + 5}
                 textAnchor="middle"
                 dominantBaseline="hanging"
               >

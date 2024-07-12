@@ -1,46 +1,47 @@
 import React from 'react';
 
 interface CartesianGridProps {
-  width: number;
-  height: number;
-  maxValue: number;
+  width?: number;
+  height?: number;
+  maxValue?: number;
   strokeDasharray?: string;
+  layout?: 'horizontal' | 'vertical';
 }
 
-const CartesianGrid: React.FC<CartesianGridProps> = ({ width, height, maxValue, strokeDasharray = "3 3" }) => {
-  const horizontalLines = [];
-  const verticalLines = [];
-  const tickInterval = Math.ceil(maxValue / 5);
-
-  for (let i = 0; i <= maxValue; i += tickInterval) {
-    horizontalLines.push(
-      <line
-        key={`grid-horizontal-${i}`}
-        x1="0"
-        y1={height - (i / maxValue) * height}
-        x2={width}
-        y2={height - (i / maxValue) * height}
-        stroke="#e0e0e0"
-        strokeDasharray={strokeDasharray}
-      />
-    );
-  }
-
-  for (let i = 0; i <= 10; i++) {
-    verticalLines.push(
-      <line
-        key={`grid-vertical-${i}`}
-        x1={(i * width) / 10}
-        y1="0"
-        x2={(i * width) / 10}
-        y2={height}
-        stroke="#e0e0e0"
-        strokeDasharray={strokeDasharray}
-      />
-    );
-  }
-
-  return <g>{horizontalLines}{verticalLines}</g>;
+const CartesianGrid: React.FC<CartesianGridProps> = ({
+  width = 0,
+  height = 0,
+  maxValue = 0,
+  strokeDasharray = '3 3',
+  layout = 'horizontal'
+}) => {
+  return (
+    <g className="cartesian-grid">
+      {layout === 'horizontal'
+        ? new Array(6).fill(null).map((_, index) => (
+            <line
+              key={`hline-${index}`}
+              x1="0"
+              y1={(index * height) / 5}
+              x2={width}
+              y2={(index * height) / 5}
+              strokeDasharray={strokeDasharray}
+              stroke="grey"
+            />
+          ))
+        : new Array(6).fill(null).map((_, index) => (
+            <line
+              key={`vline-${index}`}
+              x1={(index * width) / 5}
+              y1="0"
+              x2={(index * width) / 5}
+              y2={height}
+              strokeDasharray={strokeDasharray}
+              stroke="grey"
+            />
+          ))}
+    </g>
+  );
 };
 
 export default CartesianGrid;
