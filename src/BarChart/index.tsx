@@ -5,12 +5,21 @@ import YAxis from '../YAxis';
 import Tooltip from '../Tooltip';
 import Legend from '../Legend';
 import Bar from '../Bar';
+import { 
+  DEFAULT_WIDTH, 
+  DEFAULT_HEIGHT, 
+  DEFAULT_MARGIN, 
+  DEFAULT_BAR_CATEGORY_GAP, 
+  DEFAULT_BAR_GAP, 
+  DEFAULT_LAYOUT,
+  ChartData 
+} from '../constants';
+import { roundMaxValue, parseGap } from './utils';
 
 interface BarChartProps {
-  data: Array<{ name: string; [key: string]: any }>;
+  data: ChartData;
   width?: number;
   height?: number;
-  barColor?: string;
   children?: React.ReactNode;
   margin?: { top?: number; right?: number; bottom?: number; left?: number };
   barCategoryGap?: string | number;
@@ -18,33 +27,20 @@ interface BarChartProps {
   layout?: 'horizontal' | 'vertical';
 }
 
-const roundMaxValue = (value: number): number => {
-  const magnitude = Math.pow(10, Math.floor(Math.log10(value)));
-  return Math.ceil(value / magnitude) * magnitude;
-};
-
-const parseGap = (gap: string | number, totalSize: number): number => {
-  if (typeof gap === 'string' && gap.includes('%')) {
-    return (parseFloat(gap) / 100) * totalSize;
-  }
-  return Number(gap);
-};
-
 const BarChart: React.FC<BarChartProps> = ({
   data,
-  width = 400,
-  height = 300,
-  barColor = '#8884d8',
+  width = DEFAULT_WIDTH,
+  height = DEFAULT_HEIGHT,
   children,
-  margin = { top: 5, right: 5, bottom: 5, left: 5 },
-  barCategoryGap = '10%',
-  barGap = 4,
-  layout = 'horizontal',
+  margin = { top: DEFAULT_MARGIN, right: DEFAULT_MARGIN, bottom: DEFAULT_MARGIN, left: DEFAULT_MARGIN },
+  barCategoryGap = DEFAULT_BAR_CATEGORY_GAP,
+  barGap = DEFAULT_BAR_GAP,
+  layout = DEFAULT_LAYOUT,
 }) => {
   const [tooltipData, setTooltipData] = useState<{ name: string; values: { key: string; value: number, color: string }[] } | null>(null);
   const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [leftMargin, setLeftMargin] = useState(40);
-  const [rightMargin, setRightMargin] = useState(margin.right ?? 5);
+  const [rightMargin, setRightMargin] = useState(margin.right ?? DEFAULT_MARGIN);
   const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
@@ -55,12 +51,11 @@ const BarChart: React.FC<BarChartProps> = ({
         return Math.max(maxWidth, width);
       }, 0);
       setLeftMargin(maxWidth + (width * 0.025));
-      setRightMargin(layout === 'vertical' ? maxWidth + (width * 0.1) + (margin.right ?? 5) : (margin.right ?? 5));
+      setRightMargin(layout === 'vertical' ? maxWidth + (width * 0.1) + (margin.right ?? DEFAULT_MARGIN) : (margin.right ?? DEFAULT_MARGIN));
     }
   }, [data, layout, margin.right, width]);
 
-  const maxValue = Math.max(...data.map(d => Math.max(...Object.values(d).filter(v => typeof v === 'number'))));
-  const roundedMaxValue = roundMaxValue(maxValue);
+  const maxValue = roundMaxValue(data);
   const barComponents = React.Children.toArray(children).filter(child => (child as React.ReactElement).type === Bar);
   const xAxisComponent = React.Children.toArray(children).find(child => (child as React.ReactElement).type === XAxis);
   const yAxisComponent = React.Children.toArray(children).find(child => (child as React.ReactElement).type === YAxis);
@@ -96,31 +91,31 @@ const BarChart: React.FC<BarChartProps> = ({
     setTooltipData(null);
   };
 
-  const categoryGap = parseGap(barCategoryGap, layout === 'horizontal' ? width - (margin.left ?? 5) - rightMargin - leftMargin : height - (margin.top ?? 5) - (margin.bottom ?? 5));
+  const categoryGap = parseGap(barCategoryGap, layout === 'horizontal' ? width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin : height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN));
   const adjustedCategoryGap = categoryGap / data.length;
   const barZoneSize = layout === 'horizontal'
-    ? (width - (margin.left ?? 5) - rightMargin - leftMargin) / data.length
-    : (height - (margin.top ?? 5) - (margin.bottom ?? 5)) / data.length;
+    ? (width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin) / data.length
+    : (height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)) / data.length;
   const adjustedBarGap = parseGap(barGap, barZoneSize - adjustedCategoryGap);
 
   const barSize = (barZoneSize - adjustedCategoryGap - (adjustedBarGap * (barComponents.length - 1))) / barComponents.length;
 
   return (
-    <div className="relative inline-block" style={{ margin: `${margin.top ?? 5}px ${margin.right ?? 5}px ${margin.bottom ?? 5}px ${margin.left ?? 5}px` }}>
+    <div className="relative inline-block" style={{ margin: `${margin.top ?? DEFAULT_MARGIN}px ${margin.right ?? DEFAULT_MARGIN}px ${margin.bottom ?? DEFAULT_MARGIN}px ${margin.left ?? DEFAULT_MARGIN}px` }}>
       <svg ref={svgRef} width={width} height={height + (height * 0.1)} className="border border-gray-300">
-        <g transform={`translate(${(margin.left ?? 5) + leftMargin}, ${(margin.top ?? 5) + (height * 0.025)})`}>
+        <g transform={`translate(${(margin.left ?? DEFAULT_MARGIN) + leftMargin}, ${(margin.top ?? DEFAULT_MARGIN) + (height * 0.025)})`}>
           {layout === 'horizontal' && (
             <>
-              {yAxisComponent && <YAxis height={height - (margin.top ?? 5) - (margin.bottom ?? 5)} maxValue={roundedMaxValue} layout={layout} />}
-              {cartesianGridComponent && <CartesianGrid width={width - (margin.left ?? 5) - rightMargin - leftMargin} height={height - (margin.top ?? 5) - (margin.bottom ?? 5)} maxValue={roundedMaxValue} layout={layout} />}
-              {xAxisComponent && <XAxis data={data} width={width - (margin.left ?? 5) - rightMargin - leftMargin} height={height - (margin.top ?? 5) - (margin.bottom ?? 5)} dataKey="name" layout={layout} />}
+              {yAxisComponent && <YAxis height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)} maxValue={maxValue} layout={layout} />}
+              {cartesianGridComponent && <CartesianGrid width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin} height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)} maxValue={maxValue} layout={layout} />}
+              {xAxisComponent && <XAxis data={data} width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin} height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)} dataKey="name" layout={layout} />}
             </>
           )}
           {layout === 'vertical' && (
             <>
-              {xAxisComponent && <XAxis data={data} width={width - (margin.left ?? 5) - rightMargin} height={height - (margin.top ?? 5) - (margin.bottom ?? 5)} dataKey="name" maxValue={roundedMaxValue} layout={layout} />}
-              {cartesianGridComponent && <CartesianGrid width={width - (margin.left ?? 5) - rightMargin} height={height - (margin.top ?? 5) - (margin.bottom ?? 5)} maxValue={roundedMaxValue} layout={layout} />}
-              {yAxisComponent && <YAxis data={data} width={width - (margin.left ?? 5) - rightMargin} height={height - (margin.top ?? 5) - (margin.bottom ?? 5)} layout={layout} />}
+              {xAxisComponent && <XAxis data={data} width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin} height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)} dataKey="name" maxValue={maxValue} layout={layout} />}
+              {cartesianGridComponent && <CartesianGrid width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin} height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)} maxValue={maxValue} layout={layout} />}
+              {yAxisComponent && <YAxis data={data} width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin} height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)} layout={layout} />}
             </>
           )}
           {data.map((entry, index) => (
@@ -131,9 +126,9 @@ const BarChart: React.FC<BarChartProps> = ({
               {barComponents.map((child, barIndex) =>
                 React.isValidElement(child) ? React.cloneElement(child as React.ReactElement<any>, {
                   data: [entry],
-                  width: layout === 'horizontal' ? barSize : width - (margin.left ?? 5) - rightMargin,
-                  height: layout === 'horizontal' ? height - (margin.top ?? 5) - (margin.bottom ?? 5) : barSize,
-                  maxValue: roundedMaxValue,
+                  width: layout === 'horizontal' ? barSize : width - (margin.left ?? DEFAULT_MARGIN) - rightMargin,
+                  height: layout === 'horizontal' ? height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN) : barSize,
+                  maxValue,
                   barIndex,
                   totalBars: barComponents.length,
                   barGap: adjustedBarGap,

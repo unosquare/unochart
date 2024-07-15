@@ -20,8 +20,8 @@ describe('BarChart', () => {
         const { container } = render(
             <BarChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
+                <XAxis data={data} dataKey="name" width={400} height={300} layout="horizontal" />
+                <YAxis height={300} maxValue={100} layout="horizontal" />
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="uv" fill="#8884d8" />
@@ -35,8 +35,8 @@ describe('BarChart', () => {
         const { container } = render(
             <BarChart data={data} height={300}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
+                <XAxis data={data} dataKey="name" width={400} height={300} layout="horizontal" />
+                <YAxis height={300} maxValue={100} layout="horizontal" />
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="uv" fill="#8884d8" />
@@ -58,8 +58,8 @@ describe('BarChart', () => {
         const { container } = render(
             <BarChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
+                <XAxis data={data} dataKey="name" width={400} height={300} layout="horizontal" />
+                <YAxis height={300} maxValue={100} layout="horizontal" />
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="uv" fill="#8884d8" />
@@ -74,4 +74,3 @@ describe('BarChart', () => {
         });
     });
 });
-
