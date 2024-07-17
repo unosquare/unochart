@@ -1,4 +1,4 @@
-import './index.css'; 
+import './index.css';
 
 export { default as BarChart } from './BarChart';
 export { default as CartesianGrid } from './CartesianGrid';
