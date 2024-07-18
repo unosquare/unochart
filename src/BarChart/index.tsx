@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import CartesianGrid from '../CartesianGrid';
 import XAxis from '../XAxis';
 import YAxis from '../YAxis';
@@ -197,7 +198,7 @@ const BarChart: React.FC<BarChartProps> = ({
                     )}
                     {data.map((entry, index) => (
                         <g
-                            key={index}
+                            key={uuidv4()}
                             transform={
                                 layout === 'horizontal'
                                     ? `translate(${index * barZoneSize + adjustedCategoryGap / 2}, 0)`

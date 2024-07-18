@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 interface YAxisProps {
     data?: Array<{ [key: string]: any }>;
@@ -15,7 +16,7 @@ const YAxis: React.FC<YAxisProps> = ({ data = [], height = 0, maxValue = 0, widt
                   const value = (maxValue / 5) * index;
                   return (
                       <text
-                          key={`y-axis-${index}`}
+                          key={uuidv4()}
                           x={-10}
                           y={height - (index * height) / 5}
                           textAnchor='end'
@@ -27,7 +28,7 @@ const YAxis: React.FC<YAxisProps> = ({ data = [], height = 0, maxValue = 0, widt
               })
             : data.map((entry, index) => (
                   <text
-                      key={`y-axis-${index}`}
+                      key={uuidv4()}
                       x={-10}
                       y={(index + 0.5) * (height / data.length)}
                       textAnchor='end'

@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 interface BarProps {
     data?: Array<{ name: string; [key: string]: any }>;
@@ -30,11 +31,11 @@ const Bar: React.FC<BarProps> = ({
     onMouseOut = () => {},
 }) => (
     <g>
-        {data.map((entry, index) => {
+        {data.map((entry) => {
             const barHeight = (entry[dataKey] / maxValue) * height;
             return layout === 'horizontal' ? (
                 <rect
-                    key={`bar-${barIndex}-${index}`}
+                    key={uuidv4()}
                     x={barIndex * (width + barGap)}
                     y={height - barHeight}
                     width={width}
@@ -48,7 +49,7 @@ const Bar: React.FC<BarProps> = ({
                 />
             ) : (
                 <rect
-                    key={`bar-${barIndex}-${index}`}
+                    key={uuidv4()}
                     x={0}
                     y={barIndex * (height + barGap)}
                     width={(entry[dataKey] / maxValue) * width}

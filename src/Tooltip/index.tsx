@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 interface TooltipProps {
     tooltipData?: { name: string; values: { key: string; value: number; color: string }[] } | null;
@@ -19,8 +20,8 @@ const Tooltip: React.FC<TooltipProps> = ({ tooltipData = null, position = { x: 0
             }}
         >
             <p className='font-bold mb-1'>{tooltipData.name}</p>
-            {tooltipData.values.map((value, index) => (
-                <p key={index} className='text-sm' style={{ color: value.color }}>
+            {tooltipData.values.map((value) => (
+                <p key={uuidv4()} className='text-sm' style={{ color: value.color }}>
                     {value.key}: {value.value}
                 </p>
             ))}

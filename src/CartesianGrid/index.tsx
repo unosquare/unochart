@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 interface CartesianGridProps {
     width?: number;
@@ -19,7 +20,7 @@ const CartesianGrid: React.FC<CartesianGridProps> = ({
                   .fill(null)
                   .map((_, index) => (
                       <line
-                          key={`hline-${index}`}
+                          key={uuidv4()}
                           x1='0'
                           y1={(index * height) / 5}
                           x2={width}
@@ -32,7 +33,7 @@ const CartesianGrid: React.FC<CartesianGridProps> = ({
                   .fill(null)
                   .map((_, index) => (
                       <line
-                          key={`vline-${index}`}
+                          key={uuidv4()}
                           x1={(index * width) / 5}
                           y1='0'
                           x2={(index * width) / 5}

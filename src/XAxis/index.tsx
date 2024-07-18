@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 interface XAxisProps {
     data?: Array<{ [key: string]: any }>;
@@ -22,7 +23,7 @@ const XAxis: React.FC<XAxisProps> = ({
             <g className='x-axis'>
                 {data.map((entry, index) => (
                     <text
-                        key={`x-axis-${index}`}
+                        key={uuidv4()}
                         x={(index + 0.5) * (width / data.length)}
                         y={height}
                         textAnchor='middle'
@@ -38,7 +39,7 @@ const XAxis: React.FC<XAxisProps> = ({
                     const value = (maxValue / 5) * index;
                     return (
                         <text
-                            key={`x-axis-${index}`}
+                            key={uuidv4()}
                             x={(index * width) / 5}
                             y={height + 5}
                             textAnchor='middle'
