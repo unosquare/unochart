@@ -1,4 +1,3 @@
-import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 interface YAxisProps {
@@ -9,7 +8,7 @@ interface YAxisProps {
     layout?: 'horizontal' | 'vertical';
 }
 
-const YAxis: React.FC<YAxisProps> = ({ data = [], height = 0, maxValue = 0, width = 0, layout = 'horizontal' }) => (
+const YAxis = ({ data = [], height = 0, width = 0, maxValue = 0, layout = 'horizontal' }: YAxisProps) => (
     <g className='y-axis'>
         {layout === 'horizontal'
             ? new Array(6).fill(null).map((_, index) => {

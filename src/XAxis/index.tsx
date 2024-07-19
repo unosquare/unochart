@@ -1,4 +1,3 @@
-import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 interface XAxisProps {
@@ -10,14 +9,14 @@ interface XAxisProps {
     layout?: 'horizontal' | 'vertical';
 }
 
-const XAxis: React.FC<XAxisProps> = ({
+const XAxis = ({
     data = [],
     width = 0,
     height = 0,
     dataKey = 'name',
     maxValue = 0,
     layout = 'horizontal',
-}) => (
+}: XAxisProps) => (
     <>
         {layout === 'horizontal' ? (
             <g className='x-axis'>
@@ -41,7 +40,7 @@ const XAxis: React.FC<XAxisProps> = ({
                         <text
                             key={uuidv4()}
                             x={(index * width) / 5}
-                            y={height + 5}
+                            y={height + (height * 0.02)}
                             textAnchor='middle'
                             dominantBaseline='hanging'
                         >

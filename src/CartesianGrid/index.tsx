@@ -1,4 +1,3 @@
-import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 interface CartesianGridProps {
@@ -8,12 +7,12 @@ interface CartesianGridProps {
     layout?: 'horizontal' | 'vertical';
 }
 
-const CartesianGrid: React.FC<CartesianGridProps> = ({
+const CartesianGrid = ({
     width = 0,
     height = 0,
     strokeDasharray = '3 3',
     layout = 'horizontal',
-}) => (
+}: CartesianGridProps) => (
     <g className='cartesian-grid'>
         {layout === 'horizontal'
             ? new Array(6)

@@ -1,11 +1,10 @@
-import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 interface LegendProps {
     items?: Array<{ color: string; label: string }>;
 }
 
-const Legend: React.FC<LegendProps> = ({ items = [] }) => (
+const Legend = ({ items = [] }: LegendProps) => (
     <div className='flex justify-center '>
         {items.map((item) => (
             <div key={uuidv4()} className='flex items-center mr-4'>

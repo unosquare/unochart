@@ -1,4 +1,3 @@
-import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 interface TooltipProps {
@@ -6,7 +5,7 @@ interface TooltipProps {
     position?: { x: number; y: number };
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ tooltipData = null, position = { x: 0, y: 0 } }) => {
+const Tooltip = ({ tooltipData = null, position = { x: 0, y: 0 } }: TooltipProps) => {
     if (!tooltipData) return null;
 
     return (

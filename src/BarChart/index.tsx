@@ -28,7 +28,7 @@ interface BarChartProps {
     layout?: 'horizontal' | 'vertical';
 }
 
-const BarChart: React.FC<BarChartProps> = ({
+const BarChart = ({
     data,
     width = DEFAULT_WIDTH,
     height = DEFAULT_HEIGHT,
@@ -37,7 +37,7 @@ const BarChart: React.FC<BarChartProps> = ({
     barCategoryGap = DEFAULT_BAR_CATEGORY_GAP,
     barGap = DEFAULT_BAR_GAP,
     layout = DEFAULT_LAYOUT,
-}) => {
+}: BarChartProps) => {
     const [tooltipData, setTooltipData] = useState<{
         name: string;
         values: { key: string; value: number; color: string }[];
@@ -83,7 +83,7 @@ const BarChart: React.FC<BarChartProps> = ({
         (child) => (child as React.ReactElement).type === Tooltip,
     );
 
-    const legendItems = barComponents.map((child, index) => {
+    const legendItems = barComponents.map((child) => {
         if (React.isValidElement(child)) {
             return { color: child.props.fill, label: child.props.dataKey };
         }

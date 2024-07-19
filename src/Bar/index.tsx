@@ -16,7 +16,7 @@ interface BarProps {
     onMouseOut?: () => void;
 }
 
-const Bar: React.FC<BarProps> = ({
+const Bar = ({
     data = [],
     dataKey,
     fill,
@@ -25,11 +25,10 @@ const Bar: React.FC<BarProps> = ({
     maxValue = 0,
     layout = 'horizontal',
     barIndex = 0,
-    totalBars = 1,
     barGap = 0,
     onMouseOver = () => {},
     onMouseOut = () => {},
-}) => (
+}: BarProps) => (
     <g>
         {data.map((entry) => {
             const barHeight = (entry[dataKey] / maxValue) * height;
