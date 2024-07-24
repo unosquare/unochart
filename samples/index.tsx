@@ -13,10 +13,6 @@ const data = [
   { name: 'Page G', uv: 3490, pv: 4300, amt: 2100 },
 ];
 
-
-
-
-
 const App = () => {
   const [width, setWidth] = useState(600);
   const [height, setHeight] = useState(400);
