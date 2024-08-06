@@ -64,9 +64,21 @@ const BarChart = ({
     }, [data, layout, margin.right, width]);
 
     const maxValue = roundMaxValue(data);
+
+    // Agrupar barComponents por stackId
     const barComponents = React.Children.toArray(children).filter(
         (child) => (child as React.ReactElement).type === Bar,
     );
+    const groupedBarComponents: { [key: string]: React.ReactElement[] } = {};
+
+    barComponents.forEach((child) => {
+        const stackId = (child as React.ReactElement).props.stackId || 'default';
+        if (!groupedBarComponents[stackId]) {
+            groupedBarComponents[stackId] = [];
+        }
+        groupedBarComponents[stackId].push(child as React.ReactElement);
+    });
+
     const xAxisComponent = React.Children.toArray(children).find(
         (child) => (child as React.ReactElement).type === XAxis,
     );
@@ -128,6 +140,30 @@ const BarChart = ({
 
     const barSize =
         (barZoneSize - adjustedCategoryGap - adjustedBarGap * (barComponents.length - 1)) / barComponents.length;
+
+    const renderBars = (stackComponents: React.ReactElement[], entry: any) => {
+        return stackComponents.map((child, barIndex) => {
+            const totalBars = stackComponents.length;
+            return React.cloneElement(child as React.ReactElement<any>, {
+                data: [entry],
+                width:
+                    layout === 'horizontal'
+                        ? barSize
+                        : width - (margin.left ?? DEFAULT_MARGIN) - rightMargin,
+                height:
+                    layout === 'horizontal'
+                        ? height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)
+                        : barSize,
+                maxValue,
+                barIndex,
+                totalBars,
+                barGap: adjustedBarGap,
+                layout,
+                onMouseOver: (event: React.MouseEvent) => handleMouseOver(event, { name: entry.name }),
+                onMouseOut: handleMouseOut,
+            });
+        });
+    };
 
     return (
         <div
@@ -205,30 +241,8 @@ const BarChart = ({
                                     : `translate(0, ${index * barZoneSize + adjustedCategoryGap / 2})`
                             }
                         >
-                            {barComponents.map((child, barIndex) =>
-                                React.isValidElement(child)
-                                    ? React.cloneElement(child as React.ReactElement<any>, {
-                                          data: [entry],
-                                          width:
-                                              layout === 'horizontal'
-                                                  ? barSize
-                                                  : width - (margin.left ?? DEFAULT_MARGIN) - rightMargin,
-                                          height:
-                                              layout === 'horizontal'
-                                                  ? height -
-                                                    (margin.top ?? DEFAULT_MARGIN) -
-                                                    (margin.bottom ?? DEFAULT_MARGIN)
-                                                  : barSize,
-                                          maxValue,
-                                          barIndex,
-                                          totalBars: barComponents.length,
-                                          barGap: adjustedBarGap,
-                                          layout,
-                                          onMouseOver: (event: React.MouseEvent) =>
-                                              handleMouseOver(event, { name: entry.name }),
-                                          onMouseOut: handleMouseOut,
-                                      })
-                                    : null,
+                            {Object.values(groupedBarComponents).map((stackComponents) =>
+                                renderBars(stackComponents, entry)
                             )}
                         </g>
                     ))}

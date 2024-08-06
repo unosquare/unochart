@@ -13,6 +13,10 @@ const data = [
   { name: 'Page G', uv: 3490, pv: 4300, amt: 2100 },
 ];
 
+
+
+
+
 const App = () => {
   const [width, setWidth] = useState(600);
   const [height, setHeight] = useState(400);
@@ -207,8 +211,9 @@ const App = () => {
         {showYAxis && <YAxis />}
         {showTooltip && <Tooltip />}
         {showLegend && <Legend />}
-        <Bar dataKey="uv" fill="#8884d8" />
-        <Bar dataKey="pv" fill="#82ca9d" />
+        <Bar dataKey="pv" stackId="a" fill="#8884d8" />
+        <Bar dataKey="amt" stackId="a" fill="#82ca9d" />
+        <Bar dataKey="uv" stackId="b" fill="#ffc658" />
       </BarChart>
     </div>
   );

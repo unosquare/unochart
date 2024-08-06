@@ -10,7 +10,7 @@ interface BarProps {
     maxValue?: number;
     layout?: 'horizontal' | 'vertical';
     barIndex?: number;
-    totalBars?: number;
+    stackId?: string;
     barGap?: number;
     onMouseOver?: (event: React.MouseEvent, entry: { name: string; [key: string]: any }) => void;
     onMouseOut?: () => void;
@@ -25,6 +25,7 @@ const Bar = ({
     maxValue = 0,
     layout = 'horizontal',
     barIndex = 0,
+    stackId,
     barGap = 0,
     onMouseOver = () => {},
     onMouseOut = () => {},
