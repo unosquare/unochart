@@ -63,16 +63,19 @@ const BarChart = ({
         }
     }, [data, layout, margin.right, width]);
 
-    const maxValue = roundMaxValue(data);
+    const hasStackedBars = React.Children.toArray(children).some(
+        (child) => (child as React.ReactElement).props.stackId
+    );
 
-    // Agrupar barComponents por stackId
+    const maxValue = roundMaxValue(data, hasStackedBars);
+
     const barComponents = React.Children.toArray(children).filter(
         (child) => (child as React.ReactElement).type === Bar,
     );
     const groupedBarComponents: { [key: string]: React.ReactElement[] } = {};
 
     barComponents.forEach((child) => {
-        const stackId = (child as React.ReactElement).props.stackId || 'default';
+        const stackId = (child as React.ReactElement).props.stackId || uuidv4();
         if (!groupedBarComponents[stackId]) {
             groupedBarComponents[stackId] = [];
         }
@@ -131,50 +134,78 @@ const BarChart = ({
             ? width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin
             : height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN),
     );
-    const adjustedCategoryGap = categoryGap / data.length;
-    const barZoneSize =
-        layout === 'horizontal'
-            ? (width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin) / data.length
-            : (height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)) / data.length;
-    const adjustedBarGap = parseGap(barGap, barZoneSize - adjustedCategoryGap);
 
-    const barSize =
-        (barZoneSize - adjustedCategoryGap - adjustedBarGap * (barComponents.length - 1)) / barComponents.length;
+    const totalGroups = data.length; // Este es el número de grupos (no cambia)
+    const totalBars = Object.keys(groupedBarComponents).length; // Este es el número total de barras (considerando los stackId)
+
+    const barZoneSize = 
+        layout === 'horizontal'
+            ? (width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin) / totalGroups
+            : (height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)) / totalGroups;
+
+    const adjustedCategoryGap = parseGap(barCategoryGap, barZoneSize);
+
+    // Calcular el tamaño de la barra y ajustar el gap entre barras
+    const adjustedBarGap = parseGap(barGap, (barZoneSize - adjustedCategoryGap) / totalBars);
+    const barSize = (barZoneSize - adjustedCategoryGap - adjustedBarGap * (totalBars - 1)) / totalBars;
+
+    const stackIdPositions: { [key: string]: number } = {};
+    let currentStackIdPos = 0;
 
     const renderBars = (stackComponents: React.ReactElement[], entry: any) => {
+        let accumulatedHeight = 0;
+
         return stackComponents.map((child, barIndex) => {
             const totalBars = stackComponents.length;
-            return React.cloneElement(child as React.ReactElement<any>, {
+            const stackId = (child as React.ReactElement).props.stackId || uuidv4();
+
+            const stackIdPos = stackIdPositions[stackId] ?? currentStackIdPos;
+            if (!(stackId in stackIdPositions)) {
+                stackIdPositions[stackId] = currentStackIdPos;
+                currentStackIdPos++;
+            }
+
+            const barProps = {
                 data: [entry],
-                width:
-                    layout === 'horizontal'
-                        ? barSize
-                        : width - (margin.left ?? DEFAULT_MARGIN) - rightMargin,
-                height:
-                    layout === 'horizontal'
-                        ? height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)
-                        : barSize,
+                width: layout === 'horizontal' ? barSize : width - (margin.left ?? DEFAULT_MARGIN) - rightMargin,
+                height: layout === 'horizontal'
+                    ? height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)
+                    : barSize,
                 maxValue,
                 barIndex,
                 totalBars,
                 barGap: adjustedBarGap,
                 layout,
+                accumulatedHeight,
+                stackIdPos,
                 onMouseOver: (event: React.MouseEvent) => handleMouseOver(event, { name: entry.name }),
                 onMouseOut: handleMouseOut,
-            });
+            };
+
+            const renderedBar = React.cloneElement(child as React.ReactElement<any>, barProps);
+
+            if (layout === 'horizontal') {
+                accumulatedHeight += (entry[child.props.dataKey] / maxValue) * barProps.height;
+            } else {
+                accumulatedHeight += (entry[child.props.dataKey] / maxValue) * barProps.width;
+            }
+
+            return renderedBar;
         });
     };
 
     return (
         <div
-            className='relative inline-block'
+            className="relative inline-block"
             style={{
                 margin: `${margin.top ?? DEFAULT_MARGIN}px ${margin.right ?? DEFAULT_MARGIN}px ${margin.bottom ?? DEFAULT_MARGIN}px ${margin.left ?? DEFAULT_MARGIN}px`,
             }}
         >
-            <svg ref={svgRef} width={width} height={height + height * 0.1} className='border border-gray-300'>
+            <svg ref={svgRef} width={width} height={height + height * 0.1} className="border border-gray-300">
                 <g
-                    transform={`translate(${(margin.left ?? DEFAULT_MARGIN) + leftMargin}, ${(margin.top ?? DEFAULT_MARGIN) + height * 0.025})`}
+                    transform={`translate(${(margin.left ?? DEFAULT_MARGIN) + leftMargin}, ${
+                        (margin.top ?? DEFAULT_MARGIN) + height * 0.025
+                    })`}
                 >
                     {layout === 'horizontal' && (
                         <>
@@ -197,7 +228,7 @@ const BarChart = ({
                                     data={data}
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
-                                    dataKey='name'
+                                    dataKey="name"
                                     layout={layout}
                                 />
                             )}
@@ -210,7 +241,7 @@ const BarChart = ({
                                     data={data}
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
-                                    dataKey='name'
+                                    dataKey="name"
                                     maxValue={maxValue}
                                     layout={layout}
                                 />
