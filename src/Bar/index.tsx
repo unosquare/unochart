@@ -12,6 +12,9 @@ interface BarProps {
     barIndex?: number;
     totalBars?: number;
     barGap?: number;
+    stackId?: string;
+    accumulatedHeight?: number;
+    stackIdPos?: number;
     onMouseOver?: (event: React.MouseEvent, entry: { name: string; [key: string]: any }) => void;
     onMouseOut?: () => void;
 }
@@ -25,18 +28,25 @@ const Bar = ({
     maxValue = 0,
     layout = 'horizontal',
     barIndex = 0,
+    totalBars = 1,
     barGap = 0,
+    stackId,
+    accumulatedHeight = 0,
+    stackIdPos = 0,
     onMouseOver = () => {},
     onMouseOut = () => {},
 }: BarProps) => (
     <g>
         {data.map((entry) => {
-            const barHeight = (entry[dataKey] / maxValue) * height;
+            const value = entry[dataKey];
+            const barHeight = (value / maxValue) * height;
+            const barWidth = (value / maxValue) * width;
+
             return layout === 'horizontal' ? (
                 <rect
                     key={uuidv4()}
-                    x={barIndex * (width + barGap)}
-                    y={height - barHeight}
+                    x={stackIdPos * (width + barGap)}
+                    y={height - barHeight - accumulatedHeight}
                     width={width}
                     height={barHeight}
                     fill={fill}
@@ -49,9 +59,9 @@ const Bar = ({
             ) : (
                 <rect
                     key={uuidv4()}
-                    x={0}
-                    y={barIndex * (height + barGap)}
-                    width={(entry[dataKey] / maxValue) * width}
+                    x={accumulatedHeight}
+                    y={stackIdPos * (height + barGap)}
+                    width={barWidth}
                     height={height}
                     fill={fill}
                     onMouseOver={(event) => {
