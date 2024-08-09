@@ -214,7 +214,6 @@ const App = () => {
         <Bar dataKey="pv" stackId="a" fill="#8884d8" />
         <Bar dataKey="amt" stackId="a" fill="#82ca9d" />
         <Bar dataKey="uv" stackId="b" fill="#ffc658" />
-        <Bar dataKey="amt" stackId="c" fill="#ff7300" />
       </BarChart>
     </div>
   );
