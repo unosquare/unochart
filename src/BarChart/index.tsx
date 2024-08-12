@@ -63,12 +63,9 @@ const BarChart = ({
         }
     }, [data, layout, margin.right, width]);
 
-    // Determinar si hay barras apiladas
     const hasStackedBars = React.Children.toArray(children).some(
-        (child) => (child as React.ReactElement).props.stackId
+        (child) => (child as React.ReactElement).props.stackId,
     );
-
-    // Calcular el valor máximo considerando barras apiladas
     const maxValue = roundMaxValue(data, hasStackedBars);
 
     // Asignar un stackId único a cada Bar que no lo tenga
@@ -79,7 +76,6 @@ const BarChart = ({
         return child;
     });
 
-    // Agrupar barComponents por stackId
     const groupedBarComponents: { [key: string]: React.ReactElement[] } = {};
 
     barComponents.forEach((child) => {
@@ -122,12 +118,14 @@ const BarChart = ({
                 if (React.isValidElement(child)) {
                     const dataKey = (child as React.ReactElement).props.dataKey;
                     const value = data.find((d) => d.name === entry.name)?.[dataKey];
-                    return value !== undefined ? { key: dataKey, value, color: (child as React.ReactElement).props.fill } : null;
+                    return value !== undefined
+                        ? { key: dataKey, value, color: (child as React.ReactElement).props.fill }
+                        : null;
                 }
                 return null;
             })
             .filter((val) => val !== null);
-    
+
         // Actualizar el tooltip solo si los valores son válidos
         if (values.length > 0) {
             setTooltipData({ name: entry.name, values });
@@ -167,7 +165,7 @@ const BarChart = ({
         let accumulatedHeight = 0;
 
         return stackComponents.map((child, barIndex) => {
-            const stackId = (child as React.ReactElement).props.stackId;
+            const stackId = child.props.stackId;
             const stackIdPos = stackIdPositions[stackId] ?? currentStackIdPos;
             if (!(stackId in stackIdPositions)) {
                 stackIdPositions[stackId] = currentStackIdPos;
@@ -176,10 +174,14 @@ const BarChart = ({
 
             const barProps = {
                 data: [entry],
-                width: layout === 'horizontal' ? barSize - adjustedBarGap : width - (margin.left ?? DEFAULT_MARGIN) - rightMargin,
-                height: layout === 'horizontal'
-                    ? height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)
-                    : barSize - adjustedBarGap,
+                width:
+                    layout === 'horizontal'
+                        ? barSize - adjustedBarGap
+                        : width - (margin.left ?? DEFAULT_MARGIN) - rightMargin,
+                height:
+                    layout === 'horizontal'
+                        ? height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)
+                        : barSize - adjustedBarGap,
                 maxValue,
                 barIndex,
                 totalBars,
@@ -191,7 +193,7 @@ const BarChart = ({
                 onMouseOut: handleMouseOut,
             };
 
-            const renderedBar = React.cloneElement(child as React.ReactElement<any>, barProps);
+            const renderedBar = React.cloneElement(child, barProps);
 
             if (layout === 'horizontal') {
                 accumulatedHeight += (entry[child.props.dataKey] / maxValue) * barProps.height;
@@ -205,12 +207,12 @@ const BarChart = ({
 
     return (
         <div
-            className="relative inline-block"
+            className='relative inline-block'
             style={{
                 margin: `${margin.top ?? DEFAULT_MARGIN}px ${margin.right ?? DEFAULT_MARGIN}px ${margin.bottom ?? DEFAULT_MARGIN}px ${margin.left ?? DEFAULT_MARGIN}px`,
             }}
         >
-            <svg ref={svgRef} width={width} height={height + height * 0.1} className="border border-gray-300">
+            <svg ref={svgRef} width={width} height={height + height * 0.1} className='border border-gray-300'>
                 <g
                     transform={`translate(${(margin.left ?? DEFAULT_MARGIN) + leftMargin}, ${
                         (margin.top ?? DEFAULT_MARGIN) + height * 0.025
@@ -237,7 +239,7 @@ const BarChart = ({
                                     data={data}
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
-                                    dataKey="name"
+                                    dataKey='name'
                                     layout={layout}
                                 />
                             )}
@@ -250,7 +252,7 @@ const BarChart = ({
                                     data={data}
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
-                                    dataKey="name"
+                                    dataKey='name'
                                     maxValue={maxValue}
                                     layout={layout}
                                 />
@@ -282,7 +284,7 @@ const BarChart = ({
                             }
                         >
                             {Object.values(groupedBarComponents).map((stackComponents) =>
-                                renderBars(stackComponents, entry)
+                                renderBars(stackComponents, entry),
                             )}
                         </g>
                     ))}

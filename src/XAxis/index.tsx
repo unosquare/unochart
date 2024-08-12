@@ -40,7 +40,7 @@ const XAxis = ({
                         <text
                             key={uuidv4()}
                             x={(index * width) / 5}
-                            y={height + (height * 0.02)}
+                            y={height + height * 0.02}
                             textAnchor='middle'
                             dominantBaseline='hanging'
                         >

@@ -8,7 +8,7 @@ interface LegendProps {
 }
 
 const Legend: React.FC<LegendProps> = ({ items = [] }) => {
-    const validItems = items.filter(item => item.label && item.color);
+    const validItems = items.filter((item) => item.label && item.color);
 
     return (
         <div className='flex justify-center items-center'>

@@ -4,8 +4,8 @@ export const roundMaxValue = (data: ChartData, stacked: boolean = false): number
     let maxValue: number;
 
     if (stacked) {
-        const stackedSums = data.map((d) => 
-            Object.values(d).reduce((sum, value) => typeof value === 'number' ? sum + value : sum, 0)
+        const stackedSums = data.map((d) =>
+            Object.values(d).reduce((sum, value) => (typeof value === 'number' ? sum + value : sum), 0),
         );
         maxValue = Math.max(...stackedSums);
     } else {
@@ -29,7 +29,6 @@ export const roundMaxValue = (data: ChartData, stacked: boolean = false): number
 
     return Math.ceil(maxValue);
 };
-
 
 export const parseGap = (gap: string | number, totalSize: number): number => {
     if (typeof gap === 'string' && gap.includes('%')) {
