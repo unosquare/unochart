@@ -63,10 +63,31 @@ const BarChart = ({
         }
     }, [data, layout, margin.right, width]);
 
-    const maxValue = roundMaxValue(data);
-    const barComponents = React.Children.toArray(children).filter(
-        (child) => (child as React.ReactElement).type === Bar,
+    const hasStackedBars = React.Children.toArray(children).some(
+        (child) => (child as React.ReactElement).props.stackId,
     );
+    const maxValue = roundMaxValue(data, hasStackedBars);
+
+    // Asignar un stackId único a cada Bar que no lo tenga
+    const barComponents = React.Children.toArray(children).map((child) => {
+        if ((child as React.ReactElement).type === Bar && !(child as React.ReactElement).props.stackId) {
+            return React.cloneElement(child as React.ReactElement, { stackId: uuidv4() });
+        }
+        return child;
+    });
+
+    const groupedBarComponents: { [key: string]: React.ReactElement[] } = {};
+
+    barComponents.forEach((child) => {
+        if ((child as React.ReactElement).type === Bar) {
+            const stackId = (child as React.ReactElement).props.stackId;
+            if (!groupedBarComponents[stackId]) {
+                groupedBarComponents[stackId] = [];
+            }
+            groupedBarComponents[stackId].push(child as React.ReactElement);
+        }
+    });
+
     const xAxisComponent = React.Children.toArray(children).find(
         (child) => (child as React.ReactElement).type === XAxis,
     );
@@ -85,7 +106,8 @@ const BarChart = ({
 
     const legendItems = barComponents.map((child) => {
         if (React.isValidElement(child)) {
-            return { color: child.props.fill, label: child.props.dataKey };
+            const barChild = child as React.ReactElement;
+            return { color: barChild.props.fill, label: barChild.props.dataKey };
         }
         return { color: '', label: '' };
     });
@@ -94,18 +116,23 @@ const BarChart = ({
         const values = barComponents
             .map((child) => {
                 if (React.isValidElement(child)) {
-                    const dataKey = child.props.dataKey;
-                    const value = data.find((d) => d.name === entry.name)?.[dataKey] ?? 0;
-                    return { key: dataKey, value, color: child.props.fill };
+                    const dataKey = (child as React.ReactElement).props.dataKey;
+                    const value = data.find((d) => d.name === entry.name)?.[dataKey];
+                    return value !== undefined
+                        ? { key: dataKey, value, color: (child as React.ReactElement).props.fill }
+                        : null;
                 }
                 return null;
             })
             .filter((val) => val !== null);
 
-        setTooltipData({ name: entry.name, values });
-        const svgRect = svgRef.current?.getBoundingClientRect();
-        if (svgRect) {
-            setPosition({ x: event.clientX - svgRect.left, y: event.clientY - svgRect.top });
+        // Actualizar el tooltip solo si los valores son válidos
+        if (values.length > 0) {
+            setTooltipData({ name: entry.name, values });
+            const svgRect = svgRef.current?.getBoundingClientRect();
+            if (svgRect) {
+                setPosition({ x: event.clientX - svgRect.left, y: event.clientY - svgRect.top });
+            }
         }
     };
 
@@ -119,15 +146,64 @@ const BarChart = ({
             ? width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin
             : height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN),
     );
-    const adjustedCategoryGap = categoryGap / data.length;
+
+    const totalGroups = data.length;
+    const totalBars = Object.keys(groupedBarComponents).length;
     const barZoneSize =
         layout === 'horizontal'
-            ? (width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin) / data.length
-            : (height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)) / data.length;
-    const adjustedBarGap = parseGap(barGap, barZoneSize - adjustedCategoryGap);
+            ? (width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin) / totalGroups
+            : (height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)) / totalGroups;
 
-    const barSize =
-        (barZoneSize - adjustedCategoryGap - adjustedBarGap * (barComponents.length - 1)) / barComponents.length;
+    const adjustedCategoryGap = parseGap(barCategoryGap, barZoneSize);
+    const barSize = (barZoneSize - adjustedCategoryGap) / totalBars;
+    const adjustedBarGap = parseGap(barGap, barSize * totalBars);
+
+    const stackIdPositions: { [key: string]: number } = {};
+    let currentStackIdPos = 0;
+
+    const renderBars = (stackComponents: React.ReactElement[], entry: any) => {
+        let accumulatedHeight = 0;
+
+        return stackComponents.map((child, barIndex) => {
+            const stackId = child.props.stackId;
+            const stackIdPos = stackIdPositions[stackId] ?? currentStackIdPos;
+            if (!(stackId in stackIdPositions)) {
+                stackIdPositions[stackId] = currentStackIdPos;
+                currentStackIdPos++;
+            }
+
+            const barProps = {
+                data: [entry],
+                width:
+                    layout === 'horizontal'
+                        ? barSize - adjustedBarGap
+                        : width - (margin.left ?? DEFAULT_MARGIN) - rightMargin,
+                height:
+                    layout === 'horizontal'
+                        ? height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)
+                        : barSize - adjustedBarGap,
+                maxValue,
+                barIndex,
+                totalBars,
+                barGap: adjustedBarGap,
+                layout,
+                accumulatedHeight,
+                stackIdPos,
+                onMouseOver: (event: React.MouseEvent) => handleMouseOver(event, { name: entry.name }),
+                onMouseOut: handleMouseOut,
+            };
+
+            const renderedBar = React.cloneElement(child, barProps);
+
+            if (layout === 'horizontal') {
+                accumulatedHeight += (entry[child.props.dataKey] / maxValue) * barProps.height;
+            } else {
+                accumulatedHeight += (entry[child.props.dataKey] / maxValue) * barProps.width;
+            }
+
+            return renderedBar;
+        });
+    };
 
     return (
         <div
@@ -138,7 +214,9 @@ const BarChart = ({
         >
             <svg ref={svgRef} width={width} height={height + height * 0.1} className='border border-gray-300'>
                 <g
-                    transform={`translate(${(margin.left ?? DEFAULT_MARGIN) + leftMargin}, ${(margin.top ?? DEFAULT_MARGIN) + height * 0.025})`}
+                    transform={`translate(${(margin.left ?? DEFAULT_MARGIN) + leftMargin}, ${
+                        (margin.top ?? DEFAULT_MARGIN) + height * 0.025
+                    })`}
                 >
                     {layout === 'horizontal' && (
                         <>
@@ -205,30 +283,8 @@ const BarChart = ({
                                     : `translate(0, ${index * barZoneSize + adjustedCategoryGap / 2})`
                             }
                         >
-                            {barComponents.map((child, barIndex) =>
-                                React.isValidElement(child)
-                                    ? React.cloneElement(child as React.ReactElement<any>, {
-                                          data: [entry],
-                                          width:
-                                              layout === 'horizontal'
-                                                  ? barSize
-                                                  : width - (margin.left ?? DEFAULT_MARGIN) - rightMargin,
-                                          height:
-                                              layout === 'horizontal'
-                                                  ? height -
-                                                    (margin.top ?? DEFAULT_MARGIN) -
-                                                    (margin.bottom ?? DEFAULT_MARGIN)
-                                                  : barSize,
-                                          maxValue,
-                                          barIndex,
-                                          totalBars: barComponents.length,
-                                          barGap: adjustedBarGap,
-                                          layout,
-                                          onMouseOver: (event: React.MouseEvent) =>
-                                              handleMouseOver(event, { name: entry.name }),
-                                          onMouseOut: handleMouseOut,
-                                      })
-                                    : null,
+                            {Object.values(groupedBarComponents).map((stackComponents) =>
+                                renderBars(stackComponents, entry),
                             )}
                         </g>
                     ))}
