@@ -66,7 +66,7 @@ const BarChart = ({
     const hasStackedBars = React.Children.toArray(children).some(
         (child) => (child as React.ReactElement).props.stackId,
     );
-    const maxValue = roundMaxValue(data, hasStackedBars);
+    const { maxValue, minValue } = roundMaxValue(data, hasStackedBars);
 
     // Asignar un stackId único a cada Bar que no lo tenga
     const barComponents = React.Children.toArray(children).map((child) => {
@@ -183,6 +183,7 @@ const BarChart = ({
                         ? height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)
                         : barSize - adjustedBarGap,
                 maxValue,
+                minValue,
                 barIndex,
                 totalBars,
                 barGap: adjustedBarGap,
@@ -224,6 +225,7 @@ const BarChart = ({
                                 <YAxis
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
                                     maxValue={maxValue}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
@@ -231,6 +233,8 @@ const BarChart = ({
                                 <CartesianGrid
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
+                                    maxValue={maxValue}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
@@ -240,6 +244,8 @@ const BarChart = ({
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
                                     dataKey='name'
+                                    maxValue={maxValue}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
@@ -254,6 +260,7 @@ const BarChart = ({
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
                                     dataKey='name'
                                     maxValue={maxValue}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
@@ -261,6 +268,8 @@ const BarChart = ({
                                 <CartesianGrid
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
+                                    maxValue={maxValue}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
@@ -269,6 +278,8 @@ const BarChart = ({
                                     data={data}
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
+                                    maxValue={maxValue}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}

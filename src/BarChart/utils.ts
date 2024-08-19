@@ -1,7 +1,29 @@
 import { ChartData } from '../constants';
 
-export const roundMaxValue = (data: ChartData, stacked: boolean = false): number => {
+export const findMinValue = (data: ChartData): number => {
+    let minValue: number;
+
+    minValue = Math.min(
+        ...data.map((d) =>
+            Math.min(
+                ...Object.values(d).map((v) => {
+                    if (typeof v === 'number') {
+                        return v;
+                    } else if (Array.isArray(v)) {
+                        return Math.min(...v); // Usar el valor mínimo del rango
+                    }
+                    return Infinity; // Valor por defecto si no es ni número ni array
+                }),
+            ),
+        ),
+    );
+
+    return Math.floor(minValue);
+};
+
+export const roundMaxValue = (data: ChartData, stacked: boolean = false): { maxValue: number, minValue: number } => {
     let maxValue: number;
+    let minValue: number = findMinValue(data);
 
     if (stacked) {
         const stackedSums = data.map((d) =>
@@ -33,8 +55,6 @@ export const roundMaxValue = (data: ChartData, stacked: boolean = false): number
     }
 
     const magnitude = Math.pow(10, Math.floor(Math.log10(maxValue)));
-
-    // Ajuste para redondeo más preciso
     const factor = maxValue / magnitude;
 
     if (factor <= 1.5) {
@@ -47,7 +67,10 @@ export const roundMaxValue = (data: ChartData, stacked: boolean = false): number
         maxValue = 10 * magnitude;
     }
 
-    return Math.ceil(maxValue);
+    return {
+        maxValue: Math.ceil(maxValue),
+        minValue: minValue
+    };
 };
 
 export const parseGap = (gap: string | number, totalSize: number): number => {
