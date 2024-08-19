@@ -67,9 +67,16 @@ export const roundMaxValue = (data: ChartData, stacked: boolean = false): { maxV
         maxValue = 10 * magnitude;
     }
 
+    maxValue = Math.ceil(maxValue);
+
+    // Asegurar que el valor mínimo y máximo sean simétricos
+    if (minValue < 0) {
+        minValue = -maxValue;
+    }
+
     return {
-        maxValue: Math.ceil(maxValue),
-        minValue: minValue
+        maxValue: maxValue,
+        minValue: minValue,
     };
 };
 

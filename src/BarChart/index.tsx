@@ -66,7 +66,7 @@ const BarChart = ({
     const hasStackedBars = React.Children.toArray(children).some(
         (child) => (child as React.ReactElement).props.stackId,
     );
-    const { maxValue, minValue } = roundMaxValue(data, hasStackedBars);
+    const { maxValue, minValue} = roundMaxValue(data, hasStackedBars);
 
     // Asignar un stackId único a cada Bar que no lo tenga
     const barComponents = React.Children.toArray(children).map((child) => {
