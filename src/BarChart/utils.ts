@@ -5,11 +5,31 @@ export const roundMaxValue = (data: ChartData, stacked: boolean = false): number
 
     if (stacked) {
         const stackedSums = data.map((d) =>
-            Object.values(d).reduce((sum, value) => (typeof value === 'number' ? sum + value : sum), 0),
+            Object.values(d).reduce((sum, value) => {
+                if (typeof value === 'number') {
+                    return sum + value;
+                } else if (Array.isArray(value)) {
+                    return sum + Math.max(...value); // Sumar el valor máximo del rango
+                }
+                return sum;
+            }, 0),
         );
         maxValue = Math.max(...stackedSums);
     } else {
-        maxValue = Math.max(...data.map((d) => Math.max(...Object.values(d).filter((v) => typeof v === 'number'))));
+        maxValue = Math.max(
+            ...data.map((d) =>
+                Math.max(
+                    ...Object.values(d).map((v) => {
+                        if (typeof v === 'number') {
+                            return v;
+                        } else if (Array.isArray(v)) {
+                            return Math.max(...v); // Usar el valor máximo del rango
+                        }
+                        return -Infinity; // Valor por defecto si no es ni número ni array
+                    }),
+                ),
+            ),
+        );
     }
 
     const magnitude = Math.pow(10, Math.floor(Math.log10(maxValue)));
