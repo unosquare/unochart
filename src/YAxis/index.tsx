@@ -19,7 +19,8 @@ const YAxis = ({ data = [], height = 0, width = 0, maxValue = 0, minValue = 0, l
 
     return (
         <g className='y-axis'>
-            {layout === 'horizontal' && minValue < 0 &&
+            {layout === 'horizontal' &&
+                minValue < 0 &&
                 // Render negative values
                 new Array(negativeLines).fill(null).map((_, index) => {
                     const value = -negativeRange * (negativeLines - index);

@@ -41,7 +41,7 @@ const Bar = ({
     <g>
         {data.map((entry) => {
             const value = entry[dataKey];
-            
+
             if (Array.isArray(value)) {
                 const [minValueRange, maxValueRange] = value;
 
@@ -51,7 +51,11 @@ const Bar = ({
                         <rect
                             key={uuidv4()}
                             x={stackIdPos * (width + barGap)}
-                            y={height - ((maxValueRange - minValue) / (maxValue - minValue)) * height - accumulatedHeight}
+                            y={
+                                height -
+                                ((maxValueRange - minValue) / (maxValue - minValue)) * height -
+                                accumulatedHeight
+                            }
                             width={width}
                             height={barHeight}
                             fill={fill}

@@ -21,7 +21,7 @@ export const findMinValue = (data: ChartData): number => {
     return Math.floor(minValue);
 };
 
-export const roundMaxValue = (data: ChartData, stacked: boolean = false): { maxValue: number, minValue: number } => {
+export const roundMaxValue = (data: ChartData, stacked: boolean = false): { maxValue: number; minValue: number } => {
     let maxValue: number;
     let minValue: number = findMinValue(data);
 

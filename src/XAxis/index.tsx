@@ -60,7 +60,7 @@ const XAxis = ({
                                 </text>
                             );
                         })}
-                    
+
                     {new Array(positiveLines + 1).fill(null).map((_, index) => {
                         const value = positiveRange * index;
                         return (

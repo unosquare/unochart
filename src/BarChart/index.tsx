@@ -143,13 +143,6 @@ const BarChart = ({
         setTooltipData(null);
     };
 
-    const categoryGap = parseGap(
-        barCategoryGap,
-        layout === 'horizontal'
-            ? width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin
-            : height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN),
-    );
-
     const totalGroups = data.length;
     const totalBars = Object.keys(groupedBarComponents).length;
     const barZoneSize =
