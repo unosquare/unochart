@@ -1,20 +1,60 @@
 import { ChartData } from '../constants';
 
-export const roundMaxValue = (data: ChartData, stacked: boolean = false): number => {
+export const findMinValue = (data: ChartData): number => {
+    let minValue: number;
+
+    minValue = Math.min(
+        ...data.map((d) =>
+            Math.min(
+                ...Object.values(d).map((v) => {
+                    if (typeof v === 'number') {
+                        return v;
+                    } else if (Array.isArray(v)) {
+                        return Math.min(...v); // Usar el valor mínimo del rango
+                    }
+                    return Infinity; // Valor por defecto si no es ni número ni array
+                }),
+            ),
+        ),
+    );
+
+    return Math.floor(minValue);
+};
+
+export const roundMaxValue = (data: ChartData, stacked: boolean = false): { maxValue: number; minValue: number } => {
     let maxValue: number;
+    let minValue: number = findMinValue(data);
 
     if (stacked) {
         const stackedSums = data.map((d) =>
-            Object.values(d).reduce((sum, value) => (typeof value === 'number' ? sum + value : sum), 0),
+            Object.values(d).reduce((sum, value) => {
+                if (typeof value === 'number') {
+                    return sum + value;
+                } else if (Array.isArray(value)) {
+                    return sum + Math.max(...value); // Sumar el valor máximo del rango
+                }
+                return sum;
+            }, 0),
         );
         maxValue = Math.max(...stackedSums);
     } else {
-        maxValue = Math.max(...data.map((d) => Math.max(...Object.values(d).filter((v) => typeof v === 'number'))));
+        maxValue = Math.max(
+            ...data.map((d) =>
+                Math.max(
+                    ...Object.values(d).map((v) => {
+                        if (typeof v === 'number') {
+                            return v;
+                        } else if (Array.isArray(v)) {
+                            return Math.max(...v); // Usar el valor máximo del rango
+                        }
+                        return -Infinity; // Valor por defecto si no es ni número ni array
+                    }),
+                ),
+            ),
+        );
     }
 
     const magnitude = Math.pow(10, Math.floor(Math.log10(maxValue)));
-
-    // Ajuste para redondeo más preciso
     const factor = maxValue / magnitude;
 
     if (factor <= 1.5) {
@@ -27,7 +67,17 @@ export const roundMaxValue = (data: ChartData, stacked: boolean = false): number
         maxValue = 10 * magnitude;
     }
 
-    return Math.ceil(maxValue);
+    maxValue = Math.ceil(maxValue);
+
+    // Asegurar que el valor mínimo y máximo sean simétricos
+    if (minValue < 0) {
+        minValue = -maxValue;
+    }
+
+    return {
+        maxValue: maxValue,
+        minValue: minValue,
+    };
 };
 
 export const parseGap = (gap: string | number, totalSize: number): number => {

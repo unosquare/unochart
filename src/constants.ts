@@ -5,4 +5,5 @@ export const DEFAULT_BAR_CATEGORY_GAP = '10%';
 export const DEFAULT_BAR_GAP = 4;
 export const DEFAULT_LAYOUT: 'horizontal' | 'vertical' = 'horizontal';
 
-export type ChartData = Array<{ name: string; [key: string]: any }>;
+// Definición actualizada de ChartData
+export type ChartData = Array<Record<string, any>>;

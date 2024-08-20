@@ -8,6 +8,7 @@ interface BarProps {
     width?: number;
     height?: number;
     maxValue?: number;
+    minValue?: number;
     layout?: 'horizontal' | 'vertical';
     barIndex?: number;
     totalBars?: number;
@@ -26,6 +27,7 @@ const Bar = ({
     width = 0,
     height = 0,
     maxValue = 0,
+    minValue = 0,
     layout = 'horizontal',
     barIndex = 0,
     totalBars = 1,
@@ -39,6 +41,51 @@ const Bar = ({
     <g>
         {data.map((entry) => {
             const value = entry[dataKey];
+
+            if (Array.isArray(value)) {
+                const [minValueRange, maxValueRange] = value;
+
+                if (layout === 'horizontal') {
+                    const barHeight = ((maxValueRange - minValueRange) / (maxValue - minValue)) * height;
+                    return (
+                        <rect
+                            key={uuidv4()}
+                            x={stackIdPos * (width + barGap)}
+                            y={
+                                height -
+                                ((maxValueRange - minValue) / (maxValue - minValue)) * height -
+                                accumulatedHeight
+                            }
+                            width={width}
+                            height={barHeight}
+                            fill={fill}
+                            onMouseOver={(event) => {
+                                const { name, ...rest } = entry;
+                                onMouseOver(event, { name, ...rest });
+                            }}
+                            onMouseOut={onMouseOut}
+                        />
+                    );
+                } else {
+                    const barWidth = ((maxValueRange - minValueRange) / (maxValue - minValue)) * width;
+                    return (
+                        <rect
+                            key={uuidv4()}
+                            x={((minValueRange - minValue) / (maxValue - minValue)) * width + accumulatedHeight}
+                            y={stackIdPos * (height + barGap)}
+                            width={barWidth}
+                            height={height}
+                            fill={fill}
+                            onMouseOver={(event) => {
+                                const { name, ...rest } = entry;
+                                onMouseOver(event, { name, ...rest });
+                            }}
+                            onMouseOut={onMouseOut}
+                        />
+                    );
+                }
+            }
+
             const barHeight = (value / maxValue) * height;
             const barWidth = (value / maxValue) * width;
 

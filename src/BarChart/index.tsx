@@ -66,7 +66,7 @@ const BarChart = ({
     const hasStackedBars = React.Children.toArray(children).some(
         (child) => (child as React.ReactElement).props.stackId,
     );
-    const maxValue = roundMaxValue(data, hasStackedBars);
+    const { maxValue, minValue } = roundMaxValue(data, hasStackedBars);
 
     // Asignar un stackId único a cada Bar que no lo tenga
     const barComponents = React.Children.toArray(children).map((child) => {
@@ -126,7 +126,6 @@ const BarChart = ({
             })
             .filter((val) => val !== null);
 
-        // Actualizar el tooltip solo si los valores son válidos
         if (values.length > 0) {
             setTooltipData({ name: entry.name, values });
             const svgRect = svgRef.current?.getBoundingClientRect();
@@ -140,12 +139,9 @@ const BarChart = ({
         setTooltipData(null);
     };
 
-    const categoryGap = parseGap(
-        barCategoryGap,
-        layout === 'horizontal'
-            ? width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin
-            : height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN),
-    );
+    const handleMouseLeave = () => {
+        setTooltipData(null);
+    };
 
     const totalGroups = data.length;
     const totalBars = Object.keys(groupedBarComponents).length;
@@ -183,6 +179,7 @@ const BarChart = ({
                         ? height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)
                         : barSize - adjustedBarGap,
                 maxValue,
+                minValue,
                 barIndex,
                 totalBars,
                 barGap: adjustedBarGap,
@@ -212,7 +209,13 @@ const BarChart = ({
                 margin: `${margin.top ?? DEFAULT_MARGIN}px ${margin.right ?? DEFAULT_MARGIN}px ${margin.bottom ?? DEFAULT_MARGIN}px ${margin.left ?? DEFAULT_MARGIN}px`,
             }}
         >
-            <svg ref={svgRef} width={width} height={height + height * 0.1} className='border border-gray-300'>
+            <svg
+                ref={svgRef}
+                width={width}
+                height={height + height * 0.1}
+                className='border border-gray-300'
+                onMouseLeave={handleMouseLeave} // Aquí agregas el manejador de evento
+            >
                 <g
                     transform={`translate(${(margin.left ?? DEFAULT_MARGIN) + leftMargin}, ${
                         (margin.top ?? DEFAULT_MARGIN) + height * 0.025
@@ -224,6 +227,7 @@ const BarChart = ({
                                 <YAxis
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
                                     maxValue={maxValue}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
@@ -240,6 +244,8 @@ const BarChart = ({
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
                                     dataKey='name'
+                                    maxValue={maxValue}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
@@ -254,6 +260,7 @@ const BarChart = ({
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
                                     dataKey='name'
                                     maxValue={maxValue}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
@@ -269,6 +276,8 @@ const BarChart = ({
                                     data={data}
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
+                                    maxValue={maxValue}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
