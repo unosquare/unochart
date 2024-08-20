@@ -66,7 +66,7 @@ const BarChart = ({
     const hasStackedBars = React.Children.toArray(children).some(
         (child) => (child as React.ReactElement).props.stackId,
     );
-    const { maxValue, minValue} = roundMaxValue(data, hasStackedBars);
+    const { maxValue, minValue } = roundMaxValue(data, hasStackedBars);
 
     // Asignar un stackId único a cada Bar que no lo tenga
     const barComponents = React.Children.toArray(children).map((child) => {
@@ -126,7 +126,6 @@ const BarChart = ({
             })
             .filter((val) => val !== null);
 
-        // Actualizar el tooltip solo si los valores son válidos
         if (values.length > 0) {
             setTooltipData({ name: entry.name, values });
             const svgRect = svgRef.current?.getBoundingClientRect();
@@ -137,6 +136,10 @@ const BarChart = ({
     };
 
     const handleMouseOut = () => {
+        setTooltipData(null);
+    };
+
+    const handleMouseLeave = () => {
         setTooltipData(null);
     };
 
@@ -213,7 +216,13 @@ const BarChart = ({
                 margin: `${margin.top ?? DEFAULT_MARGIN}px ${margin.right ?? DEFAULT_MARGIN}px ${margin.bottom ?? DEFAULT_MARGIN}px ${margin.left ?? DEFAULT_MARGIN}px`,
             }}
         >
-            <svg ref={svgRef} width={width} height={height + height * 0.1} className='border border-gray-300'>
+            <svg
+                ref={svgRef}
+                width={width}
+                height={height + height * 0.1}
+                className='border border-gray-300'
+                onMouseLeave={handleMouseLeave} // Aquí agregas el manejador de evento
+            >
                 <g
                     transform={`translate(${(margin.left ?? DEFAULT_MARGIN) + leftMargin}, ${
                         (margin.top ?? DEFAULT_MARGIN) + height * 0.025
@@ -233,8 +242,6 @@ const BarChart = ({
                                 <CartesianGrid
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
-                                    maxValue={maxValue}
-                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
@@ -268,8 +275,6 @@ const BarChart = ({
                                 <CartesianGrid
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
-                                    maxValue={maxValue}
-                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
