@@ -21,47 +21,51 @@ const BarChartWrapper: React.FC<BarChartWrapperProps> = ({ data, children }) => 
   const [showLegend, setShowLegend] = useState(true);
 
   return (
-    <div>
-      <BarChartControls
-        width={width}
-        setWidth={setWidth}
-        height={height}
-        setHeight={setHeight}
-        barCategoryGap={barCategoryGap}
-        setBarCategoryGap={setBarCategoryGap}
-        barGap={barGap}
-        setBarGap={setBarGap}
-        layout={layout}
-        setLayout={setLayout}
-        margin={margin}
-        setMargin={setMargin}
-        showXAxis={showXAxis}
-        setShowXAxis={setShowXAxis}
-        showYAxis={showYAxis}
-        setShowYAxis={setShowYAxis}
-        showCartesianGrid={showCartesianGrid}
-        setShowCartesianGrid={setShowCartesianGrid}
-        showTooltip={showTooltip}
-        setShowTooltip={setShowTooltip}
-        showLegend={showLegend}
-        setShowLegend={setShowLegend}
-      />
-      <BarChart
-        data={data}
-        width={width}
-        height={height}
-        margin={margin}
-        barCategoryGap={barCategoryGap}
-        barGap={barGap}
-        layout={layout}
-      >
-        {showCartesianGrid && <CartesianGrid strokeDasharray="3 3" />}
-        {showXAxis && <XAxis />}
-        {showYAxis && <YAxis />}
-        {showTooltip && <Tooltip />}
-        {showLegend && <Legend />}
-        {children}
-      </BarChart>
+    <div className="flex flex-col lg:flex-row gap-6 p-6">
+      <div className="lg:w-1/3">
+        <BarChartControls
+          width={width}
+          setWidth={setWidth}
+          height={height}
+          setHeight={setHeight}
+          barCategoryGap={barCategoryGap}
+          setBarCategoryGap={setBarCategoryGap}
+          barGap={barGap}
+          setBarGap={setBarGap}
+          layout={layout}
+          setLayout={setLayout}
+          margin={margin}
+          setMargin={setMargin}
+          showXAxis={showXAxis}
+          setShowXAxis={setShowXAxis}
+          showYAxis={showYAxis}
+          setShowYAxis={setShowYAxis}
+          showCartesianGrid={showCartesianGrid}
+          setShowCartesianGrid={setShowCartesianGrid}
+          showTooltip={showTooltip}
+          setShowTooltip={setShowTooltip}
+          showLegend={showLegend}
+          setShowLegend={setShowLegend}
+        />
+      </div>
+      <div className="lg:w-2/3">
+        <BarChart
+          data={data}
+          width={width}
+          height={height}
+          margin={margin}
+          barCategoryGap={barCategoryGap}
+          barGap={barGap}
+          layout={layout}
+        >
+          {showCartesianGrid && <CartesianGrid strokeDasharray="3 3" />}
+          {showXAxis && <XAxis />}
+          {showYAxis && <YAxis />}
+          {showTooltip && <Tooltip />}
+          {showLegend && <Legend />}
+          {children}
+        </BarChart>
+      </div>
     </div>
   );
 };
