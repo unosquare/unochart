@@ -202,7 +202,6 @@ const BarChart = ({
         });
     };
 
-
     return (
         <div
             className='relative inline-block'
@@ -210,13 +209,7 @@ const BarChart = ({
                 margin: `${margin.top ?? DEFAULT_MARGIN}px ${margin.right ?? DEFAULT_MARGIN}px ${margin.bottom ?? DEFAULT_MARGIN}px ${margin.left ?? DEFAULT_MARGIN}px`,
             }}
         >
-            <svg
-                ref={svgRef}
-                width={width}
-                height={height + height * 0.1}
-                className=''
-                onMouseLeave={handleMouseLeave}
-            >
+            <svg ref={svgRef} width={width} height={height + height * 0.1} className='' onMouseLeave={handleMouseLeave}>
                 <g
                     transform={`translate(${(margin.left ?? DEFAULT_MARGIN) + leftMargin}, ${
                         (margin.top ?? DEFAULT_MARGIN) + height * 0.025

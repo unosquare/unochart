@@ -13,7 +13,7 @@ const Legend: React.FC<LegendProps> = ({ items = [] }) => {
     return (
         <div className='flex justify-center items-center'>
             {validItems.map((item) => (
-                <div key={uuidv4()} className='flex items-center mx-2' data-testid="legend-item">
+                <div key={uuidv4()} className='flex items-center mx-2' data-testid='legend-item'>
                     <div className='w-4 h-3' style={{ backgroundColor: item.color }} />
                     <span className='ml-2'>{item.label}</span>
                 </div>

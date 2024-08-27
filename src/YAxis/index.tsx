@@ -17,9 +17,7 @@ const YAxis = ({ data = [], height = 0, width = 0, maxValue = 0, minValue = 0, l
     const positiveRange = maxValue / positiveLines;
     const negativeRange = minValue < 0 ? Math.abs(minValue) / negativeLines : 0;
 
-    const formatValue = (value: number) => {
-        return value % 1 === 0 ? value.toString() : value.toFixed(2);
-    };
+    const formatValue = (value: number) => (value % 1 === 0 ? value.toString() : value.toFixed(2));
 
     return (
         <g className='y-axis'>
