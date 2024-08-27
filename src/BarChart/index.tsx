@@ -209,13 +209,7 @@ const BarChart = ({
                 margin: `${margin.top ?? DEFAULT_MARGIN}px ${margin.right ?? DEFAULT_MARGIN}px ${margin.bottom ?? DEFAULT_MARGIN}px ${margin.left ?? DEFAULT_MARGIN}px`,
             }}
         >
-            <svg
-                ref={svgRef}
-                width={width}
-                height={height + height * 0.1}
-                className='border border-gray-300'
-                onMouseLeave={handleMouseLeave} // Aquí agregas el manejador de evento
-            >
+            <svg ref={svgRef} width={width} height={height + height * 0.1} className='' onMouseLeave={handleMouseLeave}>
                 <g
                     transform={`translate(${(margin.left ?? DEFAULT_MARGIN) + leftMargin}, ${
                         (margin.top ?? DEFAULT_MARGIN) + height * 0.025
@@ -235,6 +229,7 @@ const BarChart = ({
                                 <CartesianGrid
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
@@ -268,6 +263,7 @@ const BarChart = ({
                                 <CartesianGrid
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}

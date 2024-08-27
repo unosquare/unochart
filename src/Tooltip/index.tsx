@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 interface TooltipProps {
-    tooltipData?: { name: string; values: { key: string; value: number; color: string }[] } | null;
+    tooltipData?: { name: string; values: { key: string; value: number | [number, number]; color: string }[] } | null;
     position?: { x: number; y: number };
 }
 
@@ -21,7 +21,7 @@ const Tooltip = ({ tooltipData = null, position = { x: 0, y: 0 } }: TooltipProps
             <p className='font-bold mb-1'>{tooltipData.name}</p>
             {tooltipData.values.map((value) => (
                 <p key={uuidv4()} className='text-sm' style={{ color: value.color }}>
-                    {value.key}: {value.value}
+                    {value.key}: {Array.isArray(value.value) ? `${value.value[0]} - ${value.value[1]}` : value.value}
                 </p>
             ))}
         </div>
