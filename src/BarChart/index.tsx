@@ -202,6 +202,7 @@ const BarChart = ({
         });
     };
 
+
     return (
         <div
             className='relative inline-block'
@@ -235,6 +236,7 @@ const BarChart = ({
                                 <CartesianGrid
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin - leftMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}
@@ -268,6 +270,7 @@ const BarChart = ({
                                 <CartesianGrid
                                     width={width - (margin.left ?? DEFAULT_MARGIN) - rightMargin}
                                     height={height - (margin.top ?? DEFAULT_MARGIN) - (margin.bottom ?? DEFAULT_MARGIN)}
+                                    minValue={minValue}
                                     layout={layout}
                                 />
                             )}

@@ -55,69 +55,69 @@ const BarChartControls: React.FC<BarChartControlsProps> = ({
   };
 
   return (
-    <div className="bg-white p-6 shadow-lg stroke-purple-600 rounded-lg mb-5 max-w-md">
-      <h2 className="text-2xl font-semibold mb-6 text-purple-600">Controls</h2>
+    <div className="bg-white p-6 shadow-lg rounded-lg mb-5 max-w-md">
+      <h2 className="text-xl font-semibold mb-6 text-gray-700">Chart Settings</h2>
       <form className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-purple-600 mb-1">Width</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Width</label>
             <input
               type="number"
               value={width}
               onChange={(e) => setWidth(parseInt(e.target.value, 10))}
-              className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-purple-600 mb-1">Height</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Height</label>
             <input
               type="number"
               value={height}
               onChange={(e) => setHeight(parseInt(e.target.value, 10))}
-              className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
             />
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-purple-600 mb-1">Bar Category Gap</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Bar Category Gap</label>
           <input
             type="text"
             value={barCategoryGap}
             onChange={(e) => setBarCategoryGap(e.target.value)}
-            className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-purple-600 mb-1">Bar Gap</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Bar Gap</label>
           <input
             type="number"
             value={barGap}
             onChange={(e) => setBarGap(parseInt(e.target.value, 10))}
-            className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-purple-600 mb-1">Layout</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Layout</label>
           <select
             value={layout}
             onChange={(e) => setLayout(e.target.value as 'horizontal' | 'vertical')}
-            className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
           >
             <option value="horizontal">Horizontal</option>
             <option value="vertical">Vertical</option>
           </select>
         </div>
         <div>
-          <h3 className="text-lg font-medium text-purple-600 mb-2">Margin</h3>
+          <h3 className="text-lg font-medium text-gray-700 mb-2">Margin</h3>
           <div className="grid grid-cols-2 gap-4">
             {['top', 'right', 'bottom', 'left'].map((side) => (
               <div key={side}>
-                <label className="block text-sm font-medium text-purple-600 mb-1 capitalize">{side}</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">{side}</label>
                 <input
                   type="number"
                   value={margin[side as keyof typeof margin]}
                   onChange={(e) => handleMarginChange(e, side)}
-                  className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
                 />
               </div>
             ))}
@@ -131,7 +131,7 @@ const BarChartControls: React.FC<BarChartControlsProps> = ({
             { label: 'Show Tooltip', checked: showTooltip, onChange: setShowTooltip },
             { label: 'Show Legend', checked: showLegend, onChange: setShowLegend },
           ].map((item) => (
-            <label key={item.label} className="flex items-center space-x-2 text-purple-600 hover:bg-purple-100 rounded-lg p-2 transition duration-300 ease-in-out">
+            <label key={item.label} className="flex items-center space-x-2 text-gray-700 hover:bg-purple-100 rounded-lg p-2 transition duration-300 ease-in-out">
               <input
                 type="checkbox"
                 checked={item.checked}
