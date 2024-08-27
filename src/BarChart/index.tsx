@@ -213,8 +213,8 @@ const BarChart = ({
                 ref={svgRef}
                 width={width}
                 height={height + height * 0.1}
-                className='border border-gray-300'
-                onMouseLeave={handleMouseLeave} // Aquí agregas el manejador de evento
+                className=''
+                onMouseLeave={handleMouseLeave}
             >
                 <g
                     transform={`translate(${(margin.left ?? DEFAULT_MARGIN) + leftMargin}, ${
