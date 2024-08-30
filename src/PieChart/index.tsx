@@ -1,10 +1,4 @@
 import React, { ReactNode } from 'react';
-import Pie from '../Pie';
-import PolarAngleAxis from '../PolarAngleAxis';
-import PolarRadiusAxis from '../PolarRadiusAxis';
-import Tooltip from '../Tooltip';
-import Legend from '../Legend';
-import PolarGrid from '../PolarGrid';
 
 interface PieChartProps {
     width: number;

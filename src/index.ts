@@ -9,6 +9,4 @@ export { default as Legend } from './Legend';
 export { default as Bar } from './Bar';
 export { default as PieChart } from './PieChart';
 export { default as Pie } from './Pie';
-export { default as PolarAngleAxis } from './PolarAngleAxis';
-export { default as PolarRadiusAxis } from './PolarRadiusAxis';
 export { default as PolarGrid } from './PolarGrid';
