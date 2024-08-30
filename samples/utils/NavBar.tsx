@@ -8,6 +8,7 @@ const NavBar = () => {
     { name: 'Normal BarChart', path: '/' },
     { name: 'Stacked BarChart', path: '/stacked' },
     { name: 'Ranged BarChart', path: '/ranged' },
+    { name: 'PieChart', path: '/pie' }, // Nuevo enlace para PieChart
   ];
 
   return (
