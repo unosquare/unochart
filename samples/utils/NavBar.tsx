@@ -23,6 +23,7 @@ const NavBar = () => {
       items: [
         { name: 'Double Layer Pie Chart', path: '/double-layer-pie' },
         { name: 'Pie Chart', path: '/pie-chart' },
+        { name: 'Straight Angle Pie Chart', path: '/straight-angle-pie' },
       ],
     },
   ];

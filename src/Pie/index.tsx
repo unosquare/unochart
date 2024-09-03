@@ -11,6 +11,8 @@ interface PieProps {
   outerRadius: number;
   fill: string;
   label?: boolean;
+  startAngle?: number;
+  endAngle?: number;
 }
 
 const Pie: React.FC<PieProps> = ({
@@ -23,38 +25,40 @@ const Pie: React.FC<PieProps> = ({
   outerRadius,
   fill,
   label = false,
+  startAngle = 0,
+  endAngle = 360,
 }) => {
-  // Convert cx and cy to numeric values if they are percentages
   const computedCx = typeof cx === 'string' && cx.endsWith('%') ? parseFloat(cx) / 100 * 730 : cx;
   const computedCy = typeof cy === 'string' && cy.endsWith('%') ? parseFloat(cy) / 100 * 250 : cy;
 
   const totalValue = data.reduce((acc, item) => acc + item[dataKey], 0);
+  const angleRange = endAngle - startAngle;
 
-  let startAngle = 0;
+  let currentAngle = startAngle + 180; 
 
   return (
     <g transform={`translate(${computedCx}, ${computedCy})`}>
       {data.map((entry, index) => {
         const value = entry[dataKey];
-        const angle = (value / totalValue) * 360;
-        const endAngle = startAngle + angle;
+        const angle = (value / totalValue) * angleRange;
+        const nextAngle = currentAngle + angle;
         const largeArcFlag = angle > 180 ? 1 : 0;
 
-        const outerX = Math.cos((Math.PI / 180) * endAngle) * outerRadius;
-        const outerY = Math.sin((Math.PI / 180) * endAngle) * outerRadius;
-        const innerX = Math.cos((Math.PI / 180) * endAngle) * innerRadius;
-        const innerY = Math.sin((Math.PI / 180) * endAngle) * innerRadius;
+        const outerX = Math.cos((Math.PI / 180) * nextAngle) * outerRadius;
+        const outerY = Math.sin((Math.PI / 180) * nextAngle) * outerRadius;
+        const innerX = Math.cos((Math.PI / 180) * nextAngle) * innerRadius;
+        const innerY = Math.sin((Math.PI / 180) * nextAngle) * innerRadius;
 
         const pathData = `
-          M ${Math.cos((Math.PI / 180) * startAngle) * innerRadius} ${Math.sin((Math.PI / 180) * startAngle) * innerRadius}
-          L ${Math.cos((Math.PI / 180) * startAngle) * outerRadius} ${Math.sin((Math.PI / 180) * startAngle) * outerRadius}
+          M ${Math.cos((Math.PI / 180) * currentAngle) * innerRadius} ${Math.sin((Math.PI / 180) * currentAngle) * innerRadius}
+          L ${Math.cos((Math.PI / 180) * currentAngle) * outerRadius} ${Math.sin((Math.PI / 180) * currentAngle) * outerRadius}
           A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${outerX} ${outerY}
           L ${innerX} ${innerY}
-          A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${Math.cos((Math.PI / 180) * startAngle) * innerRadius} ${Math.sin((Math.PI / 180) * startAngle) * innerRadius}
+          A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${Math.cos((Math.PI / 180) * currentAngle) * innerRadius} ${Math.sin((Math.PI / 180) * currentAngle) * innerRadius}
           Z
         `;
 
-        startAngle = endAngle;
+        currentAngle = nextAngle;
 
         return (
           <g key={uuidv4()}>
@@ -66,11 +70,11 @@ const Pie: React.FC<PieProps> = ({
             />
             {label && (
               <text
-                x={Math.cos((Math.PI / 180) * (startAngle - angle / 2)) * (outerRadius + 10)}
-                y={Math.sin((Math.PI / 180) * (startAngle - angle / 2)) * (outerRadius + 10)}
+                x={Math.cos((Math.PI / 180) * (currentAngle - angle / 2)) * (outerRadius + 10)}
+                y={Math.sin((Math.PI / 180) * (currentAngle - angle / 2)) * (outerRadius + 10)}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fill={fill}  // Usar el mismo color que el segmento del pie
+                fill={fill}
                 fontSize="10"
               >
                 {entry[dataKey]}
