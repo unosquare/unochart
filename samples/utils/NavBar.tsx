@@ -24,6 +24,7 @@ const NavBar = () => {
         { name: 'Double Layer Pie Chart', path: '/double-layer-pie' },
         { name: 'Pie Chart', path: '/pie-chart' },
         { name: 'Straight Angle Pie Chart', path: '/straight-angle-pie' },
+        { name: 'Pie Chart with Padding Angle', path: '/padding-angle-pie' },
       ],
     },
   ];

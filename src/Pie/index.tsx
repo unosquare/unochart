@@ -13,6 +13,7 @@ interface PieProps {
   label?: boolean;
   startAngle?: number;
   endAngle?: number;
+  paddingAngle?: number;
 }
 
 const Pie: React.FC<PieProps> = ({
@@ -27,6 +28,7 @@ const Pie: React.FC<PieProps> = ({
   label = false,
   startAngle = 0,
   endAngle = 360,
+  paddingAngle = 0,
 }) => {
   const computedCx = typeof cx === 'string' && cx.endsWith('%') ? parseFloat(cx) / 100 * 730 : cx;
   const computedCy = typeof cy === 'string' && cy.endsWith('%') ? parseFloat(cy) / 100 * 250 : cy;
@@ -34,13 +36,13 @@ const Pie: React.FC<PieProps> = ({
   const totalValue = data.reduce((acc, item) => acc + item[dataKey], 0);
   const angleRange = endAngle - startAngle;
 
-  let currentAngle = startAngle + 180; 
+  let currentAngle = startAngle + 180;
 
   return (
     <g transform={`translate(${computedCx}, ${computedCy})`}>
       {data.map((entry, index) => {
         const value = entry[dataKey];
-        const angle = (value / totalValue) * angleRange;
+        const angle = (value / totalValue) * angleRange - paddingAngle;
         const nextAngle = currentAngle + angle;
         const largeArcFlag = angle > 180 ? 1 : 0;
 
@@ -58,7 +60,7 @@ const Pie: React.FC<PieProps> = ({
           Z
         `;
 
-        currentAngle = nextAngle;
+        currentAngle = nextAngle + paddingAngle;
 
         return (
           <g key={uuidv4()}>

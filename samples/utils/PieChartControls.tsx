@@ -10,6 +10,7 @@ interface PieChartControlsProps {
     showLabels: boolean;
     startAngle: number;
     endAngle: number;
+    paddingAngle: number;
   }>;
   setPies: React.Dispatch<React.SetStateAction<Array<{
     id: number;
@@ -20,6 +21,7 @@ interface PieChartControlsProps {
     showLabels: boolean;
     startAngle: number;
     endAngle: number;
+    paddingAngle: number;
   }>>>;
   showPolarGrid: boolean;
   setShowPolarGrid: (show: boolean) => void;
@@ -84,6 +86,15 @@ const PieChartControls: React.FC<PieChartControlsProps> = ({ pies, setPies, show
                   type="number"
                   value={pie.endAngle}
                   onChange={(e) => handlePieChange(index, 'endAngle', parseInt(e.target.value, 10))}
+                  className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-purple-600 mb-1">Padding Angle</label>
+                <input
+                  type="number"
+                  value={pie.paddingAngle}
+                  onChange={(e) => handlePieChange(index, 'paddingAngle', parseInt(e.target.value, 10))}
                   className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
                 />
               </div>
