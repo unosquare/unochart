@@ -12,6 +12,7 @@ import StraightAnglePieChart from './pages/StraightAnglePieChart';
 import PieChartWithPaddingAngle from './pages/PieChartWithPaddingAngle';
 import PieChartWithCustomizedLabel from './pages/PieChartWithCustomizedLabel';
 
+
 const App = () => {
   return (
     <Router>
