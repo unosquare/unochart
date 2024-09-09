@@ -31,14 +31,27 @@ const PieChartWithCustomizedLabel: React.FC = () => {
   ]);
   const [showPolarGrid, setShowPolarGrid] = useState(true);
 
+  const handleLabelToggle = (index: number, show: boolean) => {
+    const updatedPies = [...pies];
+    updatedPies[index].showLabels = show;
+    // Sync the label with the showLabels state
+    updatedPies[index].label = show ? updatedPies[index].label : false;
+    setPies(updatedPies);
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-4">PieChart With Customized Label</h1>
       <div className="flex">
-        <PieChartControls pies={pies} setPies={setPies} showPolarGrid={showPolarGrid} setShowPolarGrid={setShowPolarGrid} />
+        <PieChartControls 
+          pies={pies} 
+          setPies={setPies} 
+          showPolarGrid={showPolarGrid} 
+          setShowPolarGrid={setShowPolarGrid} 
+        />
         <PieChart width={730} height={250}>
           {showPolarGrid && <PolarGrid />}
-          {pies.map((pie, index) => (
+          {pies.map((pie) => (
             <Pie
               key={pie.id}
               data={data01}
@@ -51,7 +64,7 @@ const PieChartWithCustomizedLabel: React.FC = () => {
               startAngle={pie.startAngle}
               endAngle={pie.endAngle}
               fill="#8884d8"
-              label={pie.label} // Pass custom labels here
+              label={pie.showLabels ? pie.label : false} // Sync label with showLabels state
             />
           ))}
           <Tooltip />
