@@ -47,7 +47,6 @@ const PieChartControls: React.FC<PieChartControlsProps> = ({ pies, setPies, show
     }
     setPies(updatedPies);
   };
-
   return (
     <div className="bg-white p-6 shadow-lg rounded-lg mb-5 max-w-md">
       <h2 className="text-2xl font-semibold mb-6 text-purple-600">Chart Settings</h2>
