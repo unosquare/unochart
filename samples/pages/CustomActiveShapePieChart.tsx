@@ -7,15 +7,15 @@ import Legend from '../../src/Legend';
 import PieChartControls from '../utils/PieChartControls';
 
 const data01 = [
-  { "name": "Group A", "value": 400 },
-  { "name": "Group B", "value": 300 },
-  { "name": "Group C", "value": 300 },
-  { "name": "Group D", "value": 200 },
-  { "name": "Group E", "value": 278 },
-  { "name": "Group F", "value": 189 }
+  { name: 'Group A', value: 400 },
+  { name: 'Group B', value: 300 },
+  { name: 'Group C', value: 300 },
+  { name: 'Group D', value: 200 },
+  { name: 'Group E', value: 278 },
+  { name: 'Group F', value: 189 },
 ];
 
-const PieChartWithCustomizedLabel: React.FC = () => {
+const CustomActiveShapePieChart: React.FC = () => {
   const [pies, setPies] = useState([
     {
       id: 1,
@@ -26,21 +26,17 @@ const PieChartWithCustomizedLabel: React.FC = () => {
       showLabels: true,
       startAngle: 0,
       endAngle: 360,
-      label: ['A', 'B', 'C', 'D', 'E', 'F'],
+      label: 'percent',
+      activeShape: true,
     },
   ]);
   const [showPolarGrid, setShowPolarGrid] = useState(true);
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">PieChart With Customized Label</h1>
-      <div className="flex">
-        <PieChartControls 
-          pies={pies} 
-          setPies={setPies} 
-          showPolarGrid={showPolarGrid} 
-          setShowPolarGrid={setShowPolarGrid} 
-        />
+      <h1 className="text-2xl font-semibold mb-4">Custom Active Shape Pie Chart</h1>
+      <div className="flex gap-6">
+        <PieChartControls pies={pies} setPies={setPies} showPolarGrid={showPolarGrid} setShowPolarGrid={setShowPolarGrid} />
         <PieChart width={730} height={250}>
           {showPolarGrid && <PolarGrid />}
           {pies.map((pie) => (
@@ -56,7 +52,8 @@ const PieChartWithCustomizedLabel: React.FC = () => {
               startAngle={pie.startAngle}
               endAngle={pie.endAngle}
               fill="#8884d8"
-              label={pie.showLabels ? pie.label : false}
+              label={pie.label}
+              activeShape={pie.activeShape}
             />
           ))}
           <Tooltip />
@@ -67,4 +64,4 @@ const PieChartWithCustomizedLabel: React.FC = () => {
   );
 };
 
-export default PieChartWithCustomizedLabel;
+export default CustomActiveShapePieChart;

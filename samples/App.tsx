@@ -11,6 +11,7 @@ import PieChart from './pages/PieChart';
 import StraightAnglePieChart from './pages/StraightAnglePieChart';
 import PieChartWithPaddingAngle from './pages/PieChartWithPaddingAngle';
 import PieChartWithCustomizedLabel from './pages/PieChartWithCustomizedLabel';
+import CustomActiveShapePieChart from './pages/CustomActiveShapePieChart';
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/straight-angle-pie" element={<StraightAnglePieChart />} />
           <Route path="/pie-chart-with-padding-angle" element={<PieChartWithPaddingAngle />} />
           <Route path="/pie-chart-with-customized-label" element={<PieChartWithCustomizedLabel />} />
+          <Route path="/custom-active-shape-pie" element={<CustomActiveShapePieChart />} />
         </Routes>
       </div>
     </Router>

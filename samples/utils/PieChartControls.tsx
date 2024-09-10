@@ -12,6 +12,7 @@ interface PieChartControlsProps {
     endAngle?: number;
     label?: 'percent' | string[] | boolean;
     paddingAngle?: number;
+    activeShape?: boolean;
   }>;
   setPies: React.Dispatch<React.SetStateAction<Array<{
     id: number;
@@ -24,6 +25,7 @@ interface PieChartControlsProps {
     endAngle?: number;
     label?: 'percent' | string[] | boolean;
     paddingAngle?: number;
+    activeShape?: boolean;
   }>>>;
   showPolarGrid?: boolean;
   setShowPolarGrid?: (show: boolean) => void;
@@ -41,12 +43,13 @@ const PieChartControls: React.FC<PieChartControlsProps> = ({ pies, setPies, show
     if (value === 'percent') {
       updatedPies[index].label = 'percent';
     } else if (value) {
-      updatedPies[index].label = value.split(','); // Split string into array of labels
+      updatedPies[index].label = value.split(',');
     } else {
-      updatedPies[index].label = true; // Default to showing values
+      updatedPies[index].label = true;
     }
     setPies(updatedPies);
   };
+
   return (
     <div className="bg-white p-6 shadow-lg rounded-lg mb-5 max-w-md">
       <h2 className="text-2xl font-semibold mb-6 text-purple-600">Chart Settings</h2>
@@ -166,6 +169,17 @@ const PieChartControls: React.FC<PieChartControlsProps> = ({ pies, setPies, show
                     className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
                   />
                 </div>
+              )}
+              {pie.activeShape !== undefined && (
+                <label className="flex items-center space-x-2 text-purple-600 hover:bg-purple-100 rounded-lg p-2 transition duration-300 ease-in-out">
+                  <input
+                    type="checkbox"
+                    checked={pie.activeShape}
+                    onChange={(e) => handlePieChange(index, 'activeShape', e.target.checked)}
+                    className="form-checkbox h-5 w-5 text-purple-600 rounded transition duration-300 ease-in-out"
+                  />
+                  <span className="text-sm">Active Shape</span>
+                </label>
               )}
             </div>
           </div>

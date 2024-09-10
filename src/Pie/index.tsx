@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 interface PieProps {
@@ -14,6 +14,7 @@ interface PieProps {
   startAngle?: number;
   endAngle?: number;
   paddingAngle?: number;
+  activeShape?: boolean;
 }
 
 const Pie: React.FC<PieProps> = ({
@@ -29,6 +30,7 @@ const Pie: React.FC<PieProps> = ({
   startAngle = 0,
   endAngle = 360,
   paddingAngle = 0,
+  activeShape = false,
 }) => {
   const computedCx = typeof cx === 'string' && cx.endsWith('%') ? parseFloat(cx) / 100 * 730 : cx;
   const computedCy = typeof cy === 'string' && cy.endsWith('%') ? parseFloat(cy) / 100 * 250 : cy;
@@ -37,6 +39,8 @@ const Pie: React.FC<PieProps> = ({
   const angleRange = endAngle - startAngle;
 
   let currentAngle = startAngle + 180;
+
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
     <g transform={`translate(${computedCx}, ${computedCy})`}>
@@ -62,29 +66,37 @@ const Pie: React.FC<PieProps> = ({
 
         currentAngle = nextAngle + paddingAngle;
 
-        // Definir el texto del label basado en la propiedad `label` o usar valor como default
+        // Define el label
         let labelText = '';
         if (label === 'percent') {
           labelText = `${((value / totalValue) * 100).toFixed(1)}%`;
         } else if (Array.isArray(label) && label[index]) {
           labelText = label[index];
         } else {
-          // Si no hay `label` especificado, usar el valor por defecto
           labelText = `${value}`;
         }
 
+        // Aumentar el tamaño si el segmento está activo
+        const isActive = activeShape && activeIndex === index;
+        const adjustedOuterRadius = isActive ? outerRadius + 10 : outerRadius;
+
         return (
-          <g key={uuidv4()}>
+          <g
+            key={uuidv4()}
+            onMouseEnter={() => setActiveIndex(index)}
+            onMouseLeave={() => setActiveIndex(null)}
+          >
             <path
               d={pathData}
               fill={fill}
               stroke="#fff"
               strokeWidth={1}
+              style={{ transform: isActive ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.2s' }}
             />
             {label && (
               <text
-                x={Math.cos((Math.PI / 180) * (currentAngle - angle / 2)) * (outerRadius + 10)}
-                y={Math.sin((Math.PI / 180) * (currentAngle - angle / 2)) * (outerRadius + 10)}
+                x={Math.cos((Math.PI / 180) * (currentAngle - angle / 2)) * (adjustedOuterRadius + 10)}
+                y={Math.sin((Math.PI / 180) * (currentAngle - angle / 2)) * (adjustedOuterRadius + 10)}
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fill={fill}
