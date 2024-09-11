@@ -1,3 +1,4 @@
+// NavBar.tsx
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -21,10 +22,12 @@ const NavBar = () => {
     {
       category: 'Pie Charts',
       items: [
-        { name: 'Double Layer Pie Chart', path: '/double-layer-pie' },
         { name: 'Pie Chart', path: '/pie-chart' },
+        { name: 'Double Layer Pie Chart', path: '/double-layer-pie' },
         { name: 'Straight Angle Pie Chart', path: '/straight-angle-pie' },
-        { name: 'Pie Chart with Padding Angle', path: '/padding-angle-pie' },
+        { name: 'Pie Chart with Padding Angle', path: '/pie-chart-with-padding-angle' },
+        { name: 'Pie Chart with Customized Label', path: '/pie-chart-with-customized-label' },
+        { name: 'Custom Active Shape Pie Chart', path: '/custom-active-shape-pie' },
       ],
     },
   ];
