@@ -66,7 +66,6 @@ const Pie: React.FC<PieProps> = ({
 
                 currentAngle = nextAngle + paddingAngle;
 
-                // Define el label
                 let labelText = '';
                 if (label === 'percent') {
                     labelText = `${((value / totalValue) * 100).toFixed(1)}%`;
@@ -76,7 +75,6 @@ const Pie: React.FC<PieProps> = ({
                     labelText = `${value}`;
                 }
 
-                // Aumentar el tamaño si el segmento está activo
                 const isActive = activeShape && activeIndex === index;
                 const adjustedOuterRadius = isActive ? outerRadius + 10 : outerRadius;
 
