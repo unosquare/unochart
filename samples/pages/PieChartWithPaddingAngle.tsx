@@ -16,7 +16,18 @@ const data01 = [
 ];
 
 const PieChartWithPaddingAngle: React.FC = () => {
-  const [pies, setPies] = useState([{
+  const [pies, setPies] = useState<Array<{
+    id: number;
+    innerRadius?: number;
+    outerRadius?: number;
+    cx?: string | number;
+    cy?: string | number;
+    showLabels?: boolean;
+    startAngle?: number;
+    endAngle?: number;
+    paddingAngle?: number;
+    activeShape?: boolean;
+  }>>([{
     id: 1,
     innerRadius: 0,
     outerRadius: 80,
@@ -47,12 +58,12 @@ const PieChartWithPaddingAngle: React.FC = () => {
               data={data01} 
               dataKey="value" 
               nameKey="name" 
-              cx={pie.cx} 
-              cy={pie.cy} 
+              cx={pie.cx ?? '50%'} 
+              cy={pie.cy ?? '50%'} 
               innerRadius={pie.innerRadius} 
-              outerRadius={pie.outerRadius} 
+              outerRadius={pie.outerRadius ?? 0} 
               fill="#8884d8" 
-              label={pie.showLabels}
+              label={pie.showLabels ? "percent" : undefined}
               startAngle={pie.startAngle}
               endAngle={pie.endAngle}
               paddingAngle={pie.paddingAngle}

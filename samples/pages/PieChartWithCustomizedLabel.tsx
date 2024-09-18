@@ -15,8 +15,21 @@ const data01 = [
   { "name": "Group F", "value": 189 }
 ];
 
+interface PieData {
+  id: number;
+  innerRadius?: number;
+  outerRadius?: number;
+  cx?: string | number;
+  cy?: string | number;
+  showLabels?: boolean;
+  startAngle?: number;
+  endAngle?: number;
+  label?: boolean | string[] | "percent";
+  activeShape?: boolean;
+}
+
 const PieChartWithCustomizedLabel: React.FC = () => {
-  const [pies, setPies] = useState([
+  const [pies, setPies] = useState<PieData[]>([
     {
       id: 1,
       innerRadius: 0,
@@ -49,14 +62,14 @@ const PieChartWithCustomizedLabel: React.FC = () => {
               data={data01}
               dataKey="value"
               nameKey="name"
-              cx={pie.cx}
-              cy={pie.cy}
+              cx={pie.cx ?? '50%'}
+              cy={pie.cy ?? '50%'}
               innerRadius={pie.innerRadius}
-              outerRadius={pie.outerRadius}
+              outerRadius={pie.outerRadius ?? 0}
               startAngle={pie.startAngle}
               endAngle={pie.endAngle}
               fill="#8884d8"
-              label={pie.showLabels ? pie.label : false}
+              label={pie.showLabels ? (pie.label as string[] | "percent") : undefined}
             />
           ))}
           <Tooltip />

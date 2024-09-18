@@ -37,7 +37,7 @@ const PieChartExample: React.FC = () => {
             innerRadius={pies[0].innerRadius}
             outerRadius={pies[0].outerRadius}
             fill="#8884d8"
-            label={pies[0].showLabels}
+            label={pies[0].showLabels ? "percent" : undefined}
           />
           <Tooltip />
           <Legend />
