@@ -32,7 +32,7 @@ interface PieChartControlsProps {
 }
 
 const PieChartControls: React.FC<PieChartControlsProps> = ({ pies, setPies, showPolarGrid, setShowPolarGrid }) => {
-  const handlePieChange = (index: number, key: keyof typeof pies[number], value: string | number | boolean) => {
+  const handlePieChange = <K extends keyof typeof pies[number]>(index: number, key: K, value: typeof pies[number][K]) => {
     const updatedPies = [...pies];
     updatedPies[index][key] = value;
     setPies(updatedPies);

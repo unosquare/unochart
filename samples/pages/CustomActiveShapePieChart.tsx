@@ -26,7 +26,7 @@ const CustomActiveShapePieChart: React.FC = () => {
       showLabels: true,
       startAngle: 0,
       endAngle: 360,
-      label: 'percent',
+      label: 'percent' as "percent",
       activeShape: true,
     },
   ]);
@@ -52,7 +52,7 @@ const CustomActiveShapePieChart: React.FC = () => {
               startAngle={pie.startAngle}
               endAngle={pie.endAngle}
               fill="#8884d8"
-              label={pie.label}
+              label={pie.label as "percent"}
               activeShape={pie.activeShape}
             />
           ))}

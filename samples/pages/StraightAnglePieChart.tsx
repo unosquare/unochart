@@ -17,7 +17,7 @@ const data = [
 
 const StraightAnglePieChart: React.FC = () => {
   const [showPolarGrid, setShowPolarGrid] = useState(true);
-  const [pies, setPies] = useState([
+  const [pies, setPies] = useState<{ id: number; innerRadius?: number; outerRadius?: number; cx?: string | number; cy?: string | number; showLabels?: boolean; startAngle?: number; endAngle?: number; activeShape?: boolean }[]>([
     { id: 1, innerRadius: 0, outerRadius: 80, cx: '50%', cy: '50%', showLabels: true, startAngle: 0, endAngle: 180 },
   ]);
 
@@ -32,12 +32,12 @@ const StraightAnglePieChart: React.FC = () => {
             data={data}
             dataKey="value"
             nameKey="name"
-            cx={pies[0].cx}
-            cy={pies[0].cy}
+            cx={pies[0].cx ?? '50%'}
+            cy={pies[0].cy ?? '50%'}
             innerRadius={pies[0].innerRadius}
-            outerRadius={pies[0].outerRadius}
+            outerRadius={pies[0].outerRadius ?? 0}
             fill="#8884d8"
-            label={pies[0].showLabels}
+            label={pies[0].showLabels ? "percent" : undefined}
             startAngle={pies[0].startAngle}
             endAngle={pies[0].endAngle}
           />

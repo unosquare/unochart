@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 interface PieProps {
     data: Array<{ name: string; value: number }>;
-    dataKey: string;
+    dataKey: keyof { name: string; value: number };
     nameKey: string;
     cx: string | number;
     cy: string | number;
@@ -35,7 +35,7 @@ const Pie: React.FC<PieProps> = ({
     const computedCx = typeof cx === 'string' && cx.endsWith('%') ? (parseFloat(cx) / 100) * 730 : cx;
     const computedCy = typeof cy === 'string' && cy.endsWith('%') ? (parseFloat(cy) / 100) * 250 : cy;
 
-    const totalValue = data.reduce((acc, item) => acc + item[dataKey], 0);
+    const totalValue = data.reduce((acc, item) => acc + (item[dataKey] as number), 0); // Ajuste aquí
     const angleRange = endAngle - startAngle;
 
     let currentAngle = startAngle + 180;
@@ -45,7 +45,7 @@ const Pie: React.FC<PieProps> = ({
     return (
         <g transform={`translate(${computedCx}, ${computedCy})`}>
             {data.map((entry, index) => {
-                const value = entry[dataKey];
+                const value = entry[dataKey] as number; // Ajuste aquí
                 const angle = (value / totalValue) * angleRange - paddingAngle;
                 const nextAngle = currentAngle + angle;
                 const largeArcFlag = angle > 180 ? 1 : 0;
