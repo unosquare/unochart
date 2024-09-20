@@ -1,5 +1,4 @@
 // App.tsx
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NavBar from './utils/NavBar';
@@ -12,7 +11,7 @@ import StraightAnglePieChart from './pages/StraightAnglePieChart';
 import PieChartWithPaddingAngle from './pages/PieChartWithPaddingAngle';
 import PieChartWithCustomizedLabel from './pages/PieChartWithCustomizedLabel';
 import CustomActiveShapePieChart from './pages/CustomActiveShapePieChart';
-
+import LineChartExample from './pages/LineChartExample';
 
 const App = () => {
   return (
@@ -29,6 +28,7 @@ const App = () => {
           <Route path="/pie-chart-with-padding-angle" element={<PieChartWithPaddingAngle />} />
           <Route path="/pie-chart-with-customized-label" element={<PieChartWithCustomizedLabel />} />
           <Route path="/custom-active-shape-pie" element={<CustomActiveShapePieChart />} />
+          <Route path="/line-chart" element={<LineChartExample />} />
         </Routes>
       </div>
     </Router>

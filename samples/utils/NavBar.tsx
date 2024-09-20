@@ -30,6 +30,12 @@ const NavBar = () => {
         { name: 'Custom Active Shape Pie Chart', path: '/custom-active-shape-pie' },
       ],
     },
+    {
+      category: 'Line Charts',
+      items: [
+        { name: 'Line Chart', path: '/line-chart' }, // New item
+      ],
+    },
   ];
 
   return (

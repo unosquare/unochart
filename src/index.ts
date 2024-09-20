@@ -10,3 +10,5 @@ export { default as Bar } from './Bar';
 export { default as PieChart } from './PieChart';
 export { default as Pie } from './Pie';
 export { default as PolarGrid } from './PolarGrid';
+export { default as LineChart } from './LineChart';
+export { default as Line } from './Line';
