@@ -1,8 +1,8 @@
-// NavBar.tsx
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
-const NavBar = () => {
+export default function NavBar() {
   const location = useLocation();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
@@ -33,32 +33,39 @@ const NavBar = () => {
     {
       category: 'Line Charts',
       items: [
-        { name: 'Line Chart', path: '/line-chart' }, // New item
+        { name: 'Line Chart', path: '/line-chart' },
       ],
     },
   ];
 
   return (
-    <nav className="bg-white p-4 shadow-lg stroke-purple-600 mb-5">
-      <div className="container mx-auto flex justify-center space-x-6">
-        {navSections.map((section) => (
-          <div className="relative" key={section.category}>
-            <button
-              onClick={() => handleDropdownToggle(section.category)}
-              className="text-purple-600 py-2 px-4 rounded-lg hover:bg-purple-600 hover:text-white transition duration-300 ease-in-out"
-            >
-              {section.category}
-            </button>
-            {openDropdown === section.category && (
-              <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-                <ul className="py-1">
+    <nav className="bg-white shadow-md">
+      <div className="container mx-auto px-4 py-2">
+        <ul className="flex justify-center space-x-2">
+          {navSections.map((section) => (
+            <li key={section.category} className="relative group">
+              <button
+                onClick={() => handleDropdownToggle(section.category)}
+                className="flex items-center space-x-1 px-4 py-2 rounded-md text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+              >
+                <span>{section.category}</span>
+                {openDropdown === section.category ? (
+                  <ChevronUp className="w-4 h-4" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
+              </button>
+              {openDropdown === section.category && (
+                <ul className="absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg z-10 py-1 animate-fadeIn">
                   {section.items.map((item) => (
                     <li key={item.path}>
                       <Link
                         to={item.path}
-                        className={`block px-4 py-2 text-purple-600 hover:bg-purple-200 ${
-                          location.pathname === item.path ? 'bg-purple-400 text-white' : ''
-                        }`}
+                        className={`block px-4 py-2 text-sm ${
+                          location.pathname === item.path
+                            ? 'bg-indigo-100 text-indigo-700'
+                            : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-600'
+                        } transition duration-300 ease-in-out`}
                         onClick={() => setOpenDropdown(null)}
                       >
                         {item.name}
@@ -66,13 +73,11 @@ const NavBar = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
-            )}
-          </div>
-        ))}
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
     </nav>
   );
-};
-
-export default NavBar;
+}

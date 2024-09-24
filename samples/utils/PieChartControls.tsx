@@ -31,7 +31,7 @@ interface PieChartControlsProps {
   setShowPolarGrid?: (show: boolean) => void;
 }
 
-const PieChartControls: React.FC<PieChartControlsProps> = ({ pies, setPies, showPolarGrid, setShowPolarGrid }) => {
+export default function PieChartControls({ pies, setPies, showPolarGrid, setShowPolarGrid }: PieChartControlsProps) {
   const handlePieChange = <K extends keyof typeof pies[number]>(index: number, key: K, value: typeof pies[number][K]) => {
     const updatedPies = [...pies];
     updatedPies[index][key] = value;
@@ -52,133 +52,133 @@ const PieChartControls: React.FC<PieChartControlsProps> = ({ pies, setPies, show
 
   return (
     <div className="bg-white p-6 shadow-lg rounded-lg mb-5 max-w-md">
-      <h2 className="text-2xl font-semibold mb-6 text-purple-600">Chart Settings</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-indigo-700">Pie Chart Settings</h2>
       <form className="space-y-6">
         {setShowPolarGrid && (
           <div className="space-y-2">
-            <label className="flex items-center space-x-2 text-purple-600 hover:bg-purple-100 rounded-lg p-2 transition duration-300 ease-in-out">
+            <label className="flex items-center space-x-2 text-gray-700 hover:bg-indigo-50 rounded-lg p-2 transition duration-300 ease-in-out cursor-pointer">
               <input
                 type="checkbox"
                 checked={showPolarGrid}
                 onChange={(e) => setShowPolarGrid?.(e.target.checked)}
-                className="form-checkbox h-5 w-5 text-purple-600 rounded transition duration-300 ease-in-out"
+                className="form-checkbox h-5 w-5 text-indigo-600 rounded transition duration-300 ease-in-out"
               />
-              <span className="text-sm">Show Polar Grid</span>
+              <span className="text-sm font-medium">Show Polar Grid</span>
             </label>
           </div>
         )}
         {pies.map((pie, index) => (
-          <div key={pie.id} className="bg-gray-100 p-4 rounded-lg mb-4">
-            <h3 className="text-lg font-medium text-purple-600 mb-2">Pie {index + 1} Settings</h3>
+          <div key={pie.id} className="bg-gray-50 p-4 rounded-lg mb-4 shadow-sm">
+            <h3 className="text-lg font-medium text-indigo-700 mb-2">Pie {index + 1} Settings</h3>
             <div className="grid grid-cols-2 gap-4">
               {pie.innerRadius !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-purple-600 mb-1">Inner Radius</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Inner Radius</label>
                   <input
                     type="number"
                     value={pie.innerRadius}
                     onChange={(e) => handlePieChange(index, 'innerRadius', parseInt(e.target.value, 10))}
-                    className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
                   />
                 </div>
               )}
               {pie.outerRadius !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-purple-600 mb-1">Outer Radius</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Outer Radius</label>
                   <input
                     type="number"
                     value={pie.outerRadius}
                     onChange={(e) => handlePieChange(index, 'outerRadius', parseInt(e.target.value, 10))}
-                    className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
                   />
                 </div>
               )}
               {pie.startAngle !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-purple-600 mb-1">Start Angle</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Start Angle</label>
                   <input
                     type="number"
                     value={pie.startAngle}
                     onChange={(e) => handlePieChange(index, 'startAngle', parseInt(e.target.value, 10))}
-                    className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
                   />
                 </div>
               )}
               {pie.endAngle !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-purple-600 mb-1">End Angle</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">End Angle</label>
                   <input
                     type="number"
                     value={pie.endAngle}
                     onChange={(e) => handlePieChange(index, 'endAngle', parseInt(e.target.value, 10))}
-                    className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
                   />
                 </div>
               )}
               {pie.cx !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-purple-600 mb-1">cx</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">cx</label>
                   <input
                     type="text"
                     value={pie.cx}
                     onChange={(e) => handlePieChange(index, 'cx', e.target.value)}
-                    className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
                   />
                 </div>
               )}
               {pie.cy !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-purple-600 mb-1">cy</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">cy</label>
                   <input
                     type="text"
                     value={pie.cy}
                     onChange={(e) => handlePieChange(index, 'cy', e.target.value)}
-                    className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
                   />
                 </div>
               )}
               {pie.paddingAngle !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-purple-600 mb-1">Padding Angle</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Padding Angle</label>
                   <input
                     type="number"
                     value={pie.paddingAngle}
                     onChange={(e) => handlePieChange(index, 'paddingAngle', parseInt(e.target.value, 10))}
-                    className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
                   />
                 </div>
               )}
               {pie.showLabels !== undefined && (
-                <label className="flex items-center space-x-2 text-purple-600 hover:bg-purple-100 rounded-lg p-2 transition duration-300 ease-in-out">
+                <label className="flex items-center space-x-2 text-gray-700 hover:bg-indigo-50 rounded-lg p-2 transition duration-300 ease-in-out cursor-pointer">
                   <input
                     type="checkbox"
                     checked={pie.showLabels}
                     onChange={(e) => handlePieChange(index, 'showLabels', e.target.checked)}
-                    className="form-checkbox h-5 w-5 text-purple-600 rounded transition duration-300 ease-in-out"
+                    className="form-checkbox h-5 w-5 text-indigo-600 rounded transition duration-300 ease-in-out"
                   />
-                  <span className="text-sm">Show Labels</span>
+                  <span className="text-sm font-medium">Show Labels</span>
                 </label>
               )}
               {pie.label !== undefined && (
                 <div className="col-span-2">
-                  <label className="block text-sm font-medium text-purple-600 mb-1">Labels (percent or comma-separated)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Labels (percent or comma-separated)</label>
                   <input
                     type="text"
                     placeholder="percent or values"
                     onChange={(e) => handleLabelChange(index, e.target.value)}
-                    className="w-full px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
                   />
                 </div>
               )}
               {pie.activeShape !== undefined && (
-                <label className="flex items-center space-x-2 text-purple-600 hover:bg-purple-100 rounded-lg p-2 transition duration-300 ease-in-out">
+                <label className="flex items-center space-x-2 text-gray-700 hover:bg-indigo-50 rounded-lg p-2 transition duration-300 ease-in-out cursor-pointer">
                   <input
                     type="checkbox"
                     checked={pie.activeShape}
                     onChange={(e) => handlePieChange(index, 'activeShape', e.target.checked)}
-                    className="form-checkbox h-5 w-5 text-purple-600 rounded transition duration-300 ease-in-out"
+                    className="form-checkbox h-5 w-5 text-indigo-600 rounded transition duration-300 ease-in-out"
                   />
-                  <span className="text-sm">Active Shape</span>
+                  <span className="text-sm font-medium">Active Shape</span>
                 </label>
               )}
             </div>
@@ -187,6 +187,4 @@ const PieChartControls: React.FC<PieChartControlsProps> = ({ pies, setPies, show
       </form>
     </div>
   );
-};
-
-export default PieChartControls;
+}

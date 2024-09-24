@@ -34,7 +34,6 @@ const CustomActiveShapePieChart: React.FC = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">Custom Active Shape Pie Chart</h1>
       <div className="flex gap-6">
         <PieChartControls pies={pies} setPies={setPies} showPolarGrid={showPolarGrid} setShowPolarGrid={setShowPolarGrid} />
         <PieChart width={730} height={250}>

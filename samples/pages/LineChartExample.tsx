@@ -1,13 +1,13 @@
 // LineChartExample.tsx
 import React, { useState } from 'react';
-import LineChart from '../../src/LineChart'; // Assuming the path to the LineChart component
-import Line from '../../src/Line'; // Assuming the path to the Line component
+import LineChart from '../../src/LineChart';
+import Line from '../../src/Line';
 import CartesianGrid from '../../src/CartesianGrid';
 import XAxis from '../../src/XAxis';
 import YAxis from '../../src/YAxis';
 import Tooltip from '../../src/Tooltip';
 import Legend from '../../src/Legend';
-import LineChartControls from '../utils/LineChartControls'; // Assuming the path to the LineChartControls component
+import LineChartControls from '../utils/LineChartControls';
 
 const data = [
   { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
@@ -21,16 +21,27 @@ const data = [
 
 const LineChartExample: React.FC = () => {
   const [lines, setLines] = useState([
-    { id: 1, dataKey: 'pv', stroke: '#8884d8' },
-    { id: 2, dataKey: 'uv', stroke: '#82ca9d' },
+    { id: 1, stroke: '#8884d8', dataKey: 'pv' }, // Asignamos dataKey a cada línea
+    { id: 2, stroke: '#82ca9d', dataKey: 'uv' }, // Asignamos dataKey a cada línea
   ]);
+  const [width, setWidth] = useState(730);
+  const [height, setHeight] = useState(250);
+  const [margin, setMargin] = useState({ top: 5, right: 30, left: 20, bottom: 5 });
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">LineChart Example</h1>
       <div className="flex">
-        <LineChartControls lines={lines} setLines={setLines} />
-        <LineChart width={730} height={250} data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <LineChartControls
+          lines={lines}
+          setLines={setLines}
+          width={width}
+          setWidth={setWidth}
+          height={height}
+          setHeight={setHeight}
+          margin={margin}
+          setMargin={setMargin}
+        />
+        <LineChart width={width} height={height} data={data} margin={margin}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />

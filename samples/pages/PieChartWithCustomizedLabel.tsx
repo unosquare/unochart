@@ -46,7 +46,6 @@ const PieChartWithCustomizedLabel: React.FC = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">PieChart With Customized Label</h1>
       <div className="flex">
         <PieChartControls 
           pies={pies} 
