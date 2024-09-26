@@ -49,7 +49,6 @@ const PieChartWithPaddingAngle: React.FC = () => {
         setShowPolarGrid={setShowPolarGrid}
       />
       <div className="flex-grow">
-        <h1 className="text-2xl font-semibold mb-4">Pie Chart with Padding Angle</h1>
         <PieChart width={730} height={250}>
           {showPolarGrid && <PolarGrid />}
           {pies.map((pie) => (

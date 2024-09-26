@@ -14,8 +14,8 @@ interface BarChartControlsProps {
   showLegend: boolean;
   setWidth: (width: number) => void;
   setHeight: (height: number) => void;
-  setBarCategoryGap: (gap: string) => void;  // Actualiza a solo string
-  setBarGap: (gap: number) => void;          // Actualiza a solo number
+  setBarCategoryGap: (gap: string) => void;
+  setBarGap: (gap: number) => void;
   setLayout: (layout: 'horizontal' | 'vertical') => void;
   setMargin: (margin: { top: number; right: number; bottom: number; left: number }) => void;
   setShowXAxis: (show: boolean) => void;
@@ -25,7 +25,7 @@ interface BarChartControlsProps {
   setShowLegend: (show: boolean) => void;
 }
 
-const BarChartControls: React.FC<BarChartControlsProps> = ({
+export default function BarChartControls({
   width,
   height,
   barCategoryGap,
@@ -48,103 +48,135 @@ const BarChartControls: React.FC<BarChartControlsProps> = ({
   setShowCartesianGrid,
   setShowTooltip,
   setShowLegend,
-}) => {
-  const handleMarginChange = (e: React.ChangeEvent<HTMLInputElement>, side: string) => {
-    const value = parseInt(e.target.value, 10);
+}: BarChartControlsProps) {
+  const handleMarginChange = (side: keyof typeof margin, value: number) => {
     setMargin({ ...margin, [side]: value });
   };
 
   return (
     <div className="bg-white p-6 shadow-lg rounded-lg mb-5 max-w-md">
-      <h2 className="text-xl font-semibold mb-6 text-gray-700">Chart Settings</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-indigo-700">Bar Chart Settings</h2>
       <form className="space-y-6">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Width</label>
+            <label htmlFor="width" className="block text-sm font-medium text-gray-700 mb-1">
+              Width: {width}px
+            </label>
             <input
-              type="number"
+              id="width"
+              type="range"
+              min="200"
+              max="1000"
               value={width}
               onChange={(e) => setWidth(parseInt(e.target.value, 10))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+              className="w-full h-2 bg-indigo-200 rounded-lg appearance-none cursor-pointer"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Height</label>
+            <label htmlFor="height" className="block text-sm font-medium text-gray-700 mb-1">
+              Height: {height}px
+            </label>
             <input
-              type="number"
+              id="height"
+              type="range"
+              min="200"
+              max="800"
               value={height}
               onChange={(e) => setHeight(parseInt(e.target.value, 10))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+              className="w-full h-2 bg-indigo-200 rounded-lg appearance-none cursor-pointer"
             />
           </div>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Bar Category Gap</label>
-          <input
-            type="text"
-            value={barCategoryGap}
-            onChange={(e) => setBarCategoryGap(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
-          />
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="barCategoryGap" className="block text-sm font-medium text-gray-700 mb-1">
+              Bar Category Gap
+            </label>
+            <input
+              id="barCategoryGap"
+              type="text"
+              value={barCategoryGap}
+              onChange={(e) => setBarCategoryGap(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
+            />
+          </div>
+          <div>
+            <label htmlFor="barGap" className="block text-sm font-medium text-gray-700 mb-1">
+              Bar Gap
+            </label>
+            <input
+              id="barGap"
+              type="number"
+              value={barGap}
+              onChange={(e) => setBarGap(parseInt(e.target.value, 10))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
+            />
+          </div>
         </div>
+
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Bar Gap</label>
-          <input
-            type="number"
-            value={barGap}
-            onChange={(e) => setBarGap(parseInt(e.target.value, 10))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Layout</label>
+          <label htmlFor="layout" className="block text-sm font-medium text-gray-700 mb-1">
+            Layout
+          </label>
           <select
+            id="layout"
             value={layout}
             onChange={(e) => setLayout(e.target.value as 'horizontal' | 'vertical')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
           >
             <option value="horizontal">Horizontal</option>
             <option value="vertical">Vertical</option>
           </select>
         </div>
+
         <div>
-          <h3 className="text-lg font-medium text-gray-700 mb-2">Margin</h3>
+          <h3 className="text-lg font-medium text-indigo-700 mb-2">Margin</h3>
           <div className="grid grid-cols-2 gap-4">
-            {['top', 'right', 'bottom', 'left'].map((side) => (
+            {(['top', 'right', 'bottom', 'left'] as const).map((side) => (
               <div key={side}>
-                <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">{side}</label>
+                <label htmlFor={`margin-${side}`} className="block text-sm font-medium text-gray-700 mb-1 capitalize">
+                  {side}: {margin[side]}px
+                </label>
                 <input
-                  type="number"
-                  value={margin[side as keyof typeof margin]}
-                  onChange={(e) => handleMarginChange(e, side)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
+                  id={`margin-${side}`}
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={margin[side]}
+                  onChange={(e) => handleMarginChange(side, parseInt(e.target.value, 10))}
+                  className="w-full h-2 bg-indigo-200 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
             ))}
           </div>
         </div>
+
         <div className="space-y-2">
           {[
-            { label: 'Show X Axis', checked: showXAxis, onChange: setShowXAxis },
-            { label: 'Show Y Axis', checked: showYAxis, onChange: setShowYAxis },
-            { label: 'Show Cartesian Grid', checked: showCartesianGrid, onChange: setShowCartesianGrid },
-            { label: 'Show Tooltip', checked: showTooltip, onChange: setShowTooltip },
-            { label: 'Show Legend', checked: showLegend, onChange: setShowLegend },
+            { id: 'showXAxis', label: 'Show X Axis', checked: showXAxis, onChange: setShowXAxis },
+            { id: 'showYAxis', label: 'Show Y Axis', checked: showYAxis, onChange: setShowYAxis },
+            { id: 'showCartesianGrid', label: 'Show Cartesian Grid', checked: showCartesianGrid, onChange: setShowCartesianGrid },
+            { id: 'showTooltip', label: 'Show Tooltip', checked: showTooltip, onChange: setShowTooltip },
+            { id: 'showLegend', label: 'Show Legend', checked: showLegend, onChange: setShowLegend },
           ].map((item) => (
-            <label key={item.label} className="flex items-center space-x-2 text-gray-700 hover:bg-purple-100 rounded-lg p-2 transition duration-300 ease-in-out">
+            <label
+              key={item.id}
+              htmlFor={item.id}
+              className="flex items-center space-x-2 text-gray-700 hover:bg-indigo-50 rounded-lg p-2 transition duration-300 ease-in-out cursor-pointer"
+            >
               <input
+                id={item.id}
                 type="checkbox"
                 checked={item.checked}
                 onChange={(e) => item.onChange(e.target.checked)}
-                className="form-checkbox h-5 w-5 text-purple-600 rounded transition duration-300 ease-in-out"
+                className="form-checkbox h-5 w-5 text-indigo-600 rounded transition duration-300 ease-in-out"
               />
-              <span className="text-sm">{item.label}</span>
+              <span className="text-sm font-medium">{item.label}</span>
             </label>
           ))}
         </div>
       </form>
     </div>
   );
-};
-
-export default BarChartControls;
+}
