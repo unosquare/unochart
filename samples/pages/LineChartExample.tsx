@@ -1,4 +1,3 @@
-// LineChartExample.tsx
 import React, { useState } from 'react';
 import LineChart from '../../src/LineChart';
 import Line from '../../src/Line';
@@ -21,8 +20,8 @@ const data = [
 
 const LineChartExample: React.FC = () => {
   const [lines, setLines] = useState([
-    { id: 1, stroke: '#8884d8', dataKey: 'pv' }, // Asignamos dataKey a cada línea
-    { id: 2, stroke: '#82ca9d', dataKey: 'uv' }, // Asignamos dataKey a cada línea
+    { id: 1, stroke: '#8884d8', dataKey: 'pv' },
+    { id: 2, stroke: '#82ca9d', dataKey: 'uv' },
   ]);
   const [width, setWidth] = useState(730);
   const [height, setHeight] = useState(250);
