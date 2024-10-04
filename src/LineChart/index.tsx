@@ -14,6 +14,7 @@ interface LineChartProps {
     children: ReactNode;
 }
 
+
 // Función para encontrar el valor mínimo
 const findMinValue = (data: Array<{ [key: string]: any }>): number => {
     return Math.floor(
@@ -66,6 +67,7 @@ const LineChart: React.FC<LineChartProps> = ({
 }) => {
     const chartWidth = width - ((margin.left ?? 0) + (margin.right ?? 0));
     const chartHeight = height - ((margin.top ?? 0) + (margin.bottom ?? 0));
+
     const { maxValue, minValue } = roundMaxValue(data);
     const [leftMargin, setLeftMargin] = useState(margin.left);
     const svgRef = useRef<SVGSVGElement>(null);
@@ -80,6 +82,7 @@ const LineChart: React.FC<LineChartProps> = ({
             setLeftMargin(maxWidth + (margin.left ?? 0) * 0.5);
         }
     }, [data, margin.left]);
+
 
     const xAxis = Children.toArray(children).find(
         (child) => React.isValidElement(child) && child.type === XAxis
