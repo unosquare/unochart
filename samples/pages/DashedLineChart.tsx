@@ -18,10 +18,10 @@ const data = [
   { name: 'Page G', uv: 3490, pv: 4300, amt: 2100 },
 ];
 
-const LineChartExample: React.FC = () => {
+const DashedLineChart: React.FC = () => {
   const [lines, setLines] = useState([
-    { id: 1, stroke: '#8884d8', dataKey: 'pv', type: 'monotone' },
-    { id: 2, stroke: '#82ca9d', dataKey: 'uv', type: 'linear' },
+    { id: 1, stroke: '#8884d8', dataKey: 'pv', strokeDasharray: '5 5', type: 'linear' },
+    { id: 2, stroke: '#82ca9d', dataKey: 'uv', strokeDasharray: '3 3', type: 'monotoneX' },
   ]);
   const [width, setWidth] = useState(730);
   const [height, setHeight] = useState(250);
@@ -52,6 +52,7 @@ const LineChartExample: React.FC = () => {
               type={line.type}
               dataKey={line.dataKey}
               stroke={line.stroke}
+              strokeDasharray={line.strokeDasharray}
             />
           ))}
         </LineChart>
@@ -60,4 +61,4 @@ const LineChartExample: React.FC = () => {
   );
 };
 
-export default LineChartExample;
+export default DashedLineChart;
