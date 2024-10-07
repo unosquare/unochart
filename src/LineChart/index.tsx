@@ -71,6 +71,11 @@ const LineChart: React.FC<LineChartProps> = ({
     const { maxValue, minValue } = roundMaxValue(data);
     const [leftMargin, setLeftMargin] = useState(margin.left);
     const svgRef = useRef<SVGSVGElement>(null);
+    const [tooltipData, setTooltipData] = useState<{
+        name: string;
+        values: { key: string; value: number; color: string }[];
+    } | null>(null);
+    const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
     useEffect(() => {
         if (svgRef.current) {
@@ -111,9 +116,50 @@ const LineChart: React.FC<LineChartProps> = ({
         return { color: '', label: '' };
     });
 
+    const handleMouseMove = (event: React.MouseEvent<SVGSVGElement>) => {
+        const svgRect = svgRef.current?.getBoundingClientRect();
+        if (!svgRect) return;
+
+        const mouseX = event.clientX - svgRect.left - leftMargin;
+        const xScale = chartWidth / (data.length - 1);
+        const index = Math.round(mouseX / xScale);
+
+        if (index >= 0 && index < data.length) {
+            const entry = data[index];
+            const values = lineComponents
+                .map((child) => {
+                    if (React.isValidElement(child)) {
+                        const lineChild = child as React.ReactElement;
+                        const dataKey = lineChild.props.dataKey;
+                        return {
+                            key: dataKey,
+                            value: entry[dataKey],
+                            color: lineChild.props.stroke,
+                        };
+                    }
+                    return null;
+                })
+                .filter((v): v is { key: string; value: number; color: string } => v !== null);
+
+            setTooltipData({ name: entry.name, values });
+            setPosition({ x: event.clientX - svgRect.left, y: event.clientY - svgRect.top });
+        }
+    };
+
+    const handleMouseLeave = () => {
+        setTooltipData(null);
+    };
+
     return (
         <div className='relative inline-block'>
-            <svg ref={svgRef} width={width} height={height + height * 0.1} className='bg-white'>
+            <svg
+                ref={svgRef}
+                width={width}
+                height={height + height * 0.1}
+                className='bg-white'
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+            >
                 <g transform={`translate(${leftMargin}, ${(margin.top ?? 0) + height * 0.05})`}>
                     {grid && cloneElement(grid as React.ReactElement, { width: chartWidth, height: chartHeight })}
                     {xAxis && cloneElement(xAxis as React.ReactElement, { data, width: chartWidth, height: chartHeight })}
@@ -126,7 +172,7 @@ const LineChart: React.FC<LineChartProps> = ({
                 </g>
             </svg>
             {legend && cloneElement(legend as React.ReactElement, { items: legendItems })}
-            {tooltip && cloneElement(tooltip as React.ReactElement, { tooltipData: null, position: { x: 0, y: 0 } })}
+            {tooltip && <Tooltip tooltipData={tooltipData} position={position} />}
         </div>
     );
 };
