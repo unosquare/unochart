@@ -83,7 +83,6 @@ const LineChart: React.FC<LineChartProps> = ({
         }
     }, [data, margin.left]);
 
-
     const xAxis = Children.toArray(children).find(
         (child) => React.isValidElement(child) && child.type === XAxis
     );
@@ -100,6 +99,18 @@ const LineChart: React.FC<LineChartProps> = ({
         (child) => React.isValidElement(child) && child.type === Legend
     );
 
+    const lineComponents = Children.toArray(children).filter(
+        (child) => React.isValidElement(child) && child.type === Line
+    );
+
+    const legendItems = lineComponents.map((child) => {
+        if (React.isValidElement(child)) {
+            const lineChild = child as React.ReactElement;
+            return { color: lineChild.props.stroke, label: lineChild.props.dataKey };
+        }
+        return { color: '', label: '' };
+    });
+
     return (
         <div className='relative inline-block'>
             <svg ref={svgRef} width={width} height={height + height * 0.1} className='bg-white'>
@@ -114,7 +125,7 @@ const LineChart: React.FC<LineChartProps> = ({
                     )}
                 </g>
             </svg>
-            {legend && cloneElement(legend as React.ReactElement)}
+            {legend && cloneElement(legend as React.ReactElement, { items: legendItems })}
             {tooltip && cloneElement(tooltip as React.ReactElement, { tooltipData: null, position: { x: 0, y: 0 } })}
         </div>
     );
