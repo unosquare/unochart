@@ -14,25 +14,15 @@ interface LineChartProps {
     children: ReactNode;
 }
 
-
-// Función para encontrar el valor mínimo
-const findMinValue = (data: Array<{ [key: string]: any }>): number => {
-    return Math.floor(
-        Math.min(
-            ...data.map(d =>
-                Math.min(...Object.values(d).map(v => (typeof v === 'number' ? v : Infinity))),
-            ),
-        ),
+const findMinValue = (data: Array<{ [key: string]: any }>): number =>
+    Math.floor(
+        Math.min(...data.map((d) => Math.min(...Object.values(d).map((v) => (typeof v === 'number' ? v : Infinity))))),
     );
-};
 
-// Función para redondear el valor máximo
 const roundMaxValue = (data: Array<{ [key: string]: any }>): { maxValue: number; minValue: number } => {
     const minValue = findMinValue(data);
     const maxValue = Math.max(
-        ...data.map(d =>
-            Math.max(...Object.values(d).map(v => (typeof v === 'number' ? v : -Infinity))),
-        ),
+        ...data.map((d) => Math.max(...Object.values(d).map((v) => (typeof v === 'number' ? v : -Infinity)))),
     );
 
     const magnitude = Math.pow(10, Math.floor(Math.log10(maxValue)));
@@ -49,7 +39,6 @@ const roundMaxValue = (data: Array<{ [key: string]: any }>): { maxValue: number;
         finalMaxValue = 10 * magnitude;
     }
 
-    // Si el valor mínimo es negativo, ajustar para que sean simétricos
     const finalMinValue = minValue < 0 ? -finalMaxValue : 0;
 
     return {
@@ -88,24 +77,16 @@ const LineChart: React.FC<LineChartProps> = ({
         }
     }, [data, margin.left]);
 
-    const xAxis = Children.toArray(children).find(
-        (child) => React.isValidElement(child) && child.type === XAxis
-    );
-    const yAxis = Children.toArray(children).find(
-        (child) => React.isValidElement(child) && child.type === YAxis
-    );
+    const xAxis = Children.toArray(children).find((child) => React.isValidElement(child) && child.type === XAxis);
+    const yAxis = Children.toArray(children).find((child) => React.isValidElement(child) && child.type === YAxis);
     const grid = Children.toArray(children).find(
-        (child) => React.isValidElement(child) && child.type === CartesianGrid
+        (child) => React.isValidElement(child) && child.type === CartesianGrid,
     );
-    const tooltip = Children.toArray(children).find(
-        (child) => React.isValidElement(child) && child.type === Tooltip
-    );
-    const legend = Children.toArray(children).find(
-        (child) => React.isValidElement(child) && child.type === Legend
-    );
+    const tooltip = Children.toArray(children).find((child) => React.isValidElement(child) && child.type === Tooltip);
+    const legend = Children.toArray(children).find((child) => React.isValidElement(child) && child.type === Legend);
 
     const lineComponents = Children.toArray(children).filter(
-        (child) => React.isValidElement(child) && child.type === Line
+        (child) => React.isValidElement(child) && child.type === Line,
     );
 
     const legendItems = lineComponents.map((child) => {
@@ -162,12 +143,13 @@ const LineChart: React.FC<LineChartProps> = ({
             >
                 <g transform={`translate(${leftMargin}, ${(margin.top ?? 0) + height * 0.05})`}>
                     {grid && cloneElement(grid as React.ReactElement, { width: chartWidth, height: chartHeight })}
-                    {xAxis && cloneElement(xAxis as React.ReactElement, { data, width: chartWidth, height: chartHeight })}
+                    {xAxis &&
+                        cloneElement(xAxis as React.ReactElement, { data, width: chartWidth, height: chartHeight })}
                     {yAxis && cloneElement(yAxis as React.ReactElement, { height: chartHeight, minValue, maxValue })}
                     {Children.map(children, (child) =>
                         React.isValidElement(child) && child.type === Line
                             ? cloneElement(child, { data, chartWidth, chartHeight })
-                            : child
+                            : child,
                     )}
                 </g>
             </svg>

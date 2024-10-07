@@ -6,7 +6,22 @@ interface LineProps {
     dataKey: string;
     stroke: string;
     strokeDasharray?: string;
-    type?: 'basis' | 'basisClosed' | 'basisOpen' | 'bumpX' | 'bumpY' | 'bump' | 'linear' | 'linearClosed' | 'natural' | 'monotoneX' | 'monotoneY' | 'monotone' | 'step' | 'stepBefore' | 'stepAfter';
+    type?:
+        | 'basis'
+        | 'basisClosed'
+        | 'basisOpen'
+        | 'bumpX'
+        | 'bumpY'
+        | 'bump'
+        | 'linear'
+        | 'linearClosed'
+        | 'natural'
+        | 'monotoneX'
+        | 'monotoneY'
+        | 'monotone'
+        | 'step'
+        | 'stepBefore'
+        | 'stepAfter';
     chartWidth: number;
     chartHeight: number;
     onMouseOver?: (event: React.MouseEvent, entry: { name: string; [key: string]: any }) => void;
@@ -31,7 +46,8 @@ const Line: React.FC<LineProps> = ({
     const xScale = (index: number) => (index + 0.5) * (chartWidth / data.length);
     const yScale = (value: number) => chartHeight - (value / maxValue) * chartHeight;
 
-    const lineGenerator = d3Shape.line()
+    const lineGenerator = d3Shape
+        .line()
         .x((d, index) => xScale(index))
         .y((d) => yScale((d as any)[dataKey]))
         .curve(d3Shape[`curve${type.charAt(0).toUpperCase() + type.slice(1)}`] || d3Shape.curveLinear);
