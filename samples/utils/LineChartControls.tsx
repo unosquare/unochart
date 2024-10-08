@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface LineChartControlsProps {
-  lines: Array<{ id: number; stroke: string }>;
-  setLines: React.Dispatch<React.SetStateAction<Array<{ id: number; stroke: string }>>>;
+  lines: Array<{ id: number; stroke: string; type: string }>;
+  setLines: React.Dispatch<React.SetStateAction<Array<{ id: number; stroke: string; type: string }>>>;
   width: number;
   setWidth: React.Dispatch<React.SetStateAction<number>>;
   height: number;
@@ -10,6 +10,10 @@ interface LineChartControlsProps {
   margin: { top: number; right: number; bottom: number; left: number };
   setMargin: React.Dispatch<React.SetStateAction<{ top: number; right: number; bottom: number; left: number }>>;
 }
+
+const interpolationOptions = [
+  'linear', 'basis', 'basisClosed', 'basisOpen', 'bumpX', 'bumpY', 'natural', 'monotoneX', 'monotoneY', 'step', 'stepBefore', 'stepAfter',
+];
 
 export default function LineChartControls({
   lines,
@@ -78,7 +82,7 @@ export default function LineChartControls({
             ))}
           </div>
         </div>
-        
+
         {lines.map((line, index) => (
           <div key={line.id} className="bg-gray-50 p-4 rounded-lg mb-4 shadow-sm">
             <h3 className="text-lg font-medium text-indigo-700 mb-2">Line {index + 1} Settings</h3>
@@ -93,6 +97,19 @@ export default function LineChartControls({
                 />
                 <span className="text-sm font-medium text-gray-600">{line.stroke}</span>
               </div>
+
+              <label className="block text-sm font-medium text-gray-700 mt-2">Interpolation Type</label>
+              <select
+                value={line.type}
+                onChange={(e) => handleLineChange(index, 'type', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
+              >
+                {interpolationOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option.charAt(0).toUpperCase() + option.slice(1)}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         ))}
