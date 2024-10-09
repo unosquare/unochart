@@ -12,3 +12,4 @@ export { default as Pie } from './Pie';
 export { default as PolarGrid } from './PolarGrid';
 export { default as LineChart } from './LineChart';
 export { default as Line } from './Line';
+export { default as ReferenceLine } from './ReferenceLine';

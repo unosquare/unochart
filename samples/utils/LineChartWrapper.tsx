@@ -18,11 +18,11 @@ const data = [
   { name: 'Page G', uv: 3490, pv: 4300, amt: 2100 },
 ];
 
-const LineChartWrapper = ({ initialLines }) => {
+const LineChartWrapper = ({ initialLines, additionalComponents = [], initialWidth = 730, initialHeight = 250, initialMargin = { top: 5, right: 30, left: 20, bottom: 5 } }) => {
   const [lines, setLines] = useState(initialLines);
-  const [width, setWidth] = useState(730);
-  const [height, setHeight] = useState(250);
-  const [margin, setMargin] = useState({ top: 5, right: 30, left: 20, bottom: 5 });
+  const [width, setWidth] = useState(initialWidth);
+  const [height, setHeight] = useState(initialHeight);
+  const [margin, setMargin] = useState(initialMargin);
 
   return (
     <div className="p-6">
@@ -52,6 +52,7 @@ const LineChartWrapper = ({ initialLines }) => {
               strokeDasharray={line.strokeDasharray}
             />
           ))}
+          {additionalComponents}
         </LineChart>
       </div>
     </div>
