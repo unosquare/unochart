@@ -13,6 +13,7 @@ import PieChartWithCustomizedLabel from './pages/PieChartWithCustomizedLabel';
 import CustomActiveShapePieChart from './pages/CustomActiveShapePieChart';
 import LineChartExample from './pages/LineChartExample';
 import DashedLineChart from './pages/DashedLineChart';
+import ReferenceLineChart from './pages/ReferenceLineChart';
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/custom-active-shape-pie" element={<CustomActiveShapePieChart />} />
           <Route path="/line-chart" element={<LineChartExample />} />
           <Route path="/dashed-line-chart" element={<DashedLineChart />} />
+          <Route path="/reference-line-chart" element={<ReferenceLineChart />} />
         </Routes>
       </div>
     </Router>

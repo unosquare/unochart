@@ -35,6 +35,7 @@ export default function NavBar() {
       items: [
         { name: 'Line Chart', path: '/line-chart' },
         { name: 'Dashed Line Chart', path: '/dashed-line-chart' },
+        { name: 'Reference Line Chart', path: '/reference-line-chart' },
       ],
     },
   ];
