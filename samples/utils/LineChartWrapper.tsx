@@ -38,11 +38,11 @@ const LineChartWrapper = ({ initialLines, additionalComponents = [], initialWidt
           setMargin={setMargin}
         />
         <LineChart width={width} height={height} data={data} margin={margin}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
+        {width > 300 && height > 200 && <CartesianGrid strokeDasharray="3 3" />}
+          {width > 300 && height > 200 && <XAxis dataKey="name" />}
+          {width > 300 && height > 200 && <YAxis />}
+          {width > 300 && height > 200 && <Tooltip />}
+          {width > 300 && height > 200 && <Legend />}
           {lines.map((line) => (
             <Line
               key={line.id}

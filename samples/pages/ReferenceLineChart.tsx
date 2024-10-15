@@ -17,8 +17,8 @@ const ReferenceLineChart = () => {
     <LineChartWrapper
       initialLines={initialLines}
       additionalComponents={additionalComponents}
-      initialWidth={500}
-      initialHeight={300}
+      initialWidth={730}
+      initialHeight={250}
       initialMargin={{
         top: 20,
         right: 50,
