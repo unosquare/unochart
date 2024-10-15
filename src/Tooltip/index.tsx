@@ -33,7 +33,9 @@ export default function Tooltip({ tooltipData = null, position = { x: 0, y: 0 } 
                         <span className='font-bold ml-1'>
                             {Array.isArray(value.value)
                                 ? `${value.value[0]} - ${value.value[1]}`
-                                : value.value.toLocaleString()}
+                                : value.value !== undefined && value.value !== null
+                                ? value.value.toLocaleString()
+                                : 'N/A'}
                         </span>
                     </li>
                 ))}

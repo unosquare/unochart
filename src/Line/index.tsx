@@ -24,6 +24,7 @@ interface LineProps {
         | 'stepAfter';
     chartWidth: number;
     chartHeight: number;
+    connectNulls?: boolean;
     onMouseOver?: (event: React.MouseEvent, entry: { name: string; [key: string]: any }) => void;
     onMouseOut?: () => void;
 }
@@ -36,21 +37,32 @@ const Line: React.FC<LineProps> = ({
     type = 'linear',
     chartWidth,
     chartHeight,
+    connectNulls = false,
     onMouseOver = () => {},
     onMouseOut = () => {},
 }) => {
     if (!data.length) return null;
 
-    const maxValue = Math.max(...data.map((d) => d[dataKey]));
+ 
+    const validValues = data.map((d) => d[dataKey]).filter((value) => value !== undefined && value !== null);
+    const maxValue = validValues.length ? Math.max(...validValues) : 0;
 
     const xScale = (index: number) => (index + 0.5) * (chartWidth / data.length);
-    const yScale = (value: number) => chartHeight - (value / maxValue) * chartHeight;
+    const yScale = (value: number | null | undefined) => {
+        if (value === null || value === undefined || isNaN(value)) return chartHeight; // Manejo de valores nulos o NaN
+        return chartHeight - (value / maxValue) * chartHeight;
+    };
 
-    const lineGenerator = d3Shape
-        .line()
-        .x((d, index) => xScale(index))
-        .y((d) => yScale((d as any)[dataKey]))
-        .curve(d3Shape[`curve${type.charAt(0).toUpperCase() + type.slice(1)}`] || d3Shape.curveLinear);
+    // Ajustamos la función de línea para que se generen correctamente las líneas con `connectNulls`
+const lineGenerator = d3Shape
+    .line()
+    .defined((d: any) => d[dataKey] !== null && d[dataKey] !== undefined) // Define los puntos válidos
+    .x((d, index) => xScale(index))
+    .y((d) => {
+        const scaledY = yScale((d as any)[dataKey]);
+        return scaledY !== null ? scaledY : NaN; // Evita valores NaN
+    })
+    .curve(d3Shape[`curve${type.charAt(0).toUpperCase() + type.slice(1)}`] || d3Shape.curveLinear);
 
     const path = lineGenerator(data as [number, number][]);
 
@@ -69,6 +81,7 @@ const Line: React.FC<LineProps> = ({
             {data.map((entry, index) => {
                 const x = xScale(index);
                 const y = yScale(entry[dataKey]);
+                if (y === null) return null; // Si y es null, no renderizamos el punto.
                 return (
                     <circle
                         key={`point-${index}`}
