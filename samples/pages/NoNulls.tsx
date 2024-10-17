@@ -3,12 +3,15 @@ import LineChartWrapper from '../utils/LineChartWrapper';
 
 const NoNullsChart = () => {
   const initialLines = [
+    { id: 1, stroke: '#8884d8', dataKey: 'uv', type: 'monotone', connectNulls: false },
+  ];
+
+  const initialLines2 = [
     { id: 1, stroke: '#8884d8', dataKey: 'uv', type: 'monotone', connectNulls: true },
   ];
 
   return (
     <div>
-      <h1>LineChartConnectNulls</h1>
       <LineChartWrapper
         initialLines={initialLines}
         initialWidth={730}

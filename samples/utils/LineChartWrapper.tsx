@@ -46,6 +46,7 @@ const LineChartWrapper = ({ initialLines, additionalComponents = [], initialWidt
           setHeight={setHeight}
           margin={margin}
           setMargin={setMargin}
+          data={data}
         />
         <LineChart width={width} height={height} data={data} margin={margin}>
           {width > 300 && height > 200 && <CartesianGrid strokeDasharray="3 3" />}

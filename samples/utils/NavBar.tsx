@@ -37,7 +37,7 @@ export default function NavBar() {
         { name: 'Dashed Line Chart', path: '/dashed-line-chart' },
         { name: 'Reference Line Chart', path: '/reference-line-chart' },
         { name: 'Tiny Line Chart', path: '/tiny-line-chart' },
-        { name: 'No Nulls Chart', path: '/no-nulls' },
+        { name: 'Connect Nulls Chart', path: '/no-nulls' },
       ],
     },
   ];
