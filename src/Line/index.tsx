@@ -22,8 +22,8 @@ interface LineProps {
         | 'step'
         | 'stepBefore'
         | 'stepAfter';
-    chartWidth: number;
-    chartHeight: number;
+    xScale: (value: number) => number;
+    yScale: (value: number) => number;
     connectNulls?: boolean;
     onMouseOver?: (event: React.MouseEvent, entry: { name: string; [key: string]: any }) => void;
     onMouseOut?: () => void;
@@ -35,43 +35,15 @@ const Line: React.FC<LineProps> = ({
     stroke,
     strokeDasharray = '0',
     type = 'linear',
-    chartWidth,
-    chartHeight,
+    xScale,
+    yScale,
     connectNulls = false,
     onMouseOver = () => {},
     onMouseOut = () => {},
 }) => {
     if (!data.length) return null;
 
-    const validValues = data.map((d) => d[dataKey]).filter((value) => value !== undefined && value !== null);
-    const maxValue = validValues.length ? Math.max(...validValues) : 0;
-
-    const xScale = (index: number) => (index) * (chartWidth / (data.length - 1));
-    const yScale = (value: number | null | undefined) => {
-        if (value === null || value === undefined || isNaN(value)) return null;
-        return chartHeight - (value / maxValue) * chartHeight;
-    };
-
-    // Create segments for the line when connectNulls is false
-    const createLineSegments = () => {
-        let currentSegment: any[] = [];
-        const segments: any[][] = [];
-
-        data.forEach((point, index) => {
-            if (point[dataKey] !== null && point[dataKey] !== undefined) {
-                currentSegment.push({ ...point, index });
-            } else if (currentSegment.length > 0) {
-                segments.push(currentSegment);
-                currentSegment = [];
-            }
-        });
-
-        if (currentSegment.length > 0) {
-            segments.push(currentSegment);
-        }
-
-        return segments;
-    };
+    const processedData = data.map((d, index) => ({ ...d, index }));
 
     const lineGenerator = d3Shape
         .line()
@@ -85,21 +57,35 @@ const Line: React.FC<LineProps> = ({
 
     const renderPath = () => {
         if (connectNulls) {
-            // When connectNulls is true, filter out null values and connect remaining points
-            const filteredData = data
-                .map((d, index) => ({ ...d, index }))
-                .filter((d) => d[dataKey] !== null && d[dataKey] !== undefined);
-            return <path
-                d={lineGenerator(filteredData) || ''}
-                fill="none"
-                stroke={stroke}
-                strokeWidth={2}
-                strokeDasharray={strokeDasharray}
-                style={{ transition: 'all 0.3s' }}
-            />;
+            const filteredData = processedData.filter(lineGenerator.defined());
+            return (
+                <path
+                    d={lineGenerator(filteredData) || ''}
+                    fill="none"
+                    stroke={stroke}
+                    strokeWidth={2}
+                    strokeDasharray={strokeDasharray}
+                    style={{ transition: 'all 0.3s' }}
+                />
+            );
         } else {
-            // When connectNulls is false, create separate segments
-            const segments = createLineSegments();
+            // Cuando connectNulls es false, crear segmentos separados
+            const segments = [];
+            let segment = [];
+
+            processedData.forEach((d) => {
+                if (lineGenerator.defined()(d)) {
+                    segment.push(d);
+                } else if (segment.length) {
+                    segments.push(segment);
+                    segment = [];
+                }
+            });
+
+            if (segment.length) {
+                segments.push(segment);
+            }
+
             return segments.map((segment, i) => (
                 <path
                     key={`segment-${i}`}
@@ -117,10 +103,11 @@ const Line: React.FC<LineProps> = ({
     return (
         <>
             {renderPath()}
-            {data.map((entry, index) => {
-                if (entry[dataKey] === null || entry[dataKey] === undefined) return null;
-                const x = xScale(index);
-                const y = yScale(entry[dataKey]);
+            {processedData.map((entry, index) => {
+                const value = entry[dataKey];
+                if (value === null || value === undefined) return null;
+                const x = xScale(entry.index);
+                const y = yScale(value);
                 if (y === null) return null;
                 return (
                     <circle
