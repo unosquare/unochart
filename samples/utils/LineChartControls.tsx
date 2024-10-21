@@ -1,14 +1,27 @@
 import React from 'react';
 
 interface LineChartControlsProps {
-  lines: Array<{ id: number; stroke: string; type: string }>;
-  setLines: React.Dispatch<React.SetStateAction<Array<{ id: number; stroke: string; type: string }>>>;
+  lines: Array<{
+    id: number;
+    stroke: string;
+    type: string;
+    connectNulls: boolean;
+    dataKey: string;
+  }>;
+  setLines: React.Dispatch<React.SetStateAction<Array<{
+    id: number;
+    stroke: string;
+    type: string;
+    connectNulls: boolean;
+    dataKey: string;
+  }>>>;
   width: number;
   setWidth: React.Dispatch<React.SetStateAction<number>>;
   height: number;
   setHeight: React.Dispatch<React.SetStateAction<number>>;
   margin: { top: number; right: number; bottom: number; left: number };
   setMargin: React.Dispatch<React.SetStateAction<{ top: number; right: number; bottom: number; left: number }>>;
+  data: Array<any>;
 }
 
 const interpolationOptions = [
@@ -24,8 +37,9 @@ export default function LineChartControls({
   setHeight,
   margin,
   setMargin,
+  data,
 }: LineChartControlsProps) {
-  const handleLineChange = (index: number, key: keyof typeof lines[number], value: string) => {
+  const handleLineChange = <K extends keyof typeof lines[number]>(index: number, key: K, value: typeof lines[number][K]) => {
     const updatedLines = [...lines];
     updatedLines[index][key] = value;
     setLines(updatedLines);
@@ -33,6 +47,10 @@ export default function LineChartControls({
 
   const handleMarginChange = (side: keyof typeof margin, value: number) => {
     setMargin({ ...margin, [side]: value });
+  };
+
+  const hasNullValues = (dataKey: string): boolean => {
+    return data.some(item => item[dataKey] === undefined || item[dataKey] === null);
   };
 
   return (
@@ -86,30 +104,52 @@ export default function LineChartControls({
         {lines.map((line, index) => (
           <div key={line.id} className="bg-gray-50 p-4 rounded-lg mb-4 shadow-sm">
             <h3 className="text-lg font-medium text-indigo-700 mb-2">Line {index + 1} Settings</h3>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Stroke Color</label>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="color"
-                  value={line.stroke}
-                  onChange={(e) => handleLineChange(index, 'stroke', e.target.value)}
-                  className="w-8 h-8 border-none rounded-md cursor-pointer"
-                />
-                <span className="text-sm font-medium text-gray-600">{line.stroke}</span>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Stroke Color</label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="color"
+                    value={line.stroke}
+                    onChange={(e) => handleLineChange(index, 'stroke', e.target.value)}
+                    className="w-8 h-8 border-none rounded-md cursor-pointer"
+                  />
+                  <span className="text-sm font-medium text-gray-600">{line.stroke}</span>
+                </div>
               </div>
 
-              <label className="block text-sm font-medium text-gray-700 mt-2">Interpolation Type</label>
-              <select
-                value={line.type}
-                onChange={(e) => handleLineChange(index, 'type', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
-              >
-                {interpolationOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option.charAt(0).toUpperCase() + option.slice(1)}
-                  </option>
-                ))}
-              </select>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Interpolation Type</label>
+                <select
+                  value={line.type}
+                  onChange={(e) => handleLineChange(index, 'type', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
+                >
+                  {interpolationOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {hasNullValues(line.dataKey) && (
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id={`connectNulls-${index}`}
+                    checked={line.connectNulls}
+                    onChange={(e) => handleLineChange(index, 'connectNulls', e.target.checked)}
+                    className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                  />
+                  <label
+                    htmlFor={`connectNulls-${index}`}
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Connect Null Values
+                  </label>
+                </div>
+              )}
             </div>
           </div>
         ))}

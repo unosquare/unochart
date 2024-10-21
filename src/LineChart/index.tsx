@@ -5,6 +5,7 @@ import YAxis from '../YAxis';
 import Tooltip from '../Tooltip';
 import Legend from '../Legend';
 import Line from '../Line';
+import ReferenceLine from '../ReferenceLine';
 
 interface LineChartProps {
     width: number;
@@ -89,6 +90,10 @@ const LineChart: React.FC<LineChartProps> = ({
         (child) => React.isValidElement(child) && child.type === Line,
     );
 
+    const referenceLines = Children.toArray(children).filter(
+        (child) => React.isValidElement(child) && child.type === ReferenceLine,
+    );
+
     const legendItems = lineComponents.map((child) => {
         if (React.isValidElement(child)) {
             const lineChild = child as React.ReactElement;
@@ -97,11 +102,21 @@ const LineChart: React.FC<LineChartProps> = ({
         return { color: '', label: '' };
     });
 
+    const xScale = (value: string | number) => {
+        if (typeof value === 'string') {
+            const index = data.findIndex((item) => item.name === value);
+            return index * (chartWidth / (data.length - 1));
+        }
+        return value * (chartWidth / (data.length - 1));
+    };
+
+    const yScale = (value: number) => chartHeight - ((value - minValue) / (maxValue - minValue)) * chartHeight;
+
     const handleMouseMove = (event: React.MouseEvent<SVGSVGElement>) => {
         const svgRect = svgRef.current?.getBoundingClientRect();
         if (!svgRect) return;
 
-        const mouseX = event.clientX - svgRect.left - leftMargin;
+        const mouseX = event.clientX - svgRect.left - (leftMargin ?? 0);
         const xScale = chartWidth / (data.length - 1);
         const index = Math.round(mouseX / xScale);
 
@@ -135,7 +150,7 @@ const LineChart: React.FC<LineChartProps> = ({
         <div className='relative inline-block'>
             <svg
                 ref={svgRef}
-                width={width}
+                width={width + width * 0.1}
                 height={height + height * 0.1}
                 className='bg-white'
                 onMouseMove={handleMouseMove}
@@ -148,8 +163,23 @@ const LineChart: React.FC<LineChartProps> = ({
                     {yAxis && cloneElement(yAxis as React.ReactElement, { height: chartHeight, minValue, maxValue })}
                     {Children.map(children, (child) =>
                         React.isValidElement(child) && child.type === Line
-                            ? cloneElement(child, { data, chartWidth, chartHeight })
-                            : child,
+                            ? cloneElement(child as React.ReactElement<any>, {
+                                  data,
+                                  chartWidth,
+                                  chartHeight,
+                                  xScale,
+                                  yScale,
+                              })
+                            : null,
+                    )}
+                    {referenceLines.map((referenceLine, index) =>
+                        cloneElement(referenceLine as React.ReactElement, {
+                            key: index,
+                            chartWidth,
+                            chartHeight,
+                            xScale,
+                            yScale,
+                        }),
                     )}
                 </g>
             </svg>
