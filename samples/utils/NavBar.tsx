@@ -38,6 +38,7 @@ export default function NavBar() {
         { name: 'Reference Line Chart', path: '/reference-line-chart' },
         { name: 'Tiny Line Chart', path: '/tiny-line-chart' },
         { name: 'Connect Nulls Chart', path: '/no-nulls' },
+        { name: 'Line Chart with Labels', path: '/line-chart-with-labels' },
       ],
     },
   ];

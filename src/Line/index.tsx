@@ -1,3 +1,4 @@
+// Line.tsx
 import React from 'react';
 import * as d3Shape from 'd3-shape';
 
@@ -27,6 +28,7 @@ interface LineProps {
     connectNulls?: boolean;
     onMouseOver?: (event: React.MouseEvent, entry: { name: string; [key: string]: any }) => void;
     onMouseOut?: () => void;
+    label?: boolean; // Agregada la propiedad label
 }
 
 const Line: React.FC<LineProps> = ({
@@ -40,6 +42,7 @@ const Line: React.FC<LineProps> = ({
     connectNulls = false,
     onMouseOver = () => {},
     onMouseOut = () => {},
+    label = false, // Valor por defecto de label es false
 }) => {
     if (!data.length) return null;
 
@@ -110,15 +113,27 @@ const Line: React.FC<LineProps> = ({
                 const y = yScale(value);
                 if (y === null) return null;
                 return (
-                    <circle
-                        key={`point-${index}`}
-                        cx={x}
-                        cy={y}
-                        r={4}
-                        fill={stroke}
-                        onMouseOver={(event) => onMouseOver(event, entry)}
-                        onMouseOut={onMouseOut}
-                    />
+                    <g key={`point-${index}`}>
+                        <circle
+                            cx={x}
+                            cy={y}
+                            r={4}
+                            fill={stroke}
+                            onMouseOver={(event) => onMouseOver(event, entry)}
+                            onMouseOut={onMouseOut}
+                        />
+                        {label && (
+                            <text
+                                x={x}
+                                y={y - 10} // Posiciona la etiqueta encima de la bolita
+                                textAnchor="middle"
+                                fontSize={12}
+                                fill={stroke}
+                            >
+                                {value}
+                            </text>
+                        )}
+                    </g>
                 );
             })}
         </>

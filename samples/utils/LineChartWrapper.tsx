@@ -1,3 +1,4 @@
+// LineChartWrapper.tsx
 import React, { useState } from 'react';
 import LineChart from '../../src/LineChart';
 import Line from '../../src/Line';
@@ -48,24 +49,27 @@ const LineChartWrapper = ({ initialLines, additionalComponents = [], initialWidt
           setMargin={setMargin}
           data={data}
         />
-        <LineChart width={width} height={height} data={data} margin={margin}>
-          {width > 300 && height > 200 && <CartesianGrid strokeDasharray="3 3" />}
-          {width > 300 && height > 200 && <XAxis dataKey="name" />}
-          {width > 300 && height > 200 && <YAxis />}
-          {width > 300 && height > 200 && <Tooltip />}
-          {width > 300 && height > 200 && <Legend />}
-          {lines.map((line) => (
-            <Line
-              key={line.id}
-              type={line.type}
-              dataKey={line.dataKey}
-              stroke={line.stroke}
-              strokeDasharray={line.strokeDasharray}
-              connectNulls={line.connectNulls}
-            />
-          ))}
-          {additionalComponents}
-        </LineChart>
+        <div className='flex items-center pl-12'>
+          <LineChart width={width} height={height} data={data} margin={margin}>
+            {width > 300 && height > 200 && <CartesianGrid strokeDasharray="3 3" />}
+            {width > 300 && height > 200 && <XAxis dataKey="name" />}
+            {width > 300 && height > 200 && <YAxis />}
+            {width > 300 && height > 200 && <Tooltip />}
+            {width > 300 && height > 200 && <Legend />}
+            {lines.map((line) => (
+              <Line
+                key={line.id}
+                type={line.type}
+                dataKey={line.dataKey}
+                stroke={line.stroke}
+                strokeDasharray={line.strokeDasharray}
+                connectNulls={line.connectNulls}
+                label={line.label}
+              />
+            ))}
+            {additionalComponents}
+          </LineChart>
+        </div>
       </div>
     </div>
   );

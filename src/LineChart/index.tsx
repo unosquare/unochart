@@ -152,7 +152,7 @@ const LineChart: React.FC<LineChartProps> = ({
         <div className='relative inline-block'>
             <svg
                 ref={svgRef}
-                width={width}
+                width={width + width * 0.1}
                 height={height + height * 0.1}
                 className='bg-white'
                 onMouseMove={handleMouseMove}
