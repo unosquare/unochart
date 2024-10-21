@@ -1,4 +1,3 @@
-// LineChartWrapper.tsx
 import React, { useState } from 'react';
 import LineChart from '../../src/LineChart';
 import Line from '../../src/Line';

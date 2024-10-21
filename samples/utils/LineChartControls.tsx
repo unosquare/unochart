@@ -21,7 +21,7 @@ interface LineChartControlsProps {
   setHeight: React.Dispatch<React.SetStateAction<number>>;
   margin: { top: number; right: number; bottom: number; left: number };
   setMargin: React.Dispatch<React.SetStateAction<{ top: number; right: number; bottom: number; left: number }>>;
-  data: Array<any>; // Add data prop to check for null values
+  data: Array<any>;
 }
 
 const interpolationOptions = [
@@ -39,7 +39,7 @@ export default function LineChartControls({
   setMargin,
   data,
 }: LineChartControlsProps) {
-  const handleLineChange = (index: number, key: keyof typeof lines[number], value: any) => {
+  const handleLineChange = <K extends keyof typeof lines[number]>(index: number, key: K, value: typeof lines[number][K]) => {
     const updatedLines = [...lines];
     updatedLines[index][key] = value;
     setLines(updatedLines);
@@ -49,7 +49,6 @@ export default function LineChartControls({
     setMargin({ ...margin, [side]: value });
   };
 
-  // Function to check if data contains null values for a specific dataKey
   const hasNullValues = (dataKey: string): boolean => {
     return data.some(item => item[dataKey] === undefined || item[dataKey] === null);
   };

@@ -6,9 +6,6 @@ const NoNullsChart = () => {
     { id: 1, stroke: '#8884d8', dataKey: 'uv', type: 'monotone', connectNulls: false },
   ];
 
-  const initialLines2 = [
-    { id: 1, stroke: '#8884d8', dataKey: 'uv', type: 'monotone', connectNulls: true },
-  ];
 
   return (
     <div>

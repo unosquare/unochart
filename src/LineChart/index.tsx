@@ -104,21 +104,19 @@ const LineChart: React.FC<LineChartProps> = ({
 
     const xScale = (value: string | number) => {
         if (typeof value === 'string') {
-            const index = data.findIndex(item => item.name === value);
+            const index = data.findIndex((item) => item.name === value);
             return index * (chartWidth / (data.length - 1));
         }
         return value * (chartWidth / (data.length - 1));
     };
 
-    const yScale = (value: number) => {
-        return chartHeight - ((value - minValue) / (maxValue - minValue)) * chartHeight;
-    };
+    const yScale = (value: number) => chartHeight - ((value - minValue) / (maxValue - minValue)) * chartHeight;
 
     const handleMouseMove = (event: React.MouseEvent<SVGSVGElement>) => {
         const svgRect = svgRef.current?.getBoundingClientRect();
         if (!svgRect) return;
 
-        const mouseX = event.clientX - svgRect.left - leftMargin;
+        const mouseX = event.clientX - svgRect.left - (leftMargin ?? 0);
         const xScale = chartWidth / (data.length - 1);
         const index = Math.round(mouseX / xScale);
 
@@ -165,8 +163,14 @@ const LineChart: React.FC<LineChartProps> = ({
                     {yAxis && cloneElement(yAxis as React.ReactElement, { height: chartHeight, minValue, maxValue })}
                     {Children.map(children, (child) =>
                         React.isValidElement(child) && child.type === Line
-                            ? cloneElement(child, { data, chartWidth, chartHeight, xScale, yScale })
-                            : null
+                            ? cloneElement(child as React.ReactElement<any>, {
+                                  data,
+                                  chartWidth,
+                                  chartHeight,
+                                  xScale,
+                                  yScale,
+                              })
+                            : null,
                     )}
                     {referenceLines.map((referenceLine, index) =>
                         cloneElement(referenceLine as React.ReactElement, {
@@ -175,7 +179,7 @@ const LineChart: React.FC<LineChartProps> = ({
                             chartHeight,
                             xScale,
                             yScale,
-                        })
+                        }),
                     )}
                 </g>
             </svg>

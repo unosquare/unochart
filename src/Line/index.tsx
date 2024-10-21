@@ -1,4 +1,3 @@
-// Line.tsx
 import React from 'react';
 import * as d3Shape from 'd3-shape';
 
@@ -28,7 +27,7 @@ interface LineProps {
     connectNulls?: boolean;
     onMouseOver?: (event: React.MouseEvent, entry: { name: string; [key: string]: any }) => void;
     onMouseOut?: () => void;
-    label?: boolean; // Agregada la propiedad label
+    label?: boolean;
 }
 
 const Line: React.FC<LineProps> = ({
@@ -42,7 +41,7 @@ const Line: React.FC<LineProps> = ({
     connectNulls = false,
     onMouseOver = () => {},
     onMouseOut = () => {},
-    label = false, // Valor por defecto de label es false
+    label = false,
 }) => {
     if (!data.length) return null;
 
@@ -54,9 +53,9 @@ const Line: React.FC<LineProps> = ({
         .x((d: any) => xScale(d.index))
         .y((d: any) => {
             const value = d[dataKey];
-            return value !== null && value !== undefined ? yScale(value) : null;
+            return value !== null && value !== undefined ? yScale(value) : yScale(0);
         })
-        .curve(d3Shape[`curve${type.charAt(0).toUpperCase() + type.slice(1)}`] || d3Shape.curveLinear);
+        .curve((d3Shape as any)[`curve${type.charAt(0).toUpperCase() + type.slice(1)}`] || d3Shape.curveLinear);
 
     const renderPath = () => {
         if (connectNulls) {
@@ -64,7 +63,7 @@ const Line: React.FC<LineProps> = ({
             return (
                 <path
                     d={lineGenerator(filteredData) || ''}
-                    fill="none"
+                    fill='none'
                     stroke={stroke}
                     strokeWidth={2}
                     strokeDasharray={strokeDasharray}
@@ -72,9 +71,8 @@ const Line: React.FC<LineProps> = ({
                 />
             );
         } else {
-            // Cuando connectNulls es false, crear segmentos separados
-            const segments = [];
-            let segment = [];
+            const segments: Array<{ [key: string]: any }> = [];
+            let segment: Array<{ [key: string]: any }> = [];
 
             processedData.forEach((d) => {
                 if (lineGenerator.defined()(d)) {
@@ -93,7 +91,7 @@ const Line: React.FC<LineProps> = ({
                 <path
                     key={`segment-${i}`}
                     d={lineGenerator(segment) || ''}
-                    fill="none"
+                    fill='none'
                     stroke={stroke}
                     strokeWidth={2}
                     strokeDasharray={strokeDasharray}
@@ -123,13 +121,7 @@ const Line: React.FC<LineProps> = ({
                             onMouseOut={onMouseOut}
                         />
                         {label && (
-                            <text
-                                x={x}
-                                y={y - 10} // Posiciona la etiqueta encima de la bolita
-                                textAnchor="middle"
-                                fontSize={12}
-                                fill={stroke}
-                            >
+                            <text x={x} y={y - 10} textAnchor='middle' fontSize={12} fill={stroke}>
                                 {value}
                             </text>
                         )}
