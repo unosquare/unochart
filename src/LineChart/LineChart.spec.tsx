@@ -1,0 +1,58 @@
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import LineChart from './index';
+import Line from '../Line';
+import XAxis from '../XAxis';
+import YAxis from '../YAxis';
+
+describe('LineChart', () => {
+    const mockData = [
+        { name: 'Page A', uv: 400, pv: 200 },
+        { name: 'Page B', uv: 300, pv: 100 },
+        { name: 'Page C', uv: 200, pv: 300 }
+    ];
+
+    it('renders without crashing', () => {
+        const { container } = render(
+            <LineChart width={500} height={300} data={mockData}>
+                <Line dataKey="uv" stroke="#8884d8" />
+            </LineChart>
+        );
+        expect(container).toBeInTheDocument();
+    });
+
+    it('renders multiple lines correctly', () => {
+        const { container } = render(
+            <LineChart width={500} height={300} data={mockData}>
+                <Line dataKey="uv" stroke="#8884d8" />
+                <Line dataKey="pv" stroke="#82ca9d" />
+            </LineChart>
+        );
+        const paths = container.querySelectorAll('path');
+        expect(paths.length).toBeGreaterThan(1);
+    });
+
+    it('handles mouse movement for tooltip', () => {
+        const { container } = render(
+            <LineChart width={500} height={300} data={mockData}>
+                <Line dataKey="uv" stroke="#8884d8" />
+            </LineChart>
+        );
+        const svg = container.querySelector('svg');
+        if (svg) {
+            fireEvent.mouseMove(svg, { clientX: 250, clientY: 150 });
+            fireEvent.mouseLeave(svg);
+        }
+    });
+
+    it('renders with axes', () => {
+        const { container } = render(
+            <LineChart width={500} height={300} data={mockData}>
+                <XAxis />
+                <YAxis />
+                <Line dataKey="uv" stroke="#8884d8" />
+            </LineChart>
+        );
+        expect(container.querySelector('.y-axis')).toBeInTheDocument();
+    });
+});
