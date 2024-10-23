@@ -15,7 +15,7 @@ describe('LineChart', () => {
     it('renders without crashing', () => {
         const { container } = render(
             <LineChart width={500} height={300} data={mockData}>
-                <Line dataKey="uv" stroke="#8884d8" />
+                <Line dataKey="uv" stroke="#8884d8" data={mockData} xScale={(value) => value} yScale={(value) => value} />
             </LineChart>
         );
         expect(container).toBeInTheDocument();
@@ -24,8 +24,8 @@ describe('LineChart', () => {
     it('renders multiple lines correctly', () => {
         const { container } = render(
             <LineChart width={500} height={300} data={mockData}>
-                <Line dataKey="uv" stroke="#8884d8" />
-                <Line dataKey="pv" stroke="#82ca9d" />
+                <Line dataKey="uv" stroke="#8884d8" data={mockData} xScale={(value) => value} yScale={(value) => value} />
+                <Line dataKey="pv" stroke="#82ca9d" data={mockData} xScale={(value) => value} yScale={(value) => value} />
             </LineChart>
         );
         const paths = container.querySelectorAll('path');
@@ -35,7 +35,7 @@ describe('LineChart', () => {
     it('handles mouse movement for tooltip', () => {
         const { container } = render(
             <LineChart width={500} height={300} data={mockData}>
-                <Line dataKey="uv" stroke="#8884d8" />
+                <Line dataKey="uv" stroke="#8884d8" data={mockData} xScale={(value) => value} yScale={(value) => value} />
             </LineChart>
         );
         const svg = container.querySelector('svg');
@@ -50,7 +50,7 @@ describe('LineChart', () => {
             <LineChart width={500} height={300} data={mockData}>
                 <XAxis />
                 <YAxis />
-                <Line dataKey="uv" stroke="#8884d8" />
+                <Line dataKey="uv" stroke="#8884d8" data={mockData} xScale={(value) => value} yScale={(value) => value} />
             </LineChart>
         );
         expect(container.querySelector('.y-axis')).toBeInTheDocument();
