@@ -1,12 +1,12 @@
 import React from 'react';
-import * as d3Shape from 'd3-shape';
+import { createLineGenerator, renderPathSegments } from './utils';
 
 interface LineProps {
     data: Array<{ [key: string]: any }>;
     dataKey: string;
     stroke: string;
     strokeDasharray?: string;
-    type?:
+    type?: 
         | 'basis'
         | 'basisClosed'
         | 'basisOpen'
@@ -46,64 +46,11 @@ const Line: React.FC<LineProps> = ({
     if (!data.length) return null;
 
     const processedData = data.map((d, index) => ({ ...d, index }));
-
-    const lineGenerator = d3Shape
-        .line()
-        .defined((d: any) => d[dataKey] !== null && d[dataKey] !== undefined)
-        .x((d: any) => xScale(d.index))
-        .y((d: any) => {
-            const value = d[dataKey];
-            return value !== null && value !== undefined ? yScale(value) : yScale(0);
-        })
-        .curve((d3Shape as any)[`curve${type.charAt(0).toUpperCase() + type.slice(1)}`] || d3Shape.curveLinear);
-
-    const renderPath = () => {
-        if (connectNulls) {
-            const filteredData = processedData.filter(lineGenerator.defined());
-            return (
-                <path
-                    d={lineGenerator(filteredData) || ''}
-                    fill='none'
-                    stroke={stroke}
-                    strokeWidth={2}
-                    strokeDasharray={strokeDasharray}
-                    style={{ transition: 'all 0.3s' }}
-                />
-            );
-        } else {
-            const segments: Array<{ [key: string]: any }> = [];
-            let segment: Array<{ [key: string]: any }> = [];
-
-            processedData.forEach((d) => {
-                if (lineGenerator.defined()(d)) {
-                    segment.push(d);
-                } else if (segment.length) {
-                    segments.push(segment);
-                    segment = [];
-                }
-            });
-
-            if (segment.length) {
-                segments.push(segment);
-            }
-
-            return segments.map((segment, i) => (
-                <path
-                    key={`segment-${i}`}
-                    d={lineGenerator(segment) || ''}
-                    fill='none'
-                    stroke={stroke}
-                    strokeWidth={2}
-                    strokeDasharray={strokeDasharray}
-                    style={{ transition: 'all 0.3s' }}
-                />
-            ));
-        }
-    };
+    const lineGenerator = createLineGenerator(type, xScale, yScale, dataKey);
 
     return (
         <>
-            {renderPath()}
+            {renderPathSegments(lineGenerator, processedData, stroke, strokeDasharray, connectNulls)}
             {processedData.map((entry, index) => {
                 const value = entry[dataKey];
                 if (value === null || value === undefined) return null;
