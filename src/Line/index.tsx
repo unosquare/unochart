@@ -1,9 +1,9 @@
 import React from 'react';
 import { createLineGenerator, renderPathSegments } from './utils';
 
-interface LineProps {
-    data: Array<{ [key: string]: any }>;
-    dataKey: string;
+interface LineProps<T> {
+    data: Array<T>;
+    dataKey: keyof T;
     stroke: string;
     strokeDasharray?: string;
     type?: 
@@ -22,15 +22,15 @@ interface LineProps {
         | 'step'
         | 'stepBefore'
         | 'stepAfter';
-    xScale: (value: number) => number;
+    xScale: (value: number | string) => number;
     yScale: (value: number) => number;
     connectNulls?: boolean;
-    onMouseOver?: (event: React.MouseEvent, entry: { name: string; [key: string]: any }) => void;
+    onMouseOver?: (event: React.MouseEvent, entry: T) => void;
     onMouseOut?: () => void;
     label?: boolean;
 }
 
-const Line: React.FC<LineProps> = ({
+const Line = <T,>({
     data = [],
     dataKey,
     stroke,
@@ -42,20 +42,20 @@ const Line: React.FC<LineProps> = ({
     onMouseOver = () => {},
     onMouseOut = () => {},
     label = false,
-}) => {
+}: LineProps<T>) => {
     if (!data.length) return null;
 
     const processedData = data.map((d, index) => ({ ...d, index }));
-    const lineGenerator = createLineGenerator(type, xScale, yScale, dataKey);
+    const lineGenerator = createLineGenerator(type, xScale, yScale, dataKey as string);
 
     return (
         <>
             {renderPathSegments(lineGenerator, processedData, stroke, strokeDasharray, connectNulls)}
             {processedData.map((entry, index) => {
-                const value = entry[dataKey];
+                const value = entry[dataKey as keyof T];
                 if (value === null || value === undefined) return null;
-                const x = xScale(entry.index);
-                const y = yScale(value);
+                const x = xScale(index);
+                const y = yScale(value as number);
                 if (y === null) return null;
                 return (
                     <g key={`point-${index}`}>
@@ -69,7 +69,7 @@ const Line: React.FC<LineProps> = ({
                         />
                         {label && (
                             <text x={x} y={y - 10} textAnchor='middle' fontSize={12} fill={stroke}>
-                                {value}
+                                {String(value)}
                             </text>
                         )}
                     </g>
