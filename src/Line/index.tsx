@@ -6,7 +6,7 @@ interface LineProps<T> {
     dataKey: keyof T;
     stroke: string;
     strokeDasharray?: string;
-    type?: 
+    type?:
         | 'basis'
         | 'basisClosed'
         | 'basisOpen'
@@ -52,7 +52,7 @@ const Line = <T,>({
         <>
             {renderPathSegments(lineGenerator, processedData, stroke, strokeDasharray, connectNulls)}
             {processedData.map((entry, index) => {
-                const value = entry[dataKey as keyof T];
+                const value = entry[dataKey];
                 if (value === null || value === undefined) return null;
                 const x = xScale(index);
                 const y = yScale(Number(value));

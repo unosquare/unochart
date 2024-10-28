@@ -16,7 +16,6 @@ interface LineChartProps {
     children: ReactNode;
 }
 
-
 const LineChart: React.FC<LineChartProps> = ({
     width,
     height,

@@ -4,9 +4,9 @@ export const createLineGenerator = (
     type: string,
     xScale: (value: number) => number,
     yScale: (value: number) => number,
-    dataKey: string
-) => {
-    return d3Shape
+    dataKey: string,
+) =>
+    d3Shape
         .line()
         .defined((d: any) => d[dataKey] !== null && d[dataKey] !== undefined)
         .x((d: any) => xScale(d.index))
@@ -15,14 +15,13 @@ export const createLineGenerator = (
             return value !== null && value !== undefined ? yScale(value) : yScale(0);
         })
         .curve((d3Shape as any)[`curve${type.charAt(0).toUpperCase() + type.slice(1)}`] || d3Shape.curveLinear);
-};
 
 export const renderPathSegments = (
     lineGenerator: any,
     processedData: Array<{ [key: string]: any }>,
     stroke: string,
     strokeDasharray: string,
-    connectNulls: boolean
+    connectNulls: boolean,
 ) => {
     if (connectNulls) {
         const filteredData = processedData.filter(lineGenerator.defined());
