@@ -5,6 +5,15 @@ import Line from '../Line';
 import XAxis from '../XAxis';
 import YAxis from '../YAxis';
 
+beforeEach(() => {
+    (SVGElement.prototype as any).getBBox = jest.fn().mockReturnValue({
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 50
+    });
+});
+
 describe('LineChart', () => {
     const mockData = [
         { name: 'Page A', uv: 400, pv: 200 },
