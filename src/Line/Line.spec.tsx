@@ -10,7 +10,7 @@ describe('Line', () => {
     ];
 
     const mockScales = {
-        xScale: (value: number) => value * 100,
+        xScale: (value: string | number) => typeof value === 'number' ? value * 100 : parseFloat(value) * 100,
         yScale: (value: number) => value
     };
 

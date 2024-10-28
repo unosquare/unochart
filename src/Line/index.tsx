@@ -22,7 +22,7 @@ interface LineProps<T> {
         | 'step'
         | 'stepBefore'
         | 'stepAfter';
-    xScale: (value: number | string) => number;
+    xScale: (value: number) => number;
     yScale: (value: number) => number;
     connectNulls?: boolean;
     onMouseOver?: (event: React.MouseEvent, entry: T) => void;
@@ -55,7 +55,7 @@ const Line = <T,>({
                 const value = entry[dataKey as keyof T];
                 if (value === null || value === undefined) return null;
                 const x = xScale(index);
-                const y = yScale(value as number);
+                const y = yScale(Number(value));
                 if (y === null) return null;
                 return (
                     <g key={`point-${index}`}>
