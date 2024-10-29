@@ -1,9 +1,9 @@
 import React from 'react';
-import * as d3Shape from 'd3-shape';
+import { createLineGenerator, renderPathSegments } from './utils';
 
-interface LineProps {
-    data: Array<{ [key: string]: any }>;
-    dataKey: string;
+interface LineProps<T> {
+    data: Array<T>;
+    dataKey: keyof T;
     stroke: string;
     strokeDasharray?: string;
     type?:
@@ -25,12 +25,12 @@ interface LineProps {
     xScale: (value: number) => number;
     yScale: (value: number) => number;
     connectNulls?: boolean;
-    onMouseOver?: (event: React.MouseEvent, entry: { name: string; [key: string]: any }) => void;
+    onMouseOver?: (event: React.MouseEvent, entry: T) => void;
     onMouseOut?: () => void;
     label?: boolean;
 }
 
-const Line: React.FC<LineProps> = ({
+const Line = <T,>({
     data = [],
     dataKey,
     stroke,
@@ -42,73 +42,20 @@ const Line: React.FC<LineProps> = ({
     onMouseOver = () => {},
     onMouseOut = () => {},
     label = false,
-}) => {
+}: LineProps<T>) => {
     if (!data.length) return null;
 
     const processedData = data.map((d, index) => ({ ...d, index }));
-
-    const lineGenerator = d3Shape
-        .line()
-        .defined((d: any) => d[dataKey] !== null && d[dataKey] !== undefined)
-        .x((d: any) => xScale(d.index))
-        .y((d: any) => {
-            const value = d[dataKey];
-            return value !== null && value !== undefined ? yScale(value) : yScale(0);
-        })
-        .curve((d3Shape as any)[`curve${type.charAt(0).toUpperCase() + type.slice(1)}`] || d3Shape.curveLinear);
-
-    const renderPath = () => {
-        if (connectNulls) {
-            const filteredData = processedData.filter(lineGenerator.defined());
-            return (
-                <path
-                    d={lineGenerator(filteredData) || ''}
-                    fill='none'
-                    stroke={stroke}
-                    strokeWidth={2}
-                    strokeDasharray={strokeDasharray}
-                    style={{ transition: 'all 0.3s' }}
-                />
-            );
-        } else {
-            const segments: Array<{ [key: string]: any }> = [];
-            let segment: Array<{ [key: string]: any }> = [];
-
-            processedData.forEach((d) => {
-                if (lineGenerator.defined()(d)) {
-                    segment.push(d);
-                } else if (segment.length) {
-                    segments.push(segment);
-                    segment = [];
-                }
-            });
-
-            if (segment.length) {
-                segments.push(segment);
-            }
-
-            return segments.map((segment, i) => (
-                <path
-                    key={`segment-${i}`}
-                    d={lineGenerator(segment) || ''}
-                    fill='none'
-                    stroke={stroke}
-                    strokeWidth={2}
-                    strokeDasharray={strokeDasharray}
-                    style={{ transition: 'all 0.3s' }}
-                />
-            ));
-        }
-    };
+    const lineGenerator = createLineGenerator(type, xScale, yScale, dataKey as string);
 
     return (
         <>
-            {renderPath()}
+            {renderPathSegments(lineGenerator, processedData, stroke, strokeDasharray, connectNulls)}
             {processedData.map((entry, index) => {
                 const value = entry[dataKey];
                 if (value === null || value === undefined) return null;
-                const x = xScale(entry.index);
-                const y = yScale(value);
+                const x = xScale(index);
+                const y = yScale(Number(value));
                 if (y === null) return null;
                 return (
                     <g key={`point-${index}`}>
@@ -122,7 +69,7 @@ const Line: React.FC<LineProps> = ({
                         />
                         {label && (
                             <text x={x} y={y - 10} textAnchor='middle' fontSize={12} fill={stroke}>
-                                {value}
+                                {String(value)}
                             </text>
                         )}
                     </g>

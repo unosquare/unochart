@@ -1,6 +1,6 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import '@testing-library/jest-dom'; // Asegúrate de importar esto
+import { render, within } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import Tooltip from './index';
 
 describe('Tooltip', () => {
@@ -20,11 +20,16 @@ describe('Tooltip', () => {
     });
 
     it('displays the correct values with the correct color', () => {
-        const { getByText } = render(<Tooltip tooltipData={mockTooltipData} />);
+        const { container } = render(<Tooltip tooltipData={mockTooltipData} />);
         mockTooltipData.values.forEach(item => {
-            const valueElement = getByText(`${item.key}: ${item.value}`);
+            // Buscar el elemento que contiene la key
+            const keyElement = within(container).getByText(`${item.key}:`);
+            expect(keyElement).toBeInTheDocument();
+            expect(keyElement).toHaveStyle(`color: ${item.color}`);
+            
+            // Buscar el elemento que contiene el valor
+            const valueElement = within(container).getByText(item.value.toLocaleString());
             expect(valueElement).toBeInTheDocument();
-            expect(valueElement).toHaveStyle(`color: ${item.color}`);
         });
     });
 });
