@@ -8,7 +8,19 @@ import Tooltip from '../../src/Tooltip';
 import Legend from '../../src/Legend';
 import ScatterChartControls from './ScatterChartControls';
 
-const scatterData = [
+interface ScatterDataPoint {
+  x: number;
+  y: number;
+  z: number;
+}
+
+interface ScatterChartWrapperProps {
+  initialWidth?: number;
+  initialHeight?: number;
+  initialMargin?: { top: number; right: number; bottom: number; left: number };
+}
+
+const scatterData: ScatterDataPoint[] = [
   { x: 100, y: 200, z: 200 },
   { x: 120, y: 100, z: 260 },
   { x: 170, y: 300, z: 400 },
@@ -17,37 +29,41 @@ const scatterData = [
   { x: 110, y: 280, z: 200 },
 ];
 
-const ScatterChartWrapper = ({ initialWidth = 730, initialHeight = 250, initialMargin = { top: 5, right: 30, left: 20, bottom: 5 } }) => {
+const ScatterChartWrapper: React.FC<ScatterChartWrapperProps> = ({
+  initialWidth = 730,
+  initialHeight = 250,
+  initialMargin = { top: 5, right: 30, left: 20, bottom: 5 }
+}) => {
   const [width, setWidth] = useState(initialWidth);
   const [height, setHeight] = useState(initialHeight);
   const [margin, setMargin] = useState(initialMargin);
+  const [fill, setFill] = useState('#8884d8');
 
   return (
     <div className="p-6">
-      <div className="flex">
-
-        {/* ScatterChartControls */}
-        <ScatterChartControls
-          width={width}
-          setWidth={setWidth}
-          height={height}
-          setHeight={setHeight}
-          margin={margin}
-          setMargin={setMargin}
-          data={scatterData}
-          setData={() => {}}
-        />
-
-
-        {/* ScatterChart */}
-        <div className="flex items-center pl-12">
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="lg:w-1/3">
+          <ScatterChartControls
+            width={width}
+            setWidth={setWidth}
+            height={height}
+            setHeight={setHeight}
+            margin={margin}
+            setMargin={setMargin}
+            data={scatterData}
+            setData={() => {}}
+            fill={fill}
+            setFill={setFill}
+          />
+        </div>
+        <div className="lg:w-2/3">
           <ScatterChart width={width} height={height} data={scatterData} margin={margin}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="x" name="X-axis" type='number' />
-            <YAxis dataKey="y" name="Y-axis" type='number' />
+            <XAxis dataKey="x" name="X-axis" type="number" />
+            <YAxis dataKey="y" name="Y-axis" type="number" />
             <Tooltip />
             <Legend />
-            <Scatter name="Sample Data" data={scatterData} fill="#8884d8" />
+            <Scatter name="Sample Data" data={scatterData} fill={fill} />
           </ScatterChart>
         </div>
       </div>

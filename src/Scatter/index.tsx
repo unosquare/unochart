@@ -4,10 +4,11 @@ interface ScatterProps {
     data: Array<{ x: number; y: number; z?: number }>;
     xScale: (value: number) => number;
     yScale: (value: number) => number;
-    fill: string;
+    fill?: string;
+    hoveredPoint: number | null;
 }
 
-const Scatter: React.FC<ScatterProps> = ({ data, xScale, yScale, fill = 'blue' }) => {
+const Scatter: React.FC<ScatterProps> = ({ data, xScale, yScale, fill = 'blue', hoveredPoint }) => {
     return (
         <>
             {data.map((point, index) => (
@@ -15,8 +16,10 @@ const Scatter: React.FC<ScatterProps> = ({ data, xScale, yScale, fill = 'blue' }
                     key={index}
                     cx={xScale(point.x)}
                     cy={yScale(point.y)}
-                    r={5}
+                    r={hoveredPoint === index ? 7 : 5}
                     fill={fill}
+                    opacity={hoveredPoint === null || hoveredPoint === index ? 1 : 0.5}
+                    className="transition-all duration-300 ease-in-out"
                 />
             ))}
         </>

@@ -1,4 +1,4 @@
-import React, { Children, cloneElement, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { Children, cloneElement, ReactNode, useEffect, useRef, useState, useMemo } from 'react';
 import CartesianGrid from '../CartesianGrid';
 import XAxis from '../XAxis';
 import YAxis from '../YAxis';
@@ -12,6 +12,7 @@ interface ScatterChartProps {
     data: Array<{ [key: string]: any }>;
     margin?: { top?: number; right?: number; bottom?: number; left?: number };
     children: ReactNode;
+    theme?: 'light' | 'dark';
 }
 
 export const getDataRange = (data: Array<{ [key: string]: any }>, key: string): { min: number; max: number } => {
@@ -35,15 +36,16 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
     data,
     margin = { top: 20, right: 30, bottom: 20, left: 40 },
     children,
+    theme = 'light'
 }) => {
-    const chartWidth = width - ((margin.left ?? 0) + (margin.right ?? 0));
-    const chartHeight = height - ((margin.top ?? 0) + (margin.bottom ?? 0));
+    const chartWidth = width - ((margin.left ?? 0) + (margin.right ?? 0) + 20);
+    const chartHeight = height - ((margin.top ?? 0) + (margin.bottom ?? 0) + 20);
 
-    const xRange = getDataRange(data, 'x');
-    const yRange = getDataRange(data, 'y');
+    const xRange = useMemo(() => getDataRange(data, 'x'), [data]);
+    const yRange = useMemo(() => getDataRange(data, 'y'), [data]);
 
-    const xMax = roundToNiceNumber(xRange.max);
-    const yMax = roundToNiceNumber(yRange.max);
+    const xMax = useMemo(() => roundToNiceNumber(xRange.max), [xRange.max]);
+    const yMax = useMemo(() => roundToNiceNumber(yRange.max), [yRange.max]);
 
     const [leftMargin, setLeftMargin] = useState(margin.left);
     const svgRef = useRef<SVGSVGElement>(null);
@@ -52,6 +54,7 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
         values: { key: string; value: number; color: string }[];
     } | null>(null);
     const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+    const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
 
     useEffect(() => {
         if (svgRef.current) {
@@ -85,16 +88,16 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
         const mouseX = event.clientX - svgRect.left - (leftMargin ?? 0);
         const mouseY = event.clientY - svgRect.top - (margin.top ?? 0);
 
-        const closestPoint = data.reduce((closest, point) => {
+        const closestPoint = data.reduce((closest, point, index) => {
             const pointX = xScale(point.x);
             const pointY = yScale(point.y);
             const distance = Math.sqrt(Math.pow(mouseX - pointX, 2) + Math.pow(mouseY - pointY, 2));
             
             if (distance < closest.distance) {
-                return { point, distance };
+                return { point, distance, index };
             }
             return closest;
-        }, { point: null, distance: Infinity });
+        }, { point: null, distance: Infinity, index: -1 });
 
         if (closestPoint.point && closestPoint.distance < 50) {
             setTooltipData({
@@ -105,26 +108,30 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
                 ]
             });
             setPosition({ x: event.clientX - svgRect.left, y: event.clientY - svgRect.top });
+            setHoveredPoint(closestPoint.index);
         } else {
             setTooltipData(null);
+            setHoveredPoint(null);
         }
     };
 
     const handleMouseLeave = () => {
         setTooltipData(null);
+        setHoveredPoint(null);
     };
 
     return (
-        <div className='relative inline-block'>
+        <div className={`relative inline-block ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
             <svg
                 ref={svgRef}
-                width={width + width * 0.1}
-                height={height + height * 0.1}
-                className='bg-white'
+                width={width}
+                height={height}
+                className="bg-white transition-all duration-300 ease-in-out"
+                style={{ overflow: 'visible' }}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
             >
-                <g transform={`translate(${leftMargin}, ${(margin.top ?? 0) + height * 0.05})`}>
+                <g transform={`translate(${(leftMargin ?? 0) + 10}, ${(margin.top ?? 0) + 10})`}>
                     {grid && cloneElement(grid as React.ReactElement, { width: chartWidth, height: chartHeight })}
                     {xAxis && cloneElement(xAxis as React.ReactElement, {
                         data,
@@ -138,7 +145,12 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
                         maxValue: yMax,
                         minValue: 0
                     })}
-                    {scatter && cloneElement(scatter as React.ReactElement, { data, xScale, yScale })}
+                    {scatter && cloneElement(scatter as React.ReactElement, { 
+                        data, 
+                        xScale, 
+                        yScale, 
+                        hoveredPoint 
+                    })}
                 </g>
             </svg>
             {legend && cloneElement(legend as React.ReactElement, {

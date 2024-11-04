@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createLineGenerator, renderPathSegments } from './utils';
 
 interface LineProps<T> {
@@ -45,8 +45,8 @@ const Line = <T,>({
 }: LineProps<T>) => {
     if (!data.length) return null;
 
-    const processedData = data.map((d, index) => ({ ...d, index }));
-    const lineGenerator = createLineGenerator(type, xScale, yScale, dataKey as string);
+    const processedData = useMemo(() => data.map((d, index) => ({ ...d, index })), [data]);
+    const lineGenerator = useMemo(() => createLineGenerator(type, xScale, yScale, dataKey as string), [type, xScale, yScale, dataKey]);
 
     return (
         <>
@@ -58,7 +58,7 @@ const Line = <T,>({
                 const y = yScale(Number(value));
                 if (y === null) return null;
                 return (
-                    <g key={`point-${index}`}>
+                    <g key={`point-${index}`} className="transition-all duration-300 ease-in-out">
                         <circle
                             cx={x}
                             cy={y}
@@ -66,9 +66,17 @@ const Line = <T,>({
                             fill={stroke}
                             onMouseOver={(event) => onMouseOver(event, entry)}
                             onMouseOut={onMouseOut}
+                            className="hover:r-5 focus:r-5 transition-all duration-300 ease-in-out"
                         />
                         {label && (
-                            <text x={x} y={y - 10} textAnchor='middle' fontSize={12} fill={stroke}>
+                            <text 
+                                x={x} 
+                                y={y - 10} 
+                                textAnchor="middle" 
+                                fontSize={12} 
+                                fill={stroke}
+                                className="opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
+                            >
                                 {String(value)}
                             </text>
                         )}

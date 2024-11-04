@@ -14,7 +14,7 @@ interface ReferenceLineProps {
 const ReferenceLine: React.FC<ReferenceLineProps> = ({
     x,
     y,
-    stroke = 'red',
+    stroke = '#ef4444',
     label,
     chartWidth = 0,
     chartHeight = 0,
@@ -25,12 +25,28 @@ const ReferenceLine: React.FC<ReferenceLineProps> = ({
     const yPosition = y !== undefined ? yScale(y) : 0;
 
     return (
-        <g className='recharts-reference-line'>
+        <g className="recharts-reference-line">
             {x !== undefined && (
-                <line x1={xPosition} y1={0} x2={xPosition} y2={chartHeight} stroke={stroke} strokeWidth={1} />
+                <line
+                    x1={xPosition}
+                    y1={0}
+                    x2={xPosition}
+                    y2={chartHeight}
+                    stroke={stroke}
+                    strokeWidth={2}
+                    className="transition-all duration-300 ease-in-out"
+                />
             )}
             {y !== undefined && (
-                <line x1={0} y1={yPosition} x2={chartWidth} y2={yPosition} stroke={stroke} strokeWidth={1} />
+                <line
+                    x1={0}
+                    y1={yPosition}
+                    x2={chartWidth}
+                    y2={yPosition}
+                    stroke={stroke}
+                    strokeWidth={2}
+                    className="transition-all duration-300 ease-in-out"
+                />
             )}
             {label && (
                 <text
@@ -40,7 +56,7 @@ const ReferenceLine: React.FC<ReferenceLineProps> = ({
                     dx={x !== undefined ? 5 : -5}
                     textAnchor={x !== undefined ? 'start' : 'end'}
                     fill={stroke}
-                    fontSize={12}
+                    className="text-xs font-semibold transition-all duration-300 ease-in-out"
                 >
                     {label}
                 </text>

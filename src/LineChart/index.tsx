@@ -1,4 +1,4 @@
-import React, { Children, cloneElement, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { Children, cloneElement, ReactNode, useEffect, useRef, useState, useMemo } from 'react';
 import CartesianGrid from '../CartesianGrid';
 import XAxis from '../XAxis';
 import YAxis from '../YAxis';
@@ -23,10 +23,10 @@ const LineChart: React.FC<LineChartProps> = ({
     margin = { top: 20, right: 30, bottom: 20, left: 40 },
     children,
 }) => {
-    const chartWidth = width - ((margin.left ?? 0) + (margin.right ?? 0));
-    const chartHeight = height - ((margin.top ?? 0) + (margin.bottom ?? 0));
+    const chartWidth = width - ((margin.left ?? 0) + (margin.right ?? 0) + 20);
+    const chartHeight = height - ((margin.top ?? 0) + (margin.bottom ?? 0) + 20);
 
-    const { maxValue, minValue } = roundMaxValue(data);
+    const { maxValue, minValue } = useMemo(() => roundMaxValue(data), [data]);
     const [leftMargin, setLeftMargin] = useState(margin.left);
     const svgRef = useRef<SVGSVGElement>(null);
     const [tooltipData, setTooltipData] = useState<{
@@ -46,36 +46,32 @@ const LineChart: React.FC<LineChartProps> = ({
         }
     }, [data, margin.left]);
 
-    const xAxis = Children.toArray(children).find((child) => React.isValidElement(child) && child.type === XAxis);
-    const yAxis = Children.toArray(children).find((child) => React.isValidElement(child) && child.type === YAxis);
-    const grid = Children.toArray(children).find(
-        (child) => React.isValidElement(child) && child.type === CartesianGrid,
-    );
-    const tooltip = Children.toArray(children).find((child) => React.isValidElement(child) && child.type === Tooltip);
-    const legend = Children.toArray(children).find((child) => React.isValidElement(child) && child.type === Legend);
+    const childrenArray = useMemo(() => Children.toArray(children), [children]);
 
-    const lineComponents = Children.toArray(children).filter(
-        (child) => React.isValidElement(child) && child.type === Line,
-    );
+    const xAxis = childrenArray.find((child) => React.isValidElement(child) && child.type === XAxis);
+    const yAxis = childrenArray.find((child) => React.isValidElement(child) && child.type === YAxis);
+    const grid = childrenArray.find((child) => React.isValidElement(child) && child.type === CartesianGrid);
+    const tooltip = childrenArray.find((child) => React.isValidElement(child) && child.type === Tooltip);
+    const legend = childrenArray.find((child) => React.isValidElement(child) && child.type === Legend);
 
-    const referenceLines = Children.toArray(children).filter(
-        (child) => React.isValidElement(child) && child.type === ReferenceLine,
-    );
+    const lineComponents = childrenArray.filter((child) => React.isValidElement(child) && child.type === Line);
 
-    const legendItems = lineComponents.map((child) => {
+    const referenceLines = childrenArray.filter((child) => React.isValidElement(child) && child.type === ReferenceLine);
+
+    const legendItems = useMemo(() => lineComponents.map((child) => {
         if (React.isValidElement(child)) {
             const lineChild = child as React.ReactElement;
             return { color: lineChild.props.stroke, label: lineChild.props.dataKey };
         }
         return { color: '', label: '' };
-    });
+    }), [lineComponents]);
 
     const xScale = (value: string | number) => {
         if (typeof value === 'string') {
             const index = data.findIndex((item) => item.name === value);
-            return index * (chartWidth / (data.length - 1));
+            return (index + 0.5) * (chartWidth / data.length);
         }
-        return value * (chartWidth / (data.length - 1));
+        return (value + 0.5) * (chartWidth / data.length);
     };
 
     const yScale = (value: number) => chartHeight - ((value - minValue) / (maxValue - minValue)) * chartHeight;
@@ -115,16 +111,17 @@ const LineChart: React.FC<LineChartProps> = ({
     };
 
     return (
-        <div className='relative inline-block'>
+        <div className="relative inline-block">
             <svg
                 ref={svgRef}
-                width={width + width * 0.1}
-                height={height + height * 0.1}
-                className='bg-white'
+                width={width}
+                height={height}
+                className="bg-white transition-all duration-300 ease-in-out"
+                style={{ overflow: 'visible' }}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
             >
-                <g transform={`translate(${leftMargin}, ${(margin.top ?? 0) + height * 0.05})`}>
+                <g transform={`translate(${(leftMargin ?? 0) + 10}, ${(margin.top ?? 0) + 10})`}>
                     {grid && cloneElement(grid as React.ReactElement, { width: chartWidth, height: chartHeight })}
                     {xAxis &&
                         cloneElement(xAxis as React.ReactElement, { data, width: chartWidth, height: chartHeight })}

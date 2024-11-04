@@ -35,7 +35,7 @@ const Pie: React.FC<PieProps> = ({
     const computedCx = typeof cx === 'string' && cx.endsWith('%') ? (parseFloat(cx) / 100) * 730 : cx;
     const computedCy = typeof cy === 'string' && cy.endsWith('%') ? (parseFloat(cy) / 100) * 250 : cy;
 
-    const totalValue = data.reduce((acc, item) => acc + (item[dataKey] as number), 0); // Ajuste aquí
+    const totalValue = data.reduce((acc, item) => acc + (item[dataKey] as number), 0);
     const angleRange = endAngle - startAngle;
 
     let currentAngle = startAngle + 180;
@@ -45,7 +45,7 @@ const Pie: React.FC<PieProps> = ({
     return (
         <g transform={`translate(${computedCx}, ${computedCy})`}>
             {data.map((entry, index) => {
-                const value = entry[dataKey] as number; // Ajuste aquí
+                const value = entry[dataKey] as number;
                 const angle = (value / totalValue) * angleRange - paddingAngle;
                 const nextAngle = currentAngle + angle;
                 const largeArcFlag = angle > 180 ? 1 : 0;
@@ -83,22 +83,25 @@ const Pie: React.FC<PieProps> = ({
                         key={uuidv4()}
                         onMouseEnter={() => setActiveIndex(index)}
                         onMouseLeave={() => setActiveIndex(null)}
+                        className="transition-transform duration-300 ease-in-out"
                     >
                         <path
                             d={pathData}
                             fill={fill}
-                            stroke='#fff'
-                            strokeWidth={1}
-                            style={{ transform: isActive ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.2s' }}
+                            stroke="white"
+                            strokeWidth={2}
+                            className={`transition-all duration-300 ease-in-out ${isActive ? 'filter drop-shadow-lg' : ''}`}
+                            style={{ transform: isActive ? 'scale(1.05)' : 'scale(1)' }}
                         />
                         {label && (
                             <text
                                 x={Math.cos((Math.PI / 180) * (currentAngle - angle / 2)) * (adjustedOuterRadius + 10)}
                                 y={Math.sin((Math.PI / 180) * (currentAngle - angle / 2)) * (adjustedOuterRadius + 10)}
-                                textAnchor='middle'
-                                dominantBaseline='middle'
+                                textAnchor="middle"
+                                dominantBaseline="middle"
                                 fill={fill}
-                                fontSize='10'
+                                className="text-xs font-semibold transition-all duration-300 ease-in-out"
+                                style={{ fontSize: isActive ? '12px' : '10px' }}
                             >
                                 {labelText}
                             </text>
