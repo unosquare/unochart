@@ -8,6 +8,7 @@ interface XAxisProps {
     maxValue?: number;
     minValue?: number;
     layout?: 'horizontal' | 'vertical';
+    type?: 'monotone' | 'number';
 }
 
 const XAxis = ({
@@ -18,6 +19,7 @@ const XAxis = ({
     maxValue = 0,
     minValue = 0,
     layout = 'horizontal',
+    type = 'monotone',
 }: XAxisProps) => {
     const positiveLines = 5;
     const negativeLines = minValue < 0 ? 5 : 0;
@@ -26,10 +28,49 @@ const XAxis = ({
     const positiveRange = maxValue / positiveLines;
     const negativeRange = minValue < 0 ? Math.abs(minValue) / negativeLines : 0;
 
+    const formatValue = (value: number) => (value % 1 === 0 ? value.toString() : value.toFixed(2));
+
+    if (type === 'number') {
+        return (
+            <g className='x-axis'>
+                {minValue < 0 &&
+                    new Array(negativeLines).fill(null).map((_, index) => {
+                        const value = -negativeRange * (negativeLines - index);
+                        return (
+                            <text
+                                key={uuidv4()}
+                                x={(index * width) / totalLines}
+                                y={height}
+                                textAnchor='middle'
+                                dominantBaseline='hanging'
+                            >
+                                {formatValue(value)}
+                            </text>
+                        );
+                    })}
+
+                {new Array(positiveLines + 1).fill(null).map((_, index) => {
+                    const value = positiveRange * index;
+                    return (
+                        <text
+                            key={uuidv4()}
+                            x={((index + negativeLines) * width) / totalLines}
+                            y={height}
+                            textAnchor='middle'
+                            dominantBaseline='hanging'
+                        >
+                            {formatValue(value)}
+                        </text>
+                    );
+                })}
+            </g>
+        );
+    }
+
     return (
         <g className='x-axis'>
             {layout === 'horizontal' ? (
-                // Render axis for horizontal layout (categories)
+
                 data.map((entry, index) => (
                     <text
                         key={uuidv4()}
@@ -42,21 +83,19 @@ const XAxis = ({
                     </text>
                 ))
             ) : (
-                // Render axis for vertical layout (values)
                 <>
                     {minValue < 0 &&
-                        // Render negative values
                         new Array(negativeLines).fill(null).map((_, index) => {
                             const value = -negativeRange * (negativeLines - index);
                             return (
                                 <text
                                     key={uuidv4()}
                                     x={(index * width) / totalLines}
-                                    y={height + height * 0.02}
+                                    y={height}
                                     textAnchor='middle'
                                     dominantBaseline='hanging'
                                 >
-                                    {value.toFixed(2)}
+                                    {formatValue(value)}
                                 </text>
                             );
                         })}
@@ -67,11 +106,11 @@ const XAxis = ({
                             <text
                                 key={uuidv4()}
                                 x={((index + negativeLines) * width) / totalLines}
-                                y={height + height * 0.02}
+                                y={height}
                                 textAnchor='middle'
                                 dominantBaseline='hanging'
                             >
-                                {value.toFixed(2)}
+                                {formatValue(value)}
                             </text>
                         );
                     })}

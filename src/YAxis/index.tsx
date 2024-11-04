@@ -7,9 +7,20 @@ interface YAxisProps {
     minValue?: number;
     width?: number;
     layout?: 'horizontal' | 'vertical';
+    type?: 'monotone' | 'number';
+    dataKey?: string;
 }
 
-const YAxis = ({ data = [], height = 0, width = 0, maxValue = 0, minValue = 0, layout = 'horizontal' }: YAxisProps) => {
+const YAxis = ({
+    data = [],
+    height = 0,
+    width = 0,
+    maxValue = 0,
+    minValue = 0,
+    layout = 'horizontal',
+    type = 'monotone',
+    dataKey = 'name'
+}: YAxisProps) => {
     const positiveLines = 5;
     const negativeLines = minValue < 0 ? 5 : 0;
     const totalLines = minValue < 0 ? 10 : positiveLines;
@@ -19,11 +30,46 @@ const YAxis = ({ data = [], height = 0, width = 0, maxValue = 0, minValue = 0, l
 
     const formatValue = (value: number) => (value % 1 === 0 ? value.toString() : value.toFixed(2));
 
+    if (type === 'number') {
+        return (
+            <g className='y-axis'>
+                {minValue < 0 &&
+                    new Array(negativeLines).fill(null).map((_, index) => {
+                        const value = -negativeRange * (negativeLines - index);
+                        return (
+                            <text
+                                key={uuidv4()}
+                                x={-10}
+                                y={height - (index * height) / totalLines}
+                                textAnchor='end'
+                                dominantBaseline='middle'
+                            >
+                                {formatValue(value)}
+                            </text>
+                        );
+                    })}
+
+                {new Array(positiveLines + 1).fill(null).map((_, index) => {
+                    const value = positiveRange * index;
+                    return (
+                        <text
+                            key={uuidv4()}
+                            x={-10}
+                            y={height - ((index + negativeLines) * height) / totalLines}
+                            textAnchor='end'
+                            dominantBaseline='middle'
+                        >
+                            {formatValue(value)}
+                        </text>
+                    );
+                })}
+            </g>
+        );
+    }
+
     return (
         <g className='y-axis'>
-            {layout === 'horizontal' &&
-                minValue < 0 &&
-                // Render negative values
+            {layout === 'horizontal' && minValue < 0 &&
                 new Array(negativeLines).fill(null).map((_, index) => {
                     const value = -negativeRange * (negativeLines - index);
                     return (
@@ -40,7 +86,6 @@ const YAxis = ({ data = [], height = 0, width = 0, maxValue = 0, minValue = 0, l
                 })}
 
             {layout === 'horizontal' &&
-                // Render positive values
                 new Array(positiveLines + 1).fill(null).map((_, index) => {
                     const value = positiveRange * index;
                     return (
@@ -65,7 +110,7 @@ const YAxis = ({ data = [], height = 0, width = 0, maxValue = 0, minValue = 0, l
                         textAnchor='end'
                         dominantBaseline='middle'
                     >
-                        {entry.name}
+                        {entry[dataKey]}
                     </text>
                 ))}
         </g>
