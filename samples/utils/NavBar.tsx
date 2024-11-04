@@ -41,6 +41,12 @@ export default function NavBar() {
         { name: 'Line Chart with Labels', path: '/line-chart-with-labels' },
       ],
     },
+    {
+      category: 'Scatter Charts',
+      items: [
+        { name: 'Scatter Chart', path: '/scatter-chart' },
+      ],
+    }
   ];
 
   return (

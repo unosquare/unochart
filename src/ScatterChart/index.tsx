@@ -25,7 +25,6 @@ const ScatterChart = ({
     const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
     const svgRef = useRef<SVGSVGElement>(null);
 
-    // Calcula los valores máximo y mínimo de x e y para escalas
     const maxX = Math.max(...data.map((d) => d.x));
     const minX = Math.min(...data.map((d) => d.x));
     const maxY = Math.max(...data.map((d) => d.y));
@@ -54,22 +53,19 @@ const ScatterChart = ({
                 }}
             >
                 <g transform={`translate(${margin.left}, ${margin.top})`}>
-                    <CartesianGrid width={width - margin.left - margin.right} height={height - margin.top - margin.bottom} />
+                    <CartesianGrid width={width - (margin.left ?? 0) - (margin.right ?? 0)} height={height - (margin.top ?? 0) - (margin.bottom ?? 0)} />
                     
                     <XAxis
-                        type="number"
                         dataKey="x"
-                        width={width - margin.left - margin.right}
-                        height={height - margin.top - margin.bottom}
+                        width={width - (margin.left ?? 0) - (margin.right ?? 0)}
+                        height={height - (margin.top ?? 0) - (margin.bottom ?? 0)}
                         minValue={minX}
                         maxValue={maxX}
                     />
                     
                     <YAxis
-                        type="number"
-                        dataKey="y"
-                        height={height - margin.top - margin.bottom}
-                        width={width - margin.left - margin.right}
+                        height={height - (margin.top ?? 0) - (margin.bottom ?? 0)}
+                        width={width - (margin.left ?? 0) - (margin.right ?? 0)}
                         minValue={minY}
                         maxValue={maxY}
                     />
@@ -77,8 +73,8 @@ const ScatterChart = ({
                     {data.map((point) => (
                         <circle
                             key={uuidv4()}
-                            cx={((point.x - minX) / (maxX - minX)) * (width - margin.left - margin.right)}
-                            cy={height - margin.bottom - ((point.y - minY) / (maxY - minY)) * (height - margin.top - margin.bottom)}
+                            cx={((point.x - minX) / (maxX - minX)) * (width - (margin.left ?? 0) - (margin.right ?? 0))}
+                            cy={height - (margin.bottom ?? 0) - ((point.y - minY) / (maxY - minY)) * (height - (margin.top ?? 0) - (margin.bottom ?? 0))}
                             r={5}
                             fill="#8884d8"
                             onMouseOver={(event) => handleMouseOver(event, point)}

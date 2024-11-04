@@ -17,6 +17,7 @@ import ReferenceLineChart from './pages/ReferenceLineChart';
 import TinyLineChart from './pages/TinyLineChart';
 import NoNullsChart from './pages/NoNulls';
 import LineChartWithLabels from './pages/LineChartWithLabels';
+import ScatterChartExample from './pages/ScatterChartExample';
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/tiny-line-chart" element={<TinyLineChart />} />
           <Route path="/no-nulls" element={<NoNullsChart />} />
           <Route path="/line-chart-with-labels" element={<LineChartWithLabels />} />
+          <Route path="/scatter-chart" element={<ScatterChartExample />} />
         </Routes>
       </div>
     </Router>
