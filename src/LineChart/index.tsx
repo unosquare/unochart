@@ -6,7 +6,7 @@ import Tooltip from '../Tooltip';
 import Legend from '../Legend';
 import Line from '../Line';
 import ReferenceLine from '../ReferenceLine';
-import { roundMaxValue } from './utils';
+import { roundMaxValue } from '../utils';
 
 interface LineChartProps {
     width: number;
