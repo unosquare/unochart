@@ -90,3 +90,30 @@ export interface BarChartControlsProps {
   setShowTooltip: (show: boolean) => void;
   setShowLegend: (show: boolean) => void;
 }
+
+export interface PieData {
+    id: number;
+    innerRadius?: number;
+    outerRadius?: number;
+    cx?: string | number;
+    cy?: string | number;
+    showLabels?: boolean;
+    startAngle?: number;
+    endAngle?: number;
+    activeShape?: boolean;
+    label?: string | ((data: any) => string);
+  }
+  
+  export interface PieChartWrapperProps {
+    initialPies?: PieData[];
+    initialShowPolarGrid?: boolean;
+    initialWidth?: number;
+    initialHeight?: number;
+  }
+  
+  export interface PieChartControlsProps {
+    pies: PieData[];
+    setPies: React.Dispatch<React.SetStateAction<PieData[]>>;
+    showPolarGrid?: boolean;
+    setShowPolarGrid?: (show: boolean) => void;
+  }
