@@ -1,4 +1,3 @@
-// PieChartControls.tsx
 import React from 'react';
 import { PieChartControlsProps } from './types';
 
@@ -9,15 +8,23 @@ export default function PieChartControls({ pies, setPies, showPolarGrid, setShow
     setPies(updatedPies);
   };
 
-  const handleLabelChange = (index: number, value: string) => {
+  const handleLabelTypeChange = (index: number, labelType: string) => {
     const updatedPies = [...pies];
-    if (value === 'percent') {
+    if (labelType === 'percent') {
       updatedPies[index].label = 'percent';
-    } else if (value) {
-      updatedPies[index].label = value.split(',');
-    } else {
+    } else if (labelType === 'numbers') {
+      updatedPies[index].label = 'numbers';
+    } else if (labelType === 'custom') {
       updatedPies[index].label = [];
+    } else {
+      updatedPies[index].label = undefined;  // Asignar undefined para "None"
     }
+    setPies(updatedPies);
+  };
+
+  const handleCustomLabelChange = (index: number, value: string) => {
+    const updatedPies = [...pies];
+    updatedPies[index].label = value ? value.split(',') : [];
     setPies(updatedPies);
   };
 
@@ -67,25 +74,37 @@ export default function PieChartControls({ pies, setPies, showPolarGrid, setShow
                 </div>
               )}
               {pie.showLabels !== undefined && (
-                <label className="flex items-center space-x-2 text-gray-700 hover:bg-gray-100 rounded-lg p-2 transition duration-300 ease-in-out cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={pie.showLabels}
-                    onChange={(e) => handlePieChange(index, 'showLabels', e.target.checked)}
-                    className="form-checkbox h-5 w-5 text-blue-600 rounded transition duration-300 ease-in-out"
-                  />
-                  <span className="text-sm font-medium">Show Labels</span>
-                </label>
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Label Type</label>
+                  <select
+                    value={
+                      Array.isArray(pie.label)
+                        ? 'custom'
+                        : pie.label === 'percent'
+                        ? 'percent'
+                        : pie.label === 'numbers'
+                        ? 'numbers'
+                        : 'none'
+                    }
+                    onChange={(e) => handleLabelTypeChange(index, e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
+                  >
+                    <option value="none">None</option>
+                    <option value="percent">Percent</option>
+                    <option value="numbers">Numbers</option>
+                    <option value="custom">Custom Labels</option>
+                  </select>
+                </div>
               )}
-              {pie.label !== undefined && (
+              {Array.isArray(pie.label) && (
                 <div className="col-span-2">
                   <label htmlFor={`label-${index}`} className="block text-sm font-medium text-gray-700 mb-1">Custom Labels (comma-separated)</label>
                   <input
                     id={`label-${index}`}
                     type="text"
-                    value={Array.isArray(pie.label) ? pie.label.join(',') : ''}
+                    value={pie.label.join(',')}
                     placeholder="Comma-separated labels"
-                    onChange={(e) => handleLabelChange(index, e.target.value)}
+                    onChange={(e) => handleCustomLabelChange(index, e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
                   />
                 </div>

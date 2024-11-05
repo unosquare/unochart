@@ -12,6 +12,7 @@ const StraightAnglePieChart: React.FC = () => {
       showLabels: true,
       startAngle: 0,
       endAngle: 180,
+      showlabel: true,
     },
   ];
 

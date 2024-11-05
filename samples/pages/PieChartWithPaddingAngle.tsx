@@ -13,6 +13,7 @@ const PieChartWithPaddingAngle: React.FC = () => {
       startAngle: 0,
       endAngle: 360,
       paddingAngle: 5,
+      showlabel: true,
     },
   ];
 

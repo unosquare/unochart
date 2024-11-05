@@ -80,7 +80,7 @@ export default function PieChartWrapper({
                   endAngle={pie.endAngle}
                   paddingAngle={pie.paddingAngle}
                   fill={pieColors[index % pieColors.length]}
-                  label={pie.showLabels ? (pie.label || 'percent') : undefined}
+                  label={pie.showLabels ? (pie.label || undefined) : undefined}
                   activeShape={pie.activeShape}
                 />
               ))}
