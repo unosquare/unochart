@@ -54,7 +54,7 @@ export const renderPathSegments = (
 
         return segments.map((segment, i) => (
             <path
-                key={`segment-${i}`}
+                key={`segment-${segment[0].index}`}
                 d={lineGenerator(segment) || ''}
                 fill='none'
                 stroke={stroke}

@@ -73,8 +73,9 @@ export default function PieChartControls({ pies, setPies, showPolarGrid, setShow
             <div className="grid grid-cols-2 gap-4">
               {pie.innerRadius !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Inner Radius</label>
+                  <label htmlFor={`innerRadius-${index}`} className="block text-sm font-medium text-gray-700 mb-1">Inner Radius</label>
                   <input
+                    id={`innerRadius-${index}`}
                     type="number"
                     value={pie.innerRadius}
                     onChange={(e) => handlePieChange(index, 'innerRadius', parseInt(e.target.value, 10))}
@@ -84,8 +85,9 @@ export default function PieChartControls({ pies, setPies, showPolarGrid, setShow
               )}
               {pie.outerRadius !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Outer Radius</label>
+                  <label htmlFor={`outerRadius-${index}`} className="block text-sm font-medium text-gray-700 mb-1">Outer Radius</label>
                   <input
+                    id={`outerRadius-${index}`}
                     type="number"
                     value={pie.outerRadius}
                     onChange={(e) => handlePieChange(index, 'outerRadius', parseInt(e.target.value, 10))}
@@ -95,7 +97,7 @@ export default function PieChartControls({ pies, setPies, showPolarGrid, setShow
               )}
               {pie.startAngle !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Start Angle</label>
+                  <label htmlFor={`startAngle-${index}`} className="block text-sm font-medium text-gray-700 mb-1">Start Angle</label>
                   <input
                     type="number"
                     value={pie.startAngle}
@@ -106,8 +108,9 @@ export default function PieChartControls({ pies, setPies, showPolarGrid, setShow
               )}
               {pie.endAngle !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">End Angle</label>
+                  <label htmlFor={`endAngle-${index}`} className="block text-sm font-medium text-gray-700 mb-1">End Angle</label>
                   <input
+                    id={`endAngle-${index}`}
                     type="number"
                     value={pie.endAngle}
                     onChange={(e) => handlePieChange(index, 'endAngle', parseInt(e.target.value, 10))}
@@ -117,8 +120,9 @@ export default function PieChartControls({ pies, setPies, showPolarGrid, setShow
               )}
               {pie.cx !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">cx</label>
+                  <label htmlFor={`cx-${index}`} className="block text-sm font-medium text-gray-700 mb-1">cx</label>
                   <input
+                    id={`cx-${index}`}
                     type="text"
                     value={pie.cx}
                     onChange={(e) => handlePieChange(index, 'cx', e.target.value)}
@@ -128,7 +132,7 @@ export default function PieChartControls({ pies, setPies, showPolarGrid, setShow
               )}
               {pie.cy !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">cy</label>
+                  <label htmlFor={`cy-${index}`} className="block text-sm font-medium text-gray-700 mb-1">cy</label>
                   <input
                     type="text"
                     value={pie.cy}
@@ -139,8 +143,9 @@ export default function PieChartControls({ pies, setPies, showPolarGrid, setShow
               )}
               {pie.paddingAngle !== undefined && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Padding Angle</label>
+                  <label htmlFor={`paddingAngle-${index}`} className="block text-sm font-medium text-gray-700 mb-1">Padding Angle</label>
                   <input
+                    id={`paddingAngle-${index}`}
                     type="number"
                     value={pie.paddingAngle}
                     onChange={(e) => handlePieChange(index, 'paddingAngle', parseInt(e.target.value, 10))}
@@ -161,8 +166,9 @@ export default function PieChartControls({ pies, setPies, showPolarGrid, setShow
               )}
               {pie.label !== undefined && (
                 <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Labels (percent or comma-separated)</label>
+                  <label htmlFor={`label-${index}`} className="block text-sm font-medium text-gray-700 mb-1">Labels (percent or comma-separated)</label>
                   <input
+                    id={`label-${index}`}
                     type="text"
                     placeholder="percent or values"
                     onChange={(e) => handleLabelChange(index, e.target.value)}

@@ -1,39 +1,29 @@
+const createNavSection = (category: string, items: { name: string, path: string }[]) => ({ category, items });
+
 export const NAV_SECTIONS = [
-        {
-          category: 'Bar Charts',
-          items: [
-            { name: 'Normal BarChart', path: '/normal-bar' },
-            { name: 'Stacked BarChart', path: '/stacked-bar' },
-            { name: 'Ranged BarChart', path: '/ranged-bar' },
-          ],
-        },
-        {
-          category: 'Pie Charts',
-          items: [
-            { name: 'Pie Chart', path: '/pie-chart' },
-            { name: 'Double Layer Pie Chart', path: '/double-layer-pie' },
-            { name: 'Straight Angle Pie Chart', path: '/straight-angle-pie' },
-            { name: 'Pie Chart with Padding Angle', path: '/pie-chart-with-padding-angle' },
-            { name: 'Pie Chart with Customized Label', path: '/pie-chart-with-customized-label' },
-            { name: 'Custom Active Shape Pie Chart', path: '/custom-active-shape-pie' },
-          ],
-        },
-        {
-          category: 'Line Charts',
-          items: [
-            { name: 'Line Chart', path: '/line-chart' },
-            { name: 'Dashed Line Chart', path: '/dashed-line-chart' },
-            { name: 'Reference Line Chart', path: '/reference-line-chart' },
-            { name: 'Connect Nulls Chart', path: '/no-nulls' },
-            { name: 'Line Chart with Labels', path: '/line-chart-with-labels' },
-          ],
-        },
-        {
-          category: 'Scatter Charts',
-          items: [
-            { name: 'Scatter Chart', path: '/scatter-chart' },
-          ],
-        },
+    createNavSection('Bar Charts', [
+        { name: 'Normal BarChart', path: '/normal-bar' },
+        { name: 'Stacked BarChart', path: '/stacked-bar' },
+        { name: 'Ranged BarChart', path: '/ranged-bar' },
+    ]),
+    createNavSection('Pie Charts', [
+        { name: 'Pie Chart', path: '/pie-chart' },
+        { name: 'Double Layer Pie Chart', path: '/double-layer-pie' },
+        { name: 'Straight Angle Pie Chart', path: '/straight-angle-pie' },
+        { name: 'Pie Chart with Padding Angle', path: '/pie-chart-with-padding-angle' },
+        { name: 'Pie Chart with Customized Label', path: '/pie-chart-with-customized-label' },
+        { name: 'Custom Active Shape Pie Chart', path: '/custom-active-shape-pie' },
+    ]),
+    createNavSection('Line Charts', [
+        { name: 'Line Chart', path: '/line-chart' },
+        { name: 'Dashed Line Chart', path: '/dashed-line-chart' },
+        { name: 'Reference Line Chart', path: '/reference-line-chart' },
+        { name: 'Connect Nulls Chart', path: '/no-nulls' },
+        { name: 'Line Chart with Labels', path: '/line-chart-with-labels' },
+    ]),
+    createNavSection('Scatter Charts', [
+        { name: 'Scatter Chart', path: '/scatter-chart' },
+    ]),
 ];
 
 

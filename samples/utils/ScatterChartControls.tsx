@@ -17,8 +17,9 @@ const ScatterChartControls: React.FC<ScatterChartControlsProps> = ({ fill, setFi
     <div>
       <ChartControls {...props} />
       <div className="p-4 bg-gray-50 rounded-lg">
-        <label className="block text-sm font-medium text-gray-700 mb-1">Point Color</label>
+        <label htmlFor="point-color" className="block text-sm font-medium text-gray-700 mb-1">Point Color</label>
         <input
+          id="point-color"
           type="color" value={fill} onChange={(e) => setFill(e.target.value)}
           className="w-8 h-8"
         />

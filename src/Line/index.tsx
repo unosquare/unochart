@@ -43,10 +43,10 @@ const Line = <T,>({
     onMouseOut = () => {},
     label = false,
 }: LineProps<T>) => {
-    if (!data.length) return null;
-
     const processedData = useMemo(() => data.map((d, index) => ({ ...d, index })), [data]);
     const lineGenerator = useMemo(() => createLineGenerator(type, xScale, yScale, dataKey as string), [type, xScale, yScale, dataKey]);
+
+    if (!data.length) return null;
 
     return (
         <>
@@ -58,7 +58,7 @@ const Line = <T,>({
                 const y = yScale(Number(value));
                 if (y === null) return null;
                 return (
-                    <g key={`point-${index}`} className="transition-all duration-300 ease-in-out">
+                    <g key={`point-${entry[dataKey]}`} className="transition-all duration-300 ease-in-out">
                         <circle
                             cx={x}
                             cy={y}

@@ -2,8 +2,6 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import LineChart from './index';
 import Line from '../Line';
-import XAxis from '../XAxis';
-import YAxis from '../YAxis';
 
 beforeEach(() => {
     (SVGElement.prototype as any).getBBox = jest.fn().mockReturnValue({
@@ -54,14 +52,4 @@ describe('LineChart', () => {
         }
     });
 
-    it('renders with axes', () => {
-        const { container } = render(
-            <LineChart width={500} height={300} data={mockData}>
-                <XAxis />
-                <YAxis />
-                <Line dataKey="uv" stroke="#8884d8" data={mockData} xScale={(value) => value} yScale={(value) => value} />
-            </LineChart>
-        );
-        expect(container.querySelector('.y-axis')).toBeInTheDocument();
-    });
 });

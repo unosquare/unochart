@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar } from '../../src';
+import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend} from '../../src';
 import BarChartControls from './BarChartControls';
 import { BAR_DATA, NAV_SECTIONS } from './constants';
-import { BarChartWrapperProps, DataPoint } from './types';
+import { BarChartWrapperProps } from './types';
 
 export default function BarChartWrapper({
   data = BAR_DATA,

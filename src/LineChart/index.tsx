@@ -137,14 +137,16 @@ const LineChart: React.FC<LineChartProps> = ({
                               })
                             : null,
                     )}
-                    {referenceLines.map((referenceLine, index) =>
-                        cloneElement(referenceLine as React.ReactElement, {
-                            key: index,
-                            chartWidth,
-                            chartHeight,
-                            xScale,
-                            yScale,
-                        }),
+                    {referenceLines.map((referenceLine) =>
+                        React.isValidElement(referenceLine)
+                            ? cloneElement(referenceLine as React.ReactElement, {
+                                  key: referenceLine.props.id || referenceLine.props.dataKey,
+                                  chartWidth,
+                                  chartHeight,
+                                  xScale,
+                                  yScale,
+                              })
+                            : null,
                     )}
                 </g>
             </svg>
