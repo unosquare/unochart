@@ -1,5 +1,6 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { calculateAxisConfig, formatValue } from '../utils';
 
 interface YAxisProps {
     data?: Array<{ [key: string]: any }>;
@@ -22,54 +23,46 @@ const YAxis: React.FC<YAxisProps> = ({
     type = 'monotone',
     dataKey = 'name'
 }) => {
-    const positiveLines = 5;
-    const negativeLines = minValue < 0 ? 5 : 0;
-    const totalLines = minValue < 0 ? 10 : positiveLines;
-
-    const positiveRange = maxValue / positiveLines;
-    const negativeRange = minValue < 0 ? Math.abs(minValue) / negativeLines : 0;
-
-    const formatValue = (value: number) => (value % 1 === 0 ? value.toString() : value.toFixed(2));
+    const { positiveLines, negativeLines, totalLines, positiveRange, negativeRange } = 
+        calculateAxisConfig(maxValue, minValue);
 
     const renderText = (x: number, y: number, value: string | number) => (
         <g key={uuidv4()}>
-            {/* Tick mark line */}
             <line
-                x1={-6}
+                x1={0}
                 y1={y}
-                x2={0}
+                x2={-6}
                 y2={y}
-                stroke="#374151"
+                stroke="currentColor"
                 strokeWidth={1}
             />
-            {/* Label text */}
             <text
-                x={-12}
+                x={x}
                 y={y}
                 textAnchor="end"
                 dominantBaseline="middle"
-                className="text-xs fill-gray-600 font-medium"
+                fill="currentColor"
+                fontSize={12}
             >
                 {value}
             </text>
         </g>
     );
 
-    // Main axis line
     const axisLine = (
         <line
             x1={0}
             y1={0}
             x2={0}
             y2={height}
-            stroke="#374151"
+            stroke="currentColor"
             strokeWidth={1}
         />
     );
 
     if (type === 'number') {
         return (
-            <g className="y-axis" aria-label="Y Axis">
+            <g>
                 {axisLine}
                 {minValue < 0 &&
                     new Array(negativeLines).fill(null).map((_, index) => {
@@ -86,7 +79,7 @@ const YAxis: React.FC<YAxisProps> = ({
     }
 
     return (
-        <g className="y-axis" aria-label="Y Axis">
+        <g>
             {axisLine}
             {layout === 'horizontal' && minValue < 0 &&
                 new Array(negativeLines).fill(null).map((_, index) => {
