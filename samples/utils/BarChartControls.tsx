@@ -31,7 +31,7 @@ export default function BarChartControls({
 
   return (
     <div className="bg-white p-6 shadow-lg rounded-lg mb-5 max-w-md">
-      <h2 className="text-2xl font-semibold mb-6 text-indigo-700">Bar Chart Settings</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-gray-800">Bar Chart Settings</h2>
       <form className="space-y-6">
         <div className="space-y-4">
           <div>
@@ -42,10 +42,10 @@ export default function BarChartControls({
               id="width"
               type="range"
               min="200"
-              max="1000"
+              max="800"
               value={width}
               onChange={(e) => setWidth(parseInt(e.target.value, 10))}
-              className="w-full h-2 bg-indigo-200 rounded-lg appearance-none cursor-pointer"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
             />
           </div>
           <div>
@@ -59,7 +59,7 @@ export default function BarChartControls({
               max="800"
               value={height}
               onChange={(e) => setHeight(parseInt(e.target.value, 10))}
-              className="w-full h-2 bg-indigo-200 rounded-lg appearance-none cursor-pointer"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
             />
           </div>
         </div>
@@ -74,7 +74,7 @@ export default function BarChartControls({
               type="text"
               value={barCategoryGap}
               onChange={(e) => setBarCategoryGap(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
           <div>
@@ -86,7 +86,7 @@ export default function BarChartControls({
               type="number"
               value={barGap}
               onChange={(e) => setBarGap(parseInt(e.target.value, 10))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
             />
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function BarChartControls({
             id="layout"
             value={layout}
             onChange={(e) => setLayout(e.target.value as 'horizontal' | 'vertical')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
           >
             <option value="horizontal">Horizontal</option>
             <option value="vertical">Vertical</option>
@@ -107,7 +107,7 @@ export default function BarChartControls({
         </div>
 
         <div>
-          <h3 className="text-lg font-medium text-indigo-700 mb-2">Margin</h3>
+          <h3 className="text-lg font-medium text-gray-800 mb-2">Margin</h3>
           <div className="grid grid-cols-2 gap-4">
             {(['top', 'right', 'bottom', 'left'] as const).map((side) => (
               <div key={side}>
@@ -121,7 +121,7 @@ export default function BarChartControls({
                   max="100"
                   value={margin[side]}
                   onChange={(e) => handleMarginChange(side, parseInt(e.target.value, 10))}
-                  className="w-full h-2 bg-indigo-200 rounded-lg appearance-none cursor-pointer"
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
             ))}
@@ -139,14 +139,14 @@ export default function BarChartControls({
             <label
               key={item.id}
               htmlFor={item.id}
-              className="flex items-center space-x-2 text-gray-700 hover:bg-indigo-50 rounded-lg p-2 transition duration-300 ease-in-out cursor-pointer"
+              className="flex items-center space-x-2 text-gray-700 hover:bg-gray-100 rounded-lg p-2 transition duration-300 ease-in-out cursor-pointer"
             >
               <input
                 id={item.id}
                 type="checkbox"
                 checked={item.checked}
                 onChange={(e) => item.onChange(e.target.checked)}
-                className="form-checkbox h-5 w-5 text-indigo-600 rounded transition duration-300 ease-in-out"
+                className="form-checkbox h-5 w-5 text-blue-600 rounded transition duration-300 ease-in-out"
               />
               <span className="text-sm font-medium">{item.label}</span>
             </label>

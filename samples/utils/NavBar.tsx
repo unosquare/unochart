@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import NavDropdown from './NavDropdown';
 import { NAV_SECTIONS } from './constants';
 
-const NavBar = () => {
+const NavBar: React.FC = () => {
   const location = useLocation();
 
   return (

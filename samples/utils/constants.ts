@@ -2,9 +2,9 @@ export const NAV_SECTIONS = [
         {
           category: 'Bar Charts',
           items: [
-            { name: 'Normal BarChart', path: '/' },
-            { name: 'Stacked BarChart', path: '/stacked' },
-            { name: 'Ranged BarChart', path: '/ranged' },
+            { name: 'Normal BarChart', path: '/normal-bar' },
+            { name: 'Stacked BarChart', path: '/stacked-bar' },
+            { name: 'Ranged BarChart', path: '/ranged-bar' },
           ],
         },
         {
@@ -24,7 +24,6 @@ export const NAV_SECTIONS = [
             { name: 'Line Chart', path: '/line-chart' },
             { name: 'Dashed Line Chart', path: '/dashed-line-chart' },
             { name: 'Reference Line Chart', path: '/reference-line-chart' },
-            { name: 'Tiny Line Chart', path: '/tiny-line-chart' },
             { name: 'Connect Nulls Chart', path: '/no-nulls' },
             { name: 'Line Chart with Labels', path: '/line-chart-with-labels' },
           ],
