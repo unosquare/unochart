@@ -22,27 +22,27 @@ const PolarGrid: React.FC<PolarGridProps> = ({
     const radiusSteps = Array.from({ length: concentricCircles }, (_, i) => (100 / concentricCircles) * (i + 1));
 
     return (
-        <g transform={`translate(${computedCx}, ${computedCy})`} className="polar-grid">
+        <g transform={`translate(${computedCx}, ${computedCy})`} className='polar-grid'>
             {radialAngles.map((angle, index) => (
                 <line
                     key={`line-${index}`}
-                    x1="0"
-                    y1="0"
+                    x1='0'
+                    y1='0'
                     x2={Math.cos((Math.PI / 180) * angle) * 100}
                     y2={Math.sin((Math.PI / 180) * angle) * 100}
                     stroke={stroke}
-                    className="transition-all duration-300 ease-in-out"
+                    className='transition-all duration-300 ease-in-out'
                 />
             ))}
             {radiusSteps.map((radius, index) => (
                 <circle
                     key={`circle-${index}`}
-                    cx="0"
-                    cy="0"
+                    cx='0'
+                    cy='0'
                     r={radius}
-                    fill="none"
+                    fill='none'
                     stroke={stroke}
-                    className="transition-all duration-300 ease-in-out"
+                    className='transition-all duration-300 ease-in-out'
                 />
             ))}
         </g>

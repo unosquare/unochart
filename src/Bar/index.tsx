@@ -59,7 +59,7 @@ const Bar: React.FC<BarProps> = ({
                             width={width}
                             height={barHeight}
                             fill={fill}
-                            className="transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg"
+                            className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
                             style={{ transformOrigin: 'bottom' }}
                             onMouseOver={(event) => {
                                 const { name, ...rest } = entry;
@@ -78,7 +78,7 @@ const Bar: React.FC<BarProps> = ({
                             width={barWidth}
                             height={height}
                             fill={fill}
-                            className="transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg"
+                            className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
                             style={{ transformOrigin: 'left' }}
                             onMouseOver={(event) => {
                                 const { name, ...rest } = entry;
@@ -101,7 +101,7 @@ const Bar: React.FC<BarProps> = ({
                     width={width}
                     height={barHeight}
                     fill={fill}
-                    className="transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg"
+                    className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
                     style={{ transformOrigin: 'bottom' }}
                     onMouseOver={(event) => {
                         const { name, ...rest } = entry;
@@ -117,7 +117,7 @@ const Bar: React.FC<BarProps> = ({
                     width={barWidth}
                     height={height}
                     fill={fill}
-                    className="transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg"
+                    className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
                     style={{ transformOrigin: 'left' }}
                     onMouseOver={(event) => {
                         const { name, ...rest } = entry;

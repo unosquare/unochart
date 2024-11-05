@@ -25,7 +25,7 @@ const ReferenceLine: React.FC<ReferenceLineProps> = ({
     const yPosition = y !== undefined ? yScale(y) : 0;
 
     return (
-        <g className="recharts-reference-line">
+        <g className='recharts-reference-line'>
             {x !== undefined && (
                 <line
                     x1={xPosition}
@@ -34,7 +34,7 @@ const ReferenceLine: React.FC<ReferenceLineProps> = ({
                     y2={chartHeight}
                     stroke={stroke}
                     strokeWidth={2}
-                    className="transition-all duration-300 ease-in-out"
+                    className='transition-all duration-300 ease-in-out'
                 />
             )}
             {y !== undefined && (
@@ -45,7 +45,7 @@ const ReferenceLine: React.FC<ReferenceLineProps> = ({
                     y2={yPosition}
                     stroke={stroke}
                     strokeWidth={2}
-                    className="transition-all duration-300 ease-in-out"
+                    className='transition-all duration-300 ease-in-out'
                 />
             )}
             {label && (
@@ -56,7 +56,7 @@ const ReferenceLine: React.FC<ReferenceLineProps> = ({
                     dx={x !== undefined ? 5 : -5}
                     textAnchor={x !== undefined ? 'start' : 'end'}
                     fill={stroke}
-                    className="text-xs font-semibold transition-all duration-300 ease-in-out"
+                    className='text-xs font-semibold transition-all duration-300 ease-in-out'
                 >
                     {label}
                 </text>

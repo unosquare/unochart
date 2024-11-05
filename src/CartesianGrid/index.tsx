@@ -21,22 +21,22 @@ const CartesianGrid: React.FC<CartesianGridProps> = ({
     const numLines = minValue < 0 ? 11 : 6;
 
     return (
-        <g className="cartesian-grid">
+        <g className='cartesian-grid'>
             {/* Vertical grid lines */}
             {new Array(11).fill(null).map((_, index) => (
                 <line
                     key={uuidv4()}
                     x1={(index * width) / 10}
-                    y1="0"
+                    y1='0'
                     x2={(index * width) / 10}
                     y2={height}
-                    stroke="grey"
+                    stroke='grey'
                     strokeWidth={1}
-                    strokeDasharray="4 4"
-                    className="transition-all duration-300 ease-in-out"
+                    strokeDasharray='4 4'
+                    className='transition-all duration-300 ease-in-out'
                 />
             ))}
-            
+
             {/* Horizontal grid lines */}
             {layout === 'horizontal'
                 ? new Array(numLines)
@@ -44,14 +44,14 @@ const CartesianGrid: React.FC<CartesianGridProps> = ({
                       .map((_, index) => (
                           <line
                               key={uuidv4()}
-                              x1="0"
+                              x1='0'
                               y1={(index * height) / (numLines - 1)}
                               x2={width}
                               y2={(index * height) / (numLines - 1)}
-                              stroke="grey"
+                              stroke='grey'
                               strokeWidth={1}
-                              strokeDasharray="4 4"
-                              className="transition-all duration-300 ease-in-out"
+                              strokeDasharray='4 4'
+                              className='transition-all duration-300 ease-in-out'
                           />
                       ))
                 : new Array(numLines)
@@ -60,13 +60,13 @@ const CartesianGrid: React.FC<CartesianGridProps> = ({
                           <line
                               key={uuidv4()}
                               x1={(index * width) / (numLines - 1)}
-                              y1="0"
+                              y1='0'
                               x2={(index * width) / (numLines - 1)}
                               y2={height}
-                              stroke="grey"
+                              stroke='grey'
                               strokeWidth={1}
-                              strokeDasharray="4 4"
-                              className="transition-all duration-300 ease-in-out"
+                              strokeDasharray='4 4'
+                              className='transition-all duration-300 ease-in-out'
                           />
                       ))}
         </g>

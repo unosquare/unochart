@@ -8,22 +8,20 @@ interface ScatterProps {
     hoveredPoint: number | null;
 }
 
-const Scatter: React.FC<ScatterProps> = ({ data, xScale, yScale, fill = 'blue', hoveredPoint }) => {
-    return (
-        <>
-            {data.map((point, index) => (
-                <circle
-                    key={index}
-                    cx={xScale(point.x)}
-                    cy={yScale(point.y)}
-                    r={hoveredPoint === index ? 7 : 5}
-                    fill={fill}
-                    opacity={hoveredPoint === null || hoveredPoint === index ? 1 : 0.5}
-                    className="transition-all duration-300 ease-in-out"
-                />
-            ))}
-        </>
-    );
-};
+const Scatter: React.FC<ScatterProps> = ({ data, xScale, yScale, fill = 'blue', hoveredPoint }) => (
+    <>
+        {data.map((point, index) => (
+            <circle
+                key={index}
+                cx={xScale(point.x)}
+                cy={yScale(point.y)}
+                r={hoveredPoint === index ? 7 : 5}
+                fill={fill}
+                opacity={hoveredPoint === null || hoveredPoint === index ? 1 : 0.5}
+                className='transition-all duration-300 ease-in-out'
+            />
+        ))}
+    </>
+);
 
 export default Scatter;

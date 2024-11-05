@@ -44,7 +44,10 @@ const Line = <T,>({
     label = false,
 }: LineProps<T>) => {
     const processedData = useMemo(() => data.map((d, index) => ({ ...d, index })), [data]);
-    const lineGenerator = useMemo(() => createLineGenerator(type, xScale, yScale, dataKey as string), [type, xScale, yScale, dataKey]);
+    const lineGenerator = useMemo(
+        () => createLineGenerator(type, xScale, yScale, dataKey as string),
+        [type, xScale, yScale, dataKey],
+    );
 
     if (!data.length) return null;
 
@@ -58,7 +61,7 @@ const Line = <T,>({
                 const y = yScale(Number(value));
                 if (y === null) return null;
                 return (
-                    <g key={`point-${entry[dataKey]}`} className="transition-all duration-300 ease-in-out">
+                    <g key={`point-${entry[dataKey]}`} className='transition-all duration-300 ease-in-out'>
                         <circle
                             cx={x}
                             cy={y}
@@ -66,16 +69,16 @@ const Line = <T,>({
                             fill={stroke}
                             onMouseOver={(event) => onMouseOver(event, entry)}
                             onMouseOut={onMouseOut}
-                            className="hover:r-5 focus:r-5 transition-all duration-300 ease-in-out"
+                            className='hover:r-5 focus:r-5 transition-all duration-300 ease-in-out'
                         />
                         {label && (
-                            <text 
-                                x={x} 
-                                y={y - 10} 
-                                textAnchor="middle" 
-                                fontSize={12} 
+                            <text
+                                x={x}
+                                y={y - 10}
+                                textAnchor='middle'
+                                fontSize={12}
                                 fill={stroke}
-                                className="opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
+                                className='opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100'
                             >
                                 {String(value)}
                             </text>

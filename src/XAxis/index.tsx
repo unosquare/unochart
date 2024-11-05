@@ -23,41 +23,21 @@ const XAxis: React.FC<XAxisProps> = ({
     layout = 'horizontal',
     type = 'monotone',
 }) => {
-    const { positiveLines, negativeLines, totalLines, positiveRange, negativeRange } = 
-        calculateAxisConfig(maxValue, minValue);
+    const { positiveLines, negativeLines, totalLines, positiveRange, negativeRange } = calculateAxisConfig(
+        maxValue,
+        minValue,
+    );
 
     const renderText = (x: number, y: number, value: string | number) => (
         <g key={uuidv4()}>
-            <line
-                x1={x}
-                y1={height}
-                x2={x}
-                y2={height + 6}
-                stroke="currentColor"
-                strokeWidth={1}
-            />
-            <text
-                x={x}
-                y={height + 20}
-                textAnchor="middle"
-                fill="currentColor"
-                fontSize={12}
-            >
+            <line x1={x} y1={height} x2={x} y2={height + 6} stroke='currentColor' strokeWidth={1} />
+            <text x={x} y={height + 20} textAnchor='middle' fill='currentColor' fontSize={12}>
                 {value}
             </text>
         </g>
     );
 
-    const axisLine = (
-        <line
-            x1={0}
-            y1={height}
-            x2={width}
-            y2={height}
-            stroke="currentColor"
-            strokeWidth={1}
-        />
-    );
+    const axisLine = <line x1={0} y1={height} x2={width} y2={height} stroke='currentColor' strokeWidth={1} />;
 
     if (type === 'number') {
         return (
@@ -81,9 +61,7 @@ const XAxis: React.FC<XAxisProps> = ({
         <g>
             {axisLine}
             {layout === 'horizontal' ? (
-                data.map((entry, index) => 
-                    renderText((index + 0.5) * (width / data.length), height, entry[dataKey])
-                )
+                data.map((entry, index) => renderText((index + 0.5) * (width / data.length), height, entry[dataKey]))
             ) : (
                 <>
                     {minValue < 0 &&

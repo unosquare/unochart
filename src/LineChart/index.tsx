@@ -1,4 +1,4 @@
-import React, { Children, cloneElement, ReactNode, useEffect, useRef, useState, useMemo } from 'react';
+import React, { Children, cloneElement, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import CartesianGrid from '../CartesianGrid';
 import XAxis from '../XAxis';
 import YAxis from '../YAxis';
@@ -58,13 +58,17 @@ const LineChart: React.FC<LineChartProps> = ({
 
     const referenceLines = childrenArray.filter((child) => React.isValidElement(child) && child.type === ReferenceLine);
 
-    const legendItems = useMemo(() => lineComponents.map((child) => {
-        if (React.isValidElement(child)) {
-            const lineChild = child as React.ReactElement;
-            return { color: lineChild.props.stroke, label: lineChild.props.dataKey };
-        }
-        return { color: '', label: '' };
-    }), [lineComponents]);
+    const legendItems = useMemo(
+        () =>
+            lineComponents.map((child) => {
+                if (React.isValidElement(child)) {
+                    const lineChild = child as React.ReactElement;
+                    return { color: lineChild.props.stroke, label: lineChild.props.dataKey };
+                }
+                return { color: '', label: '' };
+            }),
+        [lineComponents],
+    );
 
     const xScale = (value: string | number) => {
         if (typeof value === 'string') {
@@ -111,12 +115,12 @@ const LineChart: React.FC<LineChartProps> = ({
     };
 
     return (
-        <div className="relative inline-block">
+        <div className='relative inline-block'>
             <svg
                 ref={svgRef}
                 width={width}
                 height={height}
-                className="bg-white transition-all duration-300 ease-in-out"
+                className='bg-white transition-all duration-300 ease-in-out'
                 style={{ overflow: 'visible' }}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}

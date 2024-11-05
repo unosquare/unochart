@@ -21,44 +21,23 @@ const YAxis: React.FC<YAxisProps> = ({
     minValue = 0,
     layout = 'horizontal',
     type = 'monotone',
-    dataKey = 'name'
+    dataKey = 'name',
 }) => {
-    const { positiveLines, negativeLines, totalLines, positiveRange, negativeRange } = 
-        calculateAxisConfig(maxValue, minValue);
+    const { positiveLines, negativeLines, totalLines, positiveRange, negativeRange } = calculateAxisConfig(
+        maxValue,
+        minValue,
+    );
 
     const renderText = (x: number, y: number, value: string | number) => (
         <g key={uuidv4()}>
-            <line
-                x1={0}
-                y1={y}
-                x2={-6}
-                y2={y}
-                stroke="currentColor"
-                strokeWidth={1}
-            />
-            <text
-                x={x}
-                y={y}
-                textAnchor="end"
-                dominantBaseline="middle"
-                fill="currentColor"
-                fontSize={12}
-            >
+            <line x1={0} y1={y} x2={-6} y2={y} stroke='currentColor' strokeWidth={1} />
+            <text x={x} y={y} textAnchor='end' dominantBaseline='middle' fill='currentColor' fontSize={12}>
                 {value}
             </text>
         </g>
     );
 
-    const axisLine = (
-        <line
-            x1={0}
-            y1={0}
-            x2={0}
-            y2={height}
-            stroke="currentColor"
-            strokeWidth={1}
-        />
-    );
+    const axisLine = <line x1={0} y1={0} x2={0} y2={height} stroke='currentColor' strokeWidth={1} />;
 
     if (type === 'number') {
         return (
@@ -72,7 +51,11 @@ const YAxis: React.FC<YAxisProps> = ({
 
                 {new Array(positiveLines + 1).fill(null).map((_, index) => {
                     const value = positiveRange * index;
-                    return renderText(-10, height - ((index + negativeLines) * height) / totalLines, formatValue(value));
+                    return renderText(
+                        -10,
+                        height - ((index + negativeLines) * height) / totalLines,
+                        formatValue(value),
+                    );
                 })}
             </g>
         );
@@ -81,7 +64,8 @@ const YAxis: React.FC<YAxisProps> = ({
     return (
         <g>
             {axisLine}
-            {layout === 'horizontal' && minValue < 0 &&
+            {layout === 'horizontal' &&
+                minValue < 0 &&
                 new Array(negativeLines).fill(null).map((_, index) => {
                     const value = -negativeRange * (negativeLines - index);
                     return renderText(-10, height - (index * height) / totalLines, formatValue(value));
@@ -90,13 +74,15 @@ const YAxis: React.FC<YAxisProps> = ({
             {layout === 'horizontal' &&
                 new Array(positiveLines + 1).fill(null).map((_, index) => {
                     const value = positiveRange * index;
-                    return renderText(-10, height - ((index + negativeLines) * height) / totalLines, formatValue(value));
+                    return renderText(
+                        -10,
+                        height - ((index + negativeLines) * height) / totalLines,
+                        formatValue(value),
+                    );
                 })}
 
             {layout !== 'horizontal' &&
-                data.map((entry, index) => 
-                    renderText(-10, (index + 0.5) * (height / data.length), entry[dataKey])
-                )}
+                data.map((entry, index) => renderText(-10, (index + 0.5) * (height / data.length), entry[dataKey]))}
         </g>
     );
 };

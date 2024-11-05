@@ -202,12 +202,12 @@ const BarChart: React.FC<BarChartProps> = ({
     };
 
     return (
-        <div className="relative inline-block bg-white p-4">
+        <div className='relative inline-block bg-white p-4'>
             <svg
                 ref={svgRef}
                 width={width}
                 height={height + height * 0.1}
-                className="overflow-visible"
+                className='overflow-visible'
                 onMouseLeave={handleMouseLeave}
             >
                 <g
@@ -241,7 +241,6 @@ const BarChart: React.FC<BarChartProps> = ({
                                     dataKey='name'
                                     maxValue={maxValue}
                                     minValue={minValue}
-                                
                                     layout={layout}
                                 />
                             )}
@@ -297,7 +296,7 @@ const BarChart: React.FC<BarChartProps> = ({
                 </g>
             </svg>
             {legendComponent && (
-                <div className="mt-4">
+                <div className='mt-4'>
                     <Legend items={legendItems} />
                 </div>
             )}
