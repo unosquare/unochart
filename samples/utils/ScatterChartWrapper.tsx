@@ -7,27 +7,8 @@ import YAxis from '../../src/YAxis';
 import Tooltip from '../../src/Tooltip';
 import Legend from '../../src/Legend';
 import ScatterChartControls from './ScatterChartControls';
-
-interface ScatterDataPoint {
-  x: number;
-  y: number;
-  z: number;
-}
-
-interface ScatterChartWrapperProps {
-  initialWidth?: number;
-  initialHeight?: number;
-  initialMargin?: { top: number; right: number; bottom: number; left: number };
-}
-
-const scatterData: ScatterDataPoint[] = [
-  { x: 100, y: 200, z: 200 },
-  { x: 120, y: 100, z: 260 },
-  { x: 170, y: 300, z: 400 },
-  { x: 140, y: 250, z: 280 },
-  { x: 150, y: 400, z: 500 },
-  { x: 110, y: 280, z: 200 },
-];
+import { SCATTER_DATA } from './constants';
+import { ScatterChartWrapperProps } from './types';
 
 const ScatterChartWrapper: React.FC<ScatterChartWrapperProps> = ({
   initialWidth = 730,
@@ -50,20 +31,20 @@ const ScatterChartWrapper: React.FC<ScatterChartWrapperProps> = ({
             setHeight={setHeight}
             margin={margin}
             setMargin={setMargin}
-            data={scatterData}
+            data={SCATTER_DATA}
             setData={() => {}}
             fill={fill}
             setFill={setFill}
           />
         </div>
         <div className="lg:w-2/3">
-          <ScatterChart width={width} height={height} data={scatterData} margin={margin}>
+          <ScatterChart width={width} height={height} data={SCATTER_DATA} margin={margin}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="x" name="X-axis" type="number" />
-            <YAxis dataKey="y" name="Y-axis" type="number" />
+            <XAxis dataKey="x" type="number" />
+            <YAxis dataKey="y" type="number" />
             <Tooltip />
             <Legend />
-            <Scatter name="Sample Data" data={scatterData} fill={fill} />
+            <Scatter data={SCATTER_DATA} fill={fill} />
           </ScatterChart>
         </div>
       </div>

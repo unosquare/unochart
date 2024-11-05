@@ -1,19 +1,5 @@
 import React from 'react';
-
-interface ScatterChartControlsProps {
-  data: Array<{ x: number; y: number; z?: number }>;
-  setData: React.Dispatch<React.SetStateAction<Array<{ x: number; y: number; z?: number }>>>;
-  width: number;
-  setWidth: React.Dispatch<React.SetStateAction<number>>;
-  height: number;
-  setHeight: React.Dispatch<React.SetStateAction<number>>;
-  margin: { top: number; right: number; bottom: number; left: number };
-  setMargin: React.Dispatch<
-    React.SetStateAction<{ top: number; right: number; bottom: number; left: number }>
-  >;
-  fill: string;
-  setFill: React.Dispatch<React.SetStateAction<string>>;
-}
+import { ScatterChartControlsProps } from './types';
 
 const ScatterChartControls: React.FC<ScatterChartControlsProps> = ({
   data,

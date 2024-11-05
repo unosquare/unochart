@@ -1,29 +1,5 @@
 import React from 'react';
-
-interface BarChartControlsProps {
-  width: number;
-  height: number;
-  barCategoryGap: string;
-  barGap: number;
-  layout: 'horizontal' | 'vertical';
-  margin: { top: number; right: number; bottom: number; left: number };
-  showXAxis: boolean;
-  showYAxis: boolean;
-  showCartesianGrid: boolean;
-  showTooltip: boolean;
-  showLegend: boolean;
-  setWidth: (width: number) => void;
-  setHeight: (height: number) => void;
-  setBarCategoryGap: (gap: string) => void;
-  setBarGap: (gap: number) => void;
-  setLayout: (layout: 'horizontal' | 'vertical') => void;
-  setMargin: (margin: { top: number; right: number; bottom: number; left: number }) => void;
-  setShowXAxis: (show: boolean) => void;
-  setShowYAxis: (show: boolean) => void;
-  setShowCartesianGrid: (show: boolean) => void;
-  setShowTooltip: (show: boolean) => void;
-  setShowLegend: (show: boolean) => void;
-}
+import { BarChartControlsProps } from './types';
 
 export default function BarChartControls({
   width,

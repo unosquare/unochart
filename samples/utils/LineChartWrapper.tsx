@@ -7,45 +7,11 @@ import YAxis from '../../src/YAxis';
 import Tooltip from '../../src/Tooltip';
 import Legend from '../../src/Legend';
 import LineChartControls from './LineChartControls';
-
-interface DataPoint {
-  name: string;
-  uv?: number;
-  pv?: number;
-  amt?: number;
-}
-
-interface LineConfig {
-  id: string;
-  type: string;
-  dataKey: string;
-  stroke: string;
-  strokeDasharray: string;
-  connectNulls: boolean;
-  label: boolean;
-}
-
-interface LineChartWrapperProps {
-  initialLines: LineConfig[];
-  additionalComponents?: React.ReactNode[];
-  initialWidth?: number;
-  initialHeight?: number;
-  initialMargin?: { top: number; right: number; bottom: number; left: number };
-  withNulls?: boolean;
-}
-
-const dataWithNulls: DataPoint[] = [
-  { name: 'Page A', uv: 4000 },
-  { name: 'Page B', uv: 3000 },
-  { name: 'Page C', uv: 2000 },
-  { name: 'Page D' },
-  { name: 'Page E', uv: 1890 },
-  { name: 'Page F', uv: 2390 },
-  { name: 'Page G', uv: 3490 },
-];
+import { LINE_DATA, LINE_CONFIG, LINE_DATA_WITH_NULLS } from './constants';
+import { LineChartWrapperProps, DataPoint } from './types';
 
 const LineChartWrapper: React.FC<LineChartWrapperProps> = ({
-  initialLines,
+  initialLines = LINE_CONFIG,
   additionalComponents = [],
   initialWidth = 730,
   initialHeight = 250,
@@ -57,15 +23,7 @@ const LineChartWrapper: React.FC<LineChartWrapperProps> = ({
   const [height, setHeight] = useState(initialHeight);
   const [margin, setMargin] = useState(initialMargin);
 
-  const data: DataPoint[] = withNulls ? dataWithNulls : [
-    { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
-    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
-    { name: 'Page C', uv: 2000, pv: 9800, amt: 2290 },
-    { name: 'Page D', uv: 2780, pv: 3908, amt: 2000 },
-    { name: 'Page E', uv: 1890, pv: 4800, amt: 2181 },
-    { name: 'Page F', uv: 2390, pv: 3800, amt: 2500 },
-    { name: 'Page G', uv: 3490, pv: 4300, amt: 2100 },
-  ];
+  const data: DataPoint[] = withNulls ? LINE_DATA_WITH_NULLS : LINE_DATA;
 
   return (
     <div className="p-6">

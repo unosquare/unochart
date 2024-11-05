@@ -1,21 +1,11 @@
 import React, { useState } from 'react';
 import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar } from '../../src';
 import BarChartControls from './BarChartControls';
-
-interface DataPoint {
-  [key: string]: string | number;
-}
-
-interface BarChartWrapperProps {
-  data: DataPoint[];
-  children: React.ReactNode;
-  initialWidth?: number;
-  initialHeight?: number;
-  initialMargin?: { top: number; right: number; bottom: number; left: number };
-}
+import { BAR_DATA } from './constants';
+import { BarChartWrapperProps, DataPoint } from './types';
 
 const BarChartWrapper: React.FC<BarChartWrapperProps> = ({
-  data,
+  data = BAR_DATA,
   children,
   initialWidth = 600,
   initialHeight = 400,

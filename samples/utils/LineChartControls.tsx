@@ -1,28 +1,5 @@
 import React from 'react';
-
-interface LineChartControlsProps {
-  lines: Array<{
-    id: number;
-    stroke: string;
-    type: string;
-    connectNulls: boolean;
-    dataKey: string;
-  }>;
-  setLines: React.Dispatch<React.SetStateAction<Array<{
-    id: number;
-    stroke: string;
-    type: string;
-    connectNulls: boolean;
-    dataKey: string;
-  }>>>;
-  width: number;
-  setWidth: React.Dispatch<React.SetStateAction<number>>;
-  height: number;
-  setHeight: React.Dispatch<React.SetStateAction<number>>;
-  margin: { top: number; right: number; bottom: number; left: number };
-  setMargin: React.Dispatch<React.SetStateAction<{ top: number; right: number; bottom: number; left: number }>>;
-  data: Array<any>;
-}
+import { LineChartControlsProps } from './types';
 
 const interpolationOptions = [
   'linear', 'basis', 'basisClosed', 'basisOpen', 'bumpX', 'bumpY', 'natural', 'monotoneX', 'monotoneY', 'step', 'stepBefore', 'stepAfter',
