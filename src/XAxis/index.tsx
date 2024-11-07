@@ -1,4 +1,6 @@
+import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { calculateAxisConfig, formatValue } from '../utils';
 
 interface XAxisProps {
     data?: Array<{ [key: string]: any }>;
@@ -8,9 +10,10 @@ interface XAxisProps {
     maxValue?: number;
     minValue?: number;
     layout?: 'horizontal' | 'vertical';
+    type?: 'monotone' | 'number';
 }
 
-const XAxis = ({
+const XAxis: React.FC<XAxisProps> = ({
     data = [],
     width = 0,
     height = 0,
@@ -18,62 +21,58 @@ const XAxis = ({
     maxValue = 0,
     minValue = 0,
     layout = 'horizontal',
-}: XAxisProps) => {
-    const positiveLines = 5;
-    const negativeLines = minValue < 0 ? 5 : 0;
-    const totalLines = minValue < 0 ? 10 : positiveLines;
+    type = 'monotone',
+}) => {
+    const { positiveLines, negativeLines, totalLines, positiveRange, negativeRange } = calculateAxisConfig(
+        maxValue,
+        minValue,
+    );
 
-    const positiveRange = maxValue / positiveLines;
-    const negativeRange = minValue < 0 ? Math.abs(minValue) / negativeLines : 0;
+    const renderText = (x: number, y: number, value: string | number) => (
+        <g key={uuidv4()}>
+            <line x1={x} y1={height} x2={x} y2={height + 6} stroke='currentColor' strokeWidth={1} />
+            <text x={x} y={height + 20} textAnchor='middle' fill='currentColor' fontSize={12}>
+                {value}
+            </text>
+        </g>
+    );
+
+    const axisLine = <line x1={0} y1={height} x2={width} y2={height} stroke='currentColor' strokeWidth={1} />;
+
+    if (type === 'number') {
+        return (
+            <g>
+                {axisLine}
+                {minValue < 0 &&
+                    new Array(negativeLines).fill(null).map((_, index) => {
+                        const value = -negativeRange * (negativeLines - index);
+                        return renderText((index * width) / totalLines, height, formatValue(value));
+                    })}
+
+                {new Array(positiveLines + 1).fill(null).map((_, index) => {
+                    const value = positiveRange * index;
+                    return renderText(((index + negativeLines) * width) / totalLines, height, formatValue(value));
+                })}
+            </g>
+        );
+    }
 
     return (
-        <g className='x-axis'>
+        <g>
+            {axisLine}
             {layout === 'horizontal' ? (
-                // Render axis for horizontal layout (categories)
-                data.map((entry, index) => (
-                    <text
-                        key={uuidv4()}
-                        x={(index + 0.5) * (width / data.length)}
-                        y={height}
-                        textAnchor='middle'
-                        dominantBaseline='hanging'
-                    >
-                        {entry[dataKey]}
-                    </text>
-                ))
+                data.map((entry, index) => renderText((index + 0.5) * (width / data.length), height, entry[dataKey]))
             ) : (
-                // Render axis for vertical layout (values)
                 <>
                     {minValue < 0 &&
-                        // Render negative values
                         new Array(negativeLines).fill(null).map((_, index) => {
                             const value = -negativeRange * (negativeLines - index);
-                            return (
-                                <text
-                                    key={uuidv4()}
-                                    x={(index * width) / totalLines}
-                                    y={height + height * 0.02}
-                                    textAnchor='middle'
-                                    dominantBaseline='hanging'
-                                >
-                                    {value.toFixed(2)}
-                                </text>
-                            );
+                            return renderText((index * width) / totalLines, height, formatValue(value));
                         })}
 
                     {new Array(positiveLines + 1).fill(null).map((_, index) => {
                         const value = positiveRange * index;
-                        return (
-                            <text
-                                key={uuidv4()}
-                                x={((index + negativeLines) * width) / totalLines}
-                                y={height + height * 0.02}
-                                textAnchor='middle'
-                                dominantBaseline='hanging'
-                            >
-                                {value.toFixed(2)}
-                            </text>
-                        );
+                        return renderText(((index + negativeLines) * width) / totalLines, height, formatValue(value));
                     })}
                 </>
             )}

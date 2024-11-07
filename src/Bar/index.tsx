@@ -20,7 +20,7 @@ interface BarProps {
     onMouseOut?: () => void;
 }
 
-const Bar = ({
+const Bar: React.FC<BarProps> = ({
     data = [],
     dataKey,
     fill,
@@ -37,7 +37,7 @@ const Bar = ({
     stackIdPos = 0,
     onMouseOver = () => {},
     onMouseOut = () => {},
-}: BarProps) => (
+}) => (
     <g>
         {data.map((entry) => {
             const value = entry[dataKey];
@@ -59,6 +59,8 @@ const Bar = ({
                             width={width}
                             height={barHeight}
                             fill={fill}
+                            className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
+                            style={{ transformOrigin: 'bottom' }}
                             onMouseOver={(event) => {
                                 const { name, ...rest } = entry;
                                 onMouseOver(event, { name, ...rest });
@@ -76,6 +78,8 @@ const Bar = ({
                             width={barWidth}
                             height={height}
                             fill={fill}
+                            className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
+                            style={{ transformOrigin: 'left' }}
                             onMouseOver={(event) => {
                                 const { name, ...rest } = entry;
                                 onMouseOver(event, { name, ...rest });
@@ -97,6 +101,8 @@ const Bar = ({
                     width={width}
                     height={barHeight}
                     fill={fill}
+                    className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
+                    style={{ transformOrigin: 'bottom' }}
                     onMouseOver={(event) => {
                         const { name, ...rest } = entry;
                         onMouseOver(event, { name, ...rest });
@@ -111,6 +117,8 @@ const Bar = ({
                     width={barWidth}
                     height={height}
                     fill={fill}
+                    className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
+                    style={{ transformOrigin: 'left' }}
                     onMouseOver={(event) => {
                         const { name, ...rest } = entry;
                         onMouseOver(event, { name, ...rest });

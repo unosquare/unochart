@@ -28,7 +28,7 @@ interface BarChartProps {
     layout?: 'horizontal' | 'vertical';
 }
 
-const BarChart = ({
+const BarChart: React.FC<BarChartProps> = ({
     data,
     width = DEFAULT_WIDTH,
     height = DEFAULT_HEIGHT,
@@ -37,7 +37,7 @@ const BarChart = ({
     barCategoryGap = DEFAULT_BAR_CATEGORY_GAP,
     barGap = DEFAULT_BAR_GAP,
     layout = DEFAULT_LAYOUT,
-}: BarChartProps) => {
+}) => {
     const [tooltipData, setTooltipData] = useState<{
         name: string;
         values: { key: string; value: number; color: string }[];
@@ -68,7 +68,6 @@ const BarChart = ({
     );
     const { maxValue, minValue } = roundMaxValue(data, hasStackedBars);
 
-    // Asignar un stackId único a cada Bar que no lo tenga
     const barComponents = React.Children.toArray(children).map((child) => {
         if ((child as React.ReactElement).type === Bar && !(child as React.ReactElement).props.stackId) {
             return React.cloneElement(child as React.ReactElement, { stackId: uuidv4() });
@@ -203,13 +202,14 @@ const BarChart = ({
     };
 
     return (
-        <div
-            className='relative inline-block'
-            style={{
-                margin: `${margin.top ?? DEFAULT_MARGIN}px ${margin.right ?? DEFAULT_MARGIN}px ${margin.bottom ?? DEFAULT_MARGIN}px ${margin.left ?? DEFAULT_MARGIN}px`,
-            }}
-        >
-            <svg ref={svgRef} width={width} height={height + height * 0.1} className='' onMouseLeave={handleMouseLeave}>
+        <div className='relative inline-block bg-white p-4'>
+            <svg
+                ref={svgRef}
+                width={width}
+                height={height + height * 0.1}
+                className='overflow-visible'
+                onMouseLeave={handleMouseLeave}
+            >
                 <g
                     transform={`translate(${(margin.left ?? DEFAULT_MARGIN) + leftMargin}, ${
                         (margin.top ?? DEFAULT_MARGIN) + height * 0.025
@@ -295,7 +295,11 @@ const BarChart = ({
                     ))}
                 </g>
             </svg>
-            {legendComponent && <Legend items={legendItems} />}
+            {legendComponent && (
+                <div className='mt-4'>
+                    <Legend items={legendItems} />
+                </div>
+            )}
             {tooltipComponent && <Tooltip tooltipData={tooltipData} position={position} />}
         </div>
     );
