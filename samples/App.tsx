@@ -17,6 +17,7 @@ import ReferenceLineChart from './pages/ReferenceLineChart';
 import NoNullsChart from './pages/NoNulls';
 import LineChartWithLabels from './pages/LineChartWithLabels';
 import ScatterChartExample from './pages/ScatterChartExample';
+import ScatterChartWithLines from './pages/ScatterChartWithLines';
 
 const App: React.FC = () => {
   return (
@@ -41,6 +42,7 @@ const App: React.FC = () => {
             <Route path="/no-nulls" element={<NoNullsChart />} />
             <Route path="/line-chart-with-labels" element={<LineChartWithLabels />} />
             <Route path="/scatter-chart" element={<ScatterChartExample />} />
+            <Route path="/scatter-chart-with-lines" element={<ScatterChartWithLines />} />
           </Routes>
         </main>
       </div>

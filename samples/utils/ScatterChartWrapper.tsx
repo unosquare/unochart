@@ -14,12 +14,14 @@ import { ScatterChartWrapperProps } from './types';
 export default function ScatterChartWrapper({
   initialWidth = 730,
   initialHeight = 250,
-  initialMargin = { top: 5, right: 30, left: 20, bottom: 5 }
+  initialMargin = { top: 5, right: 30, left: 20, bottom: 5 },
+  initialLine = false,
 }: ScatterChartWrapperProps) {
   const [width, setWidth] = useState(initialWidth);
   const [height, setHeight] = useState(initialHeight);
   const [margin, setMargin] = useState(initialMargin);
   const [fill, setFill] = useState('#8884d8');
+  const [line, setLine] = useState(initialLine);
 
   const scatterChartTypes = NAV_SECTIONS.find(section => section.category === 'Scatter Charts')?.items || [];
 
@@ -58,7 +60,7 @@ export default function ScatterChartWrapper({
               <YAxis dataKey="y" type="number" />
               <Tooltip />
               <Legend />
-              <Scatter data={SCATTER_DATA} fill={fill} />
+              <Scatter data={SCATTER_DATA} fill={fill} line={line} />
             </ScatterChart>
           </div>
         </div>
@@ -76,6 +78,8 @@ export default function ScatterChartWrapper({
               setData={() => {}}
               fill={fill}
               setFill={setFill}
+              line={line}
+              setLine={setLine}
             />
           </div>
         </div>
