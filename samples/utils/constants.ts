@@ -23,6 +23,8 @@ export const NAV_SECTIONS = [
     ]),
     createNavSection('Scatter Charts', [
         { name: 'Scatter Chart', path: '/scatter-chart' },
+        { name: 'Scatter Chart with Lines', path: '/scatter-chart-with-lines' },
+        { name: 'Scatter Chart with Labels', path: '/scatter-chart-with-labels' },
     ]),
 ];
 

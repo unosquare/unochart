@@ -8,20 +8,25 @@ import YAxis from '../../src/YAxis';
 import Tooltip from '../../src/Tooltip';
 import Legend from '../../src/Legend';
 import ScatterChartControls from './ScatterChartControls';
+import LabelList from '../../src/LabelList'; // Importar LabelList
 import { SCATTER_DATA, NAV_SECTIONS } from './constants';
 import { ScatterChartWrapperProps } from './types';
 
 export default function ScatterChartWrapper({
   initialWidth = 730,
   initialHeight = 250,
-  initialMargin = { top: 5, right: 30, left: 20, bottom: 5 }
+  initialMargin = { top: 5, right: 30, left: 20, bottom: 5 },
+  initialLine = false,
+  initialLabels = false,
 }: ScatterChartWrapperProps) {
   const [width, setWidth] = useState(initialWidth);
   const [height, setHeight] = useState(initialHeight);
   const [margin, setMargin] = useState(initialMargin);
   const [fill, setFill] = useState('#8884d8');
+  const [line, setLine] = useState(initialLine);
+  const [labels, setLabels] = useState(initialLabels);
 
-  const scatterChartTypes = NAV_SECTIONS.find(section => section.category === 'Scatter Charts')?.items || [];
+  const scatterChartTypes = NAV_SECTIONS.find((section) => section.category === 'Scatter Charts')?.items || [];
 
   return (
     <div className="p-6">
@@ -49,7 +54,7 @@ export default function ScatterChartWrapper({
             </ul>
           </div>
         </div>
-        
+
         <div className="flex-1 min-w-0">
           <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
             <ScatterChart width={width} height={height} data={SCATTER_DATA} margin={margin}>
@@ -58,7 +63,9 @@ export default function ScatterChartWrapper({
               <YAxis dataKey="y" type="number" />
               <Tooltip />
               <Legend />
-              <Scatter data={SCATTER_DATA} fill={fill} />
+              <Scatter data={SCATTER_DATA} fill={fill} line={line}>
+                {labels && <LabelList dataKey="x" />}
+              </Scatter>
             </ScatterChart>
           </div>
         </div>
@@ -76,6 +83,10 @@ export default function ScatterChartWrapper({
               setData={() => {}}
               fill={fill}
               setFill={setFill}
+              line={line}
+              setLine={setLine}
+              labels={labels}
+              setLabels={setLabels}
             />
           </div>
         </div>

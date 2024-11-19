@@ -10,6 +10,8 @@ export interface ScatterChartWrapperProps {
   initialWidth?: number;
   initialHeight?: number;
   initialMargin?: { top: number; right: number; bottom: number; left: number };
+  initialLine?: boolean;
+  initialLabels?: boolean;
 }
 
 export interface ScatterChartControlsProps {
