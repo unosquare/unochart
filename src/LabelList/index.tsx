@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface LabelListProps {
+export interface LabelListProps {
   data: Array<{ [key: string]: any }>;
   xScale: (value: number) => number;
   yScale: (value: number) => number;

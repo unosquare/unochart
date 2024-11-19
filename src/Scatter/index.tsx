@@ -1,13 +1,13 @@
 import React from 'react';
-import LabelList from '../LabelList';
+import LabelList, { LabelListProps } from '../LabelList';
 
 interface ScatterProps {
-  data: Array<{ x: number; y: number; z?: number }>;
+  data: Array<{ [key: string]: any }>;
   xScale: (value: number) => number;
   yScale: (value: number) => number;
   fill?: string;
   line?: boolean;
-  hoveredPoint: number | null;
+  hoveredPoint?: number | null;
   children?: React.ReactNode;
 }
 
@@ -17,7 +17,7 @@ const Scatter: React.FC<ScatterProps> = ({
   yScale,
   fill = 'blue',
   line = false,
-  hoveredPoint,
+  hoveredPoint = null,
   children,
 }) => {
   const sortedData = [...data].sort((a, b) => a.x - b.x);
@@ -31,7 +31,6 @@ const Scatter: React.FC<ScatterProps> = ({
             cy={yScale(point.y)}
             r={5}
             fill={fill}
-            className=""
           />
           {line && index > 0 && (
             <line
@@ -45,14 +44,16 @@ const Scatter: React.FC<ScatterProps> = ({
           )}
         </React.Fragment>
       ))}
-      {/* Renderizar los hijos como LabelList */}
-      {children &&
-        React.Children.map(children, (child) => {
-          if (React.isValidElement(child) && child.type === LabelList) {
-            return React.cloneElement(child, { data, xScale, yScale });
-          }
-          return null;
-        })}
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement<LabelListProps>(child) && child.type === LabelList) {
+          return React.cloneElement(child, {
+            data: sortedData,
+            xScale,
+            yScale,
+          });
+        }
+        return child;
+      })}
     </>
   );
 };
