@@ -1,4 +1,4 @@
-const createNavSection = (category: string, items: { name: string, path: string }[]) => ({ category, items });
+const createNavSection = (category: string, items: { name: string; path: string }[]) => ({ category, items });
 
 export const NAV_SECTIONS = [
     createNavSection('Bar Charts', [
@@ -28,7 +28,6 @@ export const NAV_SECTIONS = [
     ]),
 ];
 
-
 export const SCATTER_DATA = [
     { x: 100, y: 200, z: 200 },
     { x: 120, y: 100, z: 260 },
@@ -36,9 +35,9 @@ export const SCATTER_DATA = [
     { x: 140, y: 250, z: 280 },
     { x: 150, y: 400, z: 500 },
     { x: 110, y: 280, z: 200 },
-  ];
-  
-  export const LINE_DATA_WITH_NULLS = [
+];
+
+export const LINE_DATA_WITH_NULLS = [
     { name: 'Page A', uv: 4000 },
     { name: 'Page B', uv: 3000 },
     { name: 'Page C', uv: 2000 },
@@ -46,9 +45,9 @@ export const SCATTER_DATA = [
     { name: 'Page E', uv: 1890 },
     { name: 'Page F', uv: 2390 },
     { name: 'Page G', uv: 3490 },
-  ];
-  
-  export const LINE_DATA = [
+];
+
+export const LINE_DATA = [
     { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
     { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
     { name: 'Page C', uv: 2000, pv: 9800, amt: 2290 },
@@ -56,39 +55,39 @@ export const SCATTER_DATA = [
     { name: 'Page E', uv: 1890, pv: 4800, amt: 2181 },
     { name: 'Page F', uv: 2390, pv: 3800, amt: 2500 },
     { name: 'Page G', uv: 3490, pv: 4300, amt: 2100 },
-  ];
-  
-  export const LINE_CONFIG = [
+];
+
+export const LINE_CONFIG = [
     {
-      id: 'uv',
-      type: 'monotone',
-      dataKey: 'uv',
-      stroke: '#8884d8',
-      strokeDasharray: '3 3',
-      connectNulls: false,
-      label: true
+        id: 'uv',
+        type: 'monotone',
+        dataKey: 'uv',
+        stroke: '#8884d8',
+        strokeDasharray: '3 3',
+        connectNulls: false,
+        label: true,
     },
     {
-      id: 'pv',
-      type: 'monotone',
-      dataKey: 'pv',
-      stroke: '#82ca9d',
-      strokeDasharray: '3 3',
-      connectNulls: false,
-      label: true
+        id: 'pv',
+        type: 'monotone',
+        dataKey: 'pv',
+        stroke: '#82ca9d',
+        strokeDasharray: '3 3',
+        connectNulls: false,
+        label: true,
     },
     {
-      id: 'amt',
-      type: 'monotone',
-      dataKey: 'amt',
-      stroke: '#ffc658',
-      strokeDasharray: '3 3',
-      connectNulls: false,
-      label: true
-    }
-  ];
-  
-  export const BAR_DATA = [
+        id: 'amt',
+        type: 'monotone',
+        dataKey: 'amt',
+        stroke: '#ffc658',
+        strokeDasharray: '3 3',
+        connectNulls: false,
+        label: true,
+    },
+];
+
+export const BAR_DATA = [
     { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
     { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
     { name: 'Page C', uv: 2000, pv: 9800, amt: 2290 },
@@ -96,4 +95,4 @@ export const SCATTER_DATA = [
     { name: 'Page E', uv: 1890, pv: 4800, amt: 2181 },
     { name: 'Page F', uv: 2390, pv: 3800, amt: 2500 },
     { name: 'Page G', uv: 3490, pv: 4300, amt: 2100 },
-  ];
+];

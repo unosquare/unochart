@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 interface PolarGridProps {
     cx: string | number;
@@ -15,8 +15,8 @@ const PolarGrid: React.FC<PolarGridProps> = ({
     concentricCircles = 4,
     stroke = 'grey',
 }) => {
-    const computedCx = typeof cx === 'string' && cx.endsWith('%') ? (parseFloat(cx) / 100) * 730 : cx;
-    const computedCy = typeof cy === 'string' && cy.endsWith('%') ? (parseFloat(cy) / 100) * 250 : cy;
+    const computedCx = typeof cx === 'string' && cx.endsWith('%') ? (Number.parseFloat(cx) / 100) * 730 : cx;
+    const computedCy = typeof cy === 'string' && cy.endsWith('%') ? (Number.parseFloat(cy) / 100) * 250 : cy;
 
     const radialAngles = Array.from({ length: radialLines }, (_, i) => (360 / radialLines) * i);
     const radiusSteps = Array.from({ length: concentricCircles }, (_, i) => (100 / concentricCircles) * (i + 1));

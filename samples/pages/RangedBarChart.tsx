@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import BarChartWrapper from '../utils/BarChartWrapper';
 import { Bar } from '../../src';
-
+import BarChartWrapper from '../utils/BarChartWrapper';
 
 const RangedBarChart = () => {
     const data = [
@@ -18,13 +17,11 @@ const RangedBarChart = () => {
 
     return (
         <div>
-      <BarChartWrapper data={data}>
-        <Bar dataKey="temperature" fill="#8884d8" />
-      </BarChartWrapper>
-    </div>
+            <BarChartWrapper data={data}>
+                <Bar dataKey='temperature' fill='#8884d8' />
+            </BarChartWrapper>
+        </div>
     );
 };
-
-
 
 export default RangedBarChart;

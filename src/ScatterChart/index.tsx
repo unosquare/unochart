@@ -1,10 +1,10 @@
-import React, { Children, cloneElement, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Children, cloneElement, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import CartesianGrid from '../CartesianGrid';
-import XAxis from '../XAxis';
-import YAxis from '../YAxis';
-import Tooltip from '../Tooltip';
 import Legend from '../Legend';
 import Scatter from '../Scatter';
+import Tooltip from '../Tooltip';
+import XAxis from '../XAxis';
+import YAxis from '../YAxis';
 
 interface ScatterChartProps {
     width: number;
@@ -99,7 +99,7 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
                 }
                 return closest;
             },
-            { point: null, distance: Infinity, index: -1 },
+            { point: null, distance: Number.POSITIVE_INFINITY, index: -1 },
         );
 
         if (closestPoint.point && closestPoint.distance < 50) {

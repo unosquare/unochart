@@ -1,5 +1,5 @@
 import React from 'react';
-import LabelList, { LabelListProps } from '../LabelList';
+import LabelList, { type LabelListProps } from '../LabelList';
 
 interface ScatterProps {
     data: Array<{ [key: string]: any }>;

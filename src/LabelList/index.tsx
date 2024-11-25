@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 export interface LabelListProps {
     data: Array<{ [key: string]: any }>;

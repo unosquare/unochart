@@ -2,7 +2,7 @@ import React from 'react';
 import ScatterChartWrapper from '../utils/ScatterChartWrapper';
 
 const ScatterChartExample = () => {
-  return <ScatterChartWrapper />;
+    return <ScatterChartWrapper />;
 };
 
 export default ScatterChartExample;
