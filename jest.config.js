@@ -11,19 +11,25 @@ module.exports = {
                 tsconfig: 'tsconfig.test.json',
             },
         ],
-        '^.+\\.(js|jsx|mjs)$': ['babel-jest', {
-            presets: [
-                ['@babel/preset-env', {
-                    targets: {
-                        node: 'current',
-                    },
-                }],
-                '@babel/preset-react',
-            ],
-        }],
+        '^.+\\.(js|jsx|mjs)$': [
+            'babel-jest',
+            {
+                presets: [
+                    [
+                        '@babel/preset-env',
+                        {
+                            targets: {
+                                node: 'current',
+                            },
+                        },
+                    ],
+                    '@babel/preset-react',
+                ],
+            },
+        ],
     },
     transformIgnorePatterns: [
-        'node_modules/(?!(d3-shape|d3-path|internmap|d3-array|d3-color|d3-interpolate|d3-time|d3-time-format|d3-format|d3-scale)/)'
+        'node_modules/(?!(d3-shape|d3-path|internmap|d3-array|d3-color|d3-interpolate|d3-time|d3-time-format|d3-format|d3-scale)/)',
     ],
     testMatch: ['<rootDir>/src/**/*.spec.tsx', '<rootDir>/src/**/*.test.ts'],
     setupFilesAfterEnv: ['<rootDir>/jest-setup.tsx'],
@@ -32,5 +38,5 @@ module.exports = {
     },
     testEnvironmentOptions: {
         customExportConditions: ['node', 'node-addons'],
-    }
+    },
 };

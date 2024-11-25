@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import Bar from '../Bar';
 import CartesianGrid from '../CartesianGrid';
+import Legend from '../Legend';
+import Tooltip from '../Tooltip';
 import XAxis from '../XAxis';
 import YAxis from '../YAxis';
-import Tooltip from '../Tooltip';
-import Legend from '../Legend';
-import Bar from '../Bar';
 import {
-    ChartData,
+    type ChartData,
     DEFAULT_BAR_CATEGORY_GAP,
     DEFAULT_BAR_GAP,
     DEFAULT_HEIGHT,

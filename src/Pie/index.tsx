@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import type React from 'react';
+import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 interface PieProps {
@@ -32,8 +33,8 @@ const Pie: React.FC<PieProps> = ({
     paddingAngle = 0,
     activeShape = false,
 }) => {
-    const computedCx = typeof cx === 'string' && cx.endsWith('%') ? (parseFloat(cx) / 100) * 730 : cx;
-    const computedCy = typeof cy === 'string' && cy.endsWith('%') ? (parseFloat(cy) / 100) * 250 : cy;
+    const computedCx = typeof cx === 'string' && cx.endsWith('%') ? (Number.parseFloat(cx) / 100) * 730 : cx;
+    const computedCy = typeof cy === 'string' && cy.endsWith('%') ? (Number.parseFloat(cy) / 100) * 250 : cy;
 
     const totalValue = data.reduce((acc, item) => acc + (item[dataKey] as number), 0);
     const angleRange = endAngle - startAngle;

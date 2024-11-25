@@ -1,11 +1,11 @@
-import React, { Children, cloneElement, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Children, cloneElement, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import CartesianGrid from '../CartesianGrid';
-import XAxis from '../XAxis';
-import YAxis from '../YAxis';
-import Tooltip from '../Tooltip';
 import Legend from '../Legend';
 import Line from '../Line';
 import ReferenceLine from '../ReferenceLine';
+import Tooltip from '../Tooltip';
+import XAxis from '../XAxis';
+import YAxis from '../YAxis';
 import { roundMaxValue } from '../utils';
 
 interface LineChartProps {

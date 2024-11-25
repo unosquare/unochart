@@ -1,4 +1,4 @@
-import { ChartData } from '../constants';
+import type { ChartData } from '../constants';
 
 export const findMinValue = (data: ChartData): number => {
     let minValue: number;
@@ -12,7 +12,7 @@ export const findMinValue = (data: ChartData): number => {
                     } else if (Array.isArray(v)) {
                         return Math.min(...v); // Usar el valor mínimo del rango
                     }
-                    return Infinity; // Valor por defecto si no es ni número ni array
+                    return Number.POSITIVE_INFINITY; // Valor por defecto si no es ni número ni array
                 }),
             ),
         ),
@@ -21,7 +21,7 @@ export const findMinValue = (data: ChartData): number => {
     return Math.floor(minValue);
 };
 
-export const roundMaxValue = (data: ChartData, stacked: boolean = false): { maxValue: number; minValue: number } => {
+export const roundMaxValue = (data: ChartData, stacked = false): { maxValue: number; minValue: number } => {
     let maxValue: number;
     let minValue: number = findMinValue(data);
 
@@ -47,7 +47,7 @@ export const roundMaxValue = (data: ChartData, stacked: boolean = false): { maxV
                         } else if (Array.isArray(v)) {
                             return Math.max(...v); // Usar el valor máximo del rango
                         }
-                        return -Infinity; // Valor por defecto si no es ni número ni array
+                        return Number.NEGATIVE_INFINITY; // Valor por defecto si no es ni número ni array
                     }),
                 ),
             ),
@@ -82,7 +82,7 @@ export const roundMaxValue = (data: ChartData, stacked: boolean = false): { maxV
 
 export const parseGap = (gap: string | number, totalSize: number): number => {
     if (typeof gap === 'string' && gap.includes('%')) {
-        return (parseFloat(gap) / 100) * totalSize;
+        return (Number.parseFloat(gap) / 100) * totalSize;
     }
     return Number(gap);
 };
