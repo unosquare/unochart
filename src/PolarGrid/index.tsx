@@ -15,14 +15,14 @@ const PolarGrid: React.FC<PolarGridProps> = ({
     concentricCircles = 4,
     stroke = 'grey',
 }) => {
-    const computedCx = typeof cx === 'string' && cx.endsWith('%') ? (Number.parseFloat(cx) / 100) * 730 : cx;
-    const computedCy = typeof cy === 'string' && cy.endsWith('%') ? (Number.parseFloat(cy) / 100) * 250 : cy;
+    const computedCx = typeof cx === 'string' && cx.endsWith('%') ? (Number.parseFloat(cx) / 100) * 730 : cx || 0;
+    const computedCy = typeof cy === 'string' && cy.endsWith('%') ? (Number.parseFloat(cy) / 100) * 250 : cy || 0;
 
     const radialAngles = Array.from({ length: radialLines }, (_, i) => (360 / radialLines) * i);
     const radiusSteps = Array.from({ length: concentricCircles }, (_, i) => (100 / concentricCircles) * (i + 1));
 
     return (
-        <g transform={`translate(${computedCx}, ${computedCy})`} className='polar-grid'>
+        <g transform={`translate(${isNaN(computedCx) ? 0 : computedCx}, ${isNaN(computedCy) ? 0 : computedCy})`} className='polar-grid'>
             {radialAngles.map((angle, index) => (
                 <line
                     key={`line-${index}`}

@@ -26,6 +26,9 @@ export const NAV_SECTIONS = [
         { name: 'Scatter Chart with Lines', path: '/scatter-chart-with-lines' },
         { name: 'Scatter Chart with Labels', path: '/scatter-chart-with-labels' },
     ]),
+    createNavSection('Radar Charts', [
+        { name: 'Simple Radar Chart', path: '/simple-radar-chart' },
+    ]),
 ];
 
 export const SCATTER_DATA = [
@@ -56,6 +59,17 @@ export const LINE_DATA = [
     { name: 'Page F', uv: 2390, pv: 3800, amt: 2500 },
     { name: 'Page G', uv: 3490, pv: 4300, amt: 2100 },
 ];
+
+
+export const RADAR_DATA = [
+    { subject: 'Math', A: 120, B: 110, fullMark: 150 },
+    { subject: 'Chinese', A: 98, B: 130, fullMark: 150 },
+    { subject: 'English', A: 86, B: 130, fullMark: 150 },
+    { subject: 'Geography', A: 99, B: 100, fullMark: 150 },
+    { subject: 'Physics', A: 85, B: 90, fullMark: 150 },
+    { subject: 'History', A: 65, B: 85, fullMark: 150 },
+];
+
 
 export const LINE_CONFIG = [
     {

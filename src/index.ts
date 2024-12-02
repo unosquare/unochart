@@ -14,3 +14,4 @@ export { default as LineChart } from './LineChart';
 export { default as Line } from './Line';
 export { default as ReferenceLine } from './ReferenceLine';
 export { default as ScatterChart } from './ScatterChart';
+export { default as RadarChart } from './RadarChart';
