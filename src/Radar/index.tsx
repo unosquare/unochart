@@ -7,7 +7,7 @@ interface RadarProps {
   stroke: string;
   fill: string;
   fillOpacity: number;
-  radius: number;
+  radius?: number;
 }
 
 const Radar: React.FC<RadarProps> = ({
@@ -19,26 +19,25 @@ const Radar: React.FC<RadarProps> = ({
   fillOpacity,
   radius = 100,
 }) => {
-  const validRadius = isNaN(radius) ? 0 : radius;
   const angleStep = 360 / data.length;
 
-  // Calcular las coordenadas para la serie de datos
+  // Calculate points for the radar shape
   const points = data.map((entry, index) => {
     const value = entry[dataKey];
     const angle = angleStep * index;
-    const x = Math.cos((Math.PI / 180) * angle) * (value / 150) * validRadius;  // Normalizando con 150 como max valor
-    const y = Math.sin((Math.PI / 180) * angle) * (value / 150) * validRadius;
+    const scaledRadius = (value / 150) * radius;  // Scale based on max value of 150
+    const x = Math.cos((Math.PI / 180) * angle) * scaledRadius;
+    const y = Math.sin((Math.PI / 180) * angle) * scaledRadius;
     return { x, y };
   });
 
-  // Construir la ruta (path) del radar
+  // Create SVG path
   const path = points
     .map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x},${point.y}`)
-    .join(' ') + ' Z'; // Z cierra la ruta
+    .join(' ') + ' Z';
 
   return (
     <g>
-      {/* Radar área */}
       <path
         d={path}
         fill={fill}
@@ -47,7 +46,6 @@ const Radar: React.FC<RadarProps> = ({
         strokeWidth={2}
         className="transition-all duration-300 ease-in-out"
       />
-      {/* Radar bordes */}
       {points.map((point, index) => (
         <circle
           key={`radar-point-${index}`}
@@ -55,6 +53,7 @@ const Radar: React.FC<RadarProps> = ({
           cy={point.y}
           r={3}
           fill={stroke}
+          className="transition-all duration-300 ease-in-out"
         />
       ))}
     </g>
@@ -62,3 +61,4 @@ const Radar: React.FC<RadarProps> = ({
 };
 
 export default Radar;
+

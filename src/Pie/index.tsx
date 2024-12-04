@@ -6,8 +6,8 @@ interface PieProps {
     data: Array<{ name: string; value: number }>;
     dataKey: keyof { name: string; value: number };
     nameKey: string;
-    cx: string | number;
-    cy: string | number;
+    cx?: string | number;
+    cy?: string | number;
     innerRadius?: number;
     outerRadius: number;
     fill: string;
@@ -22,8 +22,6 @@ const Pie: React.FC<PieProps> = ({
     data,
     dataKey,
     nameKey,
-    cx,
-    cy,
     innerRadius = 0,
     outerRadius,
     fill,
@@ -33,18 +31,13 @@ const Pie: React.FC<PieProps> = ({
     paddingAngle = 0,
     activeShape = false,
 }) => {
-    const computedCx = typeof cx === 'string' && cx.endsWith('%') ? (Number.parseFloat(cx) / 100) * 730 : cx;
-    const computedCy = typeof cy === 'string' && cy.endsWith('%') ? (Number.parseFloat(cy) / 100) * 250 : cy;
-
     const totalValue = data.reduce((acc, item) => acc + (item[dataKey] as number), 0);
     const angleRange = endAngle - startAngle;
-
     let currentAngle = startAngle + 180;
-
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
     return (
-        <g transform={`translate(${computedCx}, ${computedCy})`}>
+        <g>
             {data.map((entry, index) => {
                 const value = entry[dataKey] as number;
                 const angle = (value / totalValue) * angleRange - paddingAngle;
@@ -57,17 +50,16 @@ const Pie: React.FC<PieProps> = ({
                 const innerY = Math.sin((Math.PI / 180) * nextAngle) * innerRadius;
 
                 const pathData = `
-          M ${Math.cos((Math.PI / 180) * currentAngle) * innerRadius} ${Math.sin((Math.PI / 180) * currentAngle) * innerRadius}
-          L ${Math.cos((Math.PI / 180) * currentAngle) * outerRadius} ${Math.sin((Math.PI / 180) * currentAngle) * outerRadius}
-          A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${outerX} ${outerY}
-          L ${innerX} ${innerY}
-          A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${Math.cos((Math.PI / 180) * currentAngle) * innerRadius} ${Math.sin((Math.PI / 180) * currentAngle) * innerRadius}
-          Z
-        `;
+                    M ${Math.cos((Math.PI / 180) * currentAngle) * innerRadius} ${Math.sin((Math.PI / 180) * currentAngle) * innerRadius}
+                    L ${Math.cos((Math.PI / 180) * currentAngle) * outerRadius} ${Math.sin((Math.PI / 180) * currentAngle) * outerRadius}
+                    A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${outerX} ${outerY}
+                    L ${innerX} ${innerY}
+                    A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${Math.cos((Math.PI / 180) * currentAngle) * innerRadius} ${Math.sin((Math.PI / 180) * currentAngle) * innerRadius}
+                    Z
+                `;
 
                 currentAngle = nextAngle + paddingAngle;
 
-                // Lógica de etiquetas
                 let labelText = '';
                 if (label === 'percent') {
                     labelText = `${((value / totalValue) * 100).toFixed(1)}%`;
@@ -85,12 +77,12 @@ const Pie: React.FC<PieProps> = ({
                         key={uuidv4()}
                         onMouseEnter={() => setActiveIndex(index)}
                         onMouseLeave={() => setActiveIndex(null)}
-                        className='transition-transform duration-300 ease-in-out'
+                        className="transition-transform duration-300 ease-in-out"
                     >
                         <path
                             d={pathData}
                             fill={fill}
-                            stroke='white'
+                            stroke="white"
                             strokeWidth={2}
                             className={`transition-all duration-300 ease-in-out ${isActive ? 'filter drop-shadow-lg' : ''}`}
                             style={{ transform: isActive ? 'scale(1.05)' : 'scale(1)' }}
@@ -99,10 +91,10 @@ const Pie: React.FC<PieProps> = ({
                             <text
                                 x={Math.cos((Math.PI / 180) * (currentAngle - angle / 2)) * (adjustedOuterRadius + 10)}
                                 y={Math.sin((Math.PI / 180) * (currentAngle - angle / 2)) * (adjustedOuterRadius + 10)}
-                                textAnchor='middle'
-                                dominantBaseline='middle'
+                                textAnchor="middle"
+                                dominantBaseline="middle"
                                 fill={fill}
-                                className='text-xs font-semibold transition-all duration-300 ease-in-out'
+                                className="text-xs font-semibold transition-all duration-300 ease-in-out"
                                 style={{ fontSize: isActive ? '12px' : '10px' }}
                             >
                                 {labelText}
@@ -116,3 +108,4 @@ const Pie: React.FC<PieProps> = ({
 };
 
 export default Pie;
+

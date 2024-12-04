@@ -10,14 +10,23 @@ interface RadarChartProps {
     data: Array<{ [key: string]: any }>;
     width: number;
     height: number;
-    outerRadius: number;
+    outerRadius?: number;
     children: ReactNode;
 }
 
-const RadarChart: React.FC<RadarChartProps> = ({ data, width, height, outerRadius, children }) => {
-    const cx = isNaN(width / 2) ? 0 : width / 2;
-    const cy = isNaN(height / 2) ? 0 : height / 2;
-    const validOuterRadius = isNaN(outerRadius) ? 0 : outerRadius;
+const RadarChart: React.FC<RadarChartProps> = ({ 
+    data, 
+    width, 
+    height, 
+    outerRadius, 
+    children 
+}) => {
+    // Calculate center points based on width and height
+    const cx = width / 2;
+    const cy = height / 2;
+    // Use the smaller dimension to ensure chart fits
+    const maxRadius = Math.min(width, height) / 2;
+    const validOuterRadius = outerRadius || maxRadius * 0.8; // 80% of max by default
 
     const processedChildren = React.Children.map(children, (child) => {
         if (!React.isValidElement(child)) return null;
@@ -27,7 +36,7 @@ const RadarChart: React.FC<RadarChartProps> = ({ data, width, height, outerRadiu
         if (child.type === PolarGrid || child.type === PolarAngleAxis || child.type === PolarRadiusAxis) {
             childProps.cx = cx;
             childProps.cy = cy;
-            childProps.outerRadius = validOuterRadius;
+            childProps.radius = validOuterRadius;
         }
 
         if (child.type === PolarAngleAxis) {
@@ -35,15 +44,12 @@ const RadarChart: React.FC<RadarChartProps> = ({ data, width, height, outerRadiu
         }
 
         if (child.type === PolarRadiusAxis) {
-            childProps.angle = 0; // Añadir un valor por defecto para angle
-            childProps.domain = [0, 150]; // Añadir un valor por defecto para domain
-            childProps.radius = validOuterRadius; // Asegúrate de que radius se pase correctamente
+            childProps.angle = 0;
+            childProps.domain = [0, 150];
         }
 
         if (child.type === Radar) {
-            childProps.cx = cx;
-            childProps.cy = cy;
-            childProps.outerRadius = validOuterRadius;
+            childProps.radius = validOuterRadius;
             childProps.data = data;
         }
 
@@ -55,8 +61,15 @@ const RadarChart: React.FC<RadarChartProps> = ({ data, width, height, outerRadiu
     });
 
     return (
-        <svg width={width} height={height} className="bg-white">
-            <g transform={`translate(${cx}, ${cy})`}>{processedChildren}</g>
+        <svg 
+            width={width} 
+            height={height} 
+            className="bg-white"
+            viewBox={`0 0 ${width} ${height}`}
+        >
+            <g transform={`translate(${cx}, ${cy})`}>
+                {processedChildren}
+            </g>
         </svg>
     );
 };
