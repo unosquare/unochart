@@ -7,17 +7,9 @@ import PolarRadiusAxis from '../PolarRadiusAxis';
 import Radar from '../Radar';
 import Legend from '../Legend';
 import Tooltip from '../Tooltip';
+import { mockData } from '../constants';
 
 describe('RadarChart', () => {
-    const mockData = [
-        { subject: 'Math', A: 120, B: 110, fullMark: 150 },
-        { subject: 'Chinese', A: 98, B: 130, fullMark: 150 },
-        { subject: 'English', A: 86, B: 130, fullMark: 150 },
-        { subject: 'Geography', A: 99, B: 100, fullMark: 150 },
-        { subject: 'Physics', A: 85, B: 90, fullMark: 150 },
-        { subject: 'History', A: 65, B: 85, fullMark: 150 },
-    ];
-
     it('renders without crashing', () => {
         const { container } = render(
             <RadarChart data={mockData} width={500} height={500}>
