@@ -24,7 +24,7 @@ const ChartControls: React.FC<ChartControlsProps> = ({
     setWidth,
     height,
     setHeight,
-    margin,
+    margin = { top: 0, right: 0, bottom: 0, left: 0 }, // Añadir valor predeterminado
     setMargin,
     showXAxis,
     setShowXAxis,
