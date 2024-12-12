@@ -19,6 +19,7 @@ import ScatterChartWithLines from './pages/ScatterChartWithLines';
 import StackedBarChart from './pages/StackedBarChart';
 import StraightAnglePieChart from './pages/StraightAnglePieChart';
 import SimpleRadarChart from './pages/SimpleRadarChart';
+import SimpleAreaChart from './pages/SimpleAreaChart';
 import NavBar from './utils/NavBar';
 
 const App: React.FC = () => {
@@ -47,6 +48,7 @@ const App: React.FC = () => {
                         <Route path='/scatter-chart-with-lines' element={<ScatterChartWithLines />} />
                         <Route path='/scatter-chart-with-labels' element={<ScatterChartWithLabels />} />
                         <Route path='/simple-radar-chart' element={<SimpleRadarChart />} />
+                        <Route path='/simple-area-chart' element={<SimpleAreaChart />} />
                     </Routes>
                 </main>
             </div>
