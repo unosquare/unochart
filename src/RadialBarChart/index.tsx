@@ -22,7 +22,7 @@ const RadialBarChart: React.FC<RadialBarChartProps> = ({
   children,
 }) => {
   const cx = width / 2;
-  const cy = height / 2; // Cambiado para centrar el gráfico
+  const cy = height / 2;
 
   return (
     <svg width={width} height={height} className="bg-white">
