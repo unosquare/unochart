@@ -1,4 +1,5 @@
 import React from 'react';
+import ChartControls from './ChartControls';
 
 interface RadialBarChartControlsProps {
   width: number;
@@ -30,58 +31,90 @@ const RadialBarChartControls: React.FC<RadialBarChartControlsProps> = ({
   setEndAngle,
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm p-4 w-80">
-      <h3 className="font-semibold text-gray-800 mb-4">Chart Controls</h3>
-      <label>Width: {width}px</label>
-      <input
-        type="range"
-        min="300"
-        max="1000"
-        value={width}
-        onChange={(e) => setWidth(Number(e.target.value))}
-        className="w-full mb-2"
-      />
-      <label>Height: {height}px</label>
-      <input
-        type="range"
-        min="150"
-        max="500"
-        value={height}
-        onChange={(e) => setHeight(Number(e.target.value))}
-        className="w-full mb-2"
-      />
-      <label>Inner Radius</label>
-      <input
-        type="text"
-        value={innerRadius}
-        onChange={(e) => setInnerRadius(e.target.value)}
-        className="w-full mb-2 p-1 border rounded"
-      />
-      <label>Outer Radius</label>
-      <input
-        type="text"
-        value={outerRadius}
-        onChange={(e) => setOuterRadius(e.target.value)}
-        className="w-full mb-2 p-1 border rounded"
-      />
-      <label>Start Angle: {startAngle}°</label>
-      <input
-        type="range"
-        min="0"
-        max="360"
-        value={startAngle}
-        onChange={(e) => setStartAngle(Number(e.target.value))}
-        className="w-full mb-2"
-      />
-      <label>End Angle: {endAngle}°</label>
-      <input
-        type="range"
-        min="0"
-        max="360"
-        value={endAngle}
-        onChange={(e) => setEndAngle(Number(e.target.value))}
-        className="w-full mb-2"
-      />
+    <div>
+      <div className="hide-controls">
+        <ChartControls
+          width={width}
+          setWidth={setWidth}
+          height={height}
+          setHeight={setHeight}
+          margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+          setMargin={() => {}}
+          showXAxis={false}
+          setShowXAxis={undefined}
+          showYAxis={false}
+          setShowYAxis={undefined}
+          showCartesianGrid={false}
+          setShowCartesianGrid={undefined}
+          showTooltip={false}
+          setShowTooltip={undefined}
+          showLegend={false}
+          setShowLegend={undefined}
+        />
+      </div>
+      <style jsx>{`
+        .hide-controls .grid.grid-cols-2.gap-4,
+        .hide-controls .space-y-2 {
+          display: none !important;
+        }
+      `}</style>
+      <div className="p-4 bg-gray-50 rounded-lg space-y-4">
+        <div>
+          <label htmlFor="innerRadius" className="block text-sm font-medium text-gray-700 mb-1">
+            Inner Radius
+          </label>
+          <input
+            id="innerRadius"
+            type="text"
+            value={innerRadius}
+            onChange={(e) => setInnerRadius(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="outerRadius" className="block text-sm font-medium text-gray-700 mb-1">
+            Outer Radius
+          </label>
+          <input
+            id="outerRadius"
+            type="text"
+            value={outerRadius}
+            onChange={(e) => setOuterRadius(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="startAngle" className="block text-sm font-medium text-gray-700 mb-1">
+            Start Angle: {startAngle}°
+          </label>
+          <input
+            id="startAngle"
+            type="range"
+            min="0"
+            max="360"
+            value={startAngle}
+            onChange={(e) => setStartAngle(Number(e.target.value))}
+            className="w-full"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="endAngle" className="block text-sm font-medium text-gray-700 mb-1">
+            End Angle: {endAngle}°
+          </label>
+          <input
+            id="endAngle"
+            type="range"
+            min="0"
+            max="360"
+            value={endAngle}
+            onChange={(e) => setEndAngle(Number(e.target.value))}
+            className="w-full"
+          />
+        </div>
+      </div>
     </div>
   );
 };
