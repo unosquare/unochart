@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Tooltip from '../Tooltip';
+import YAxis from '../YAxis';
 
 interface AreaChartProps {
   data: Array<{ [key: string]: any }>;
@@ -13,13 +14,9 @@ const AreaChart: React.FC<AreaChartProps> = ({ data, width, height, margin, chil
   const chartWidth = width - margin.left - margin.right;
   const chartHeight = height - margin.top - margin.bottom;
 
-  // Obtener valores min y max de los datos y redondearlos
-  const allValues = data.flatMap((item) => item.temperature || []);
-  const rawMinValue = Math.min(...allValues);
-  const rawMaxValue = Math.max(...allValues);
-
-  const minValue = Math.floor(rawMinValue / 5) * 5; // Redondear hacia abajo
-  const maxValue = Math.ceil(rawMaxValue / 5) * 5;  // Redondear hacia arriba
+  const temperatures = data.map((item) => item.temperature).flat();
+  const minValue = Math.min(...temperatures);
+  const maxValue = Math.max(...temperatures);
 
   const [tooltip, setTooltip] = useState<{
     x: number;
@@ -33,7 +30,7 @@ const AreaChart: React.FC<AreaChartProps> = ({ data, width, height, margin, chil
 
   const xScale = (value: any) => {
     const index = data.findIndex((item) => item.day === value);
-    return (index / (data.length - 1)) * chartWidth;
+    return (index + 0.5) * (chartWidth / data.length);
   };
 
   const yScale = (value: number) => {
@@ -76,6 +73,21 @@ const AreaChart: React.FC<AreaChartProps> = ({ data, width, height, margin, chil
         <g transform={`translate(${margin.left + chartWidth * 0.03}, ${margin.top})`}>
           {React.Children.map(children, (child) => {
             if (React.isValidElement(child)) {
+              // Forzamos el eje Y a usar 'number' y nuestros "simple ticks"
+              if (child.type === YAxis) {
+                return React.cloneElement(child, {
+                  data,
+                  xScale,
+                  yScale,
+                  width: chartWidth,
+                  height: chartHeight,
+                  minValue,
+                  maxValue,
+                  type: 'number',
+                  enableSimpleTicks: true, // <-- NUEVA PROP
+                });
+              }
+              // Otros children (Area, XAxis, etc.) se clonan normal
               return React.cloneElement(child, {
                 data,
                 xScale,
@@ -121,8 +133,12 @@ const AreaChart: React.FC<AreaChartProps> = ({ data, width, height, margin, chil
           )}
         </g>
       </svg>
-      {/* Render Tooltip */}
-      {tooltip.content && <Tooltip position={{ x: tooltip.x + margin.left, y: tooltip.y + margin.top }} tooltipData={tooltip.content} />}
+      {tooltip.content && (
+        <Tooltip
+          position={{ x: tooltip.x + margin.left, y: tooltip.y + margin.top }}
+          tooltipData={tooltip.content}
+        />
+      )}
     </div>
   );
 };
