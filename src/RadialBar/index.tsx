@@ -81,7 +81,7 @@ const RadialBar: React.FC<RadialBarProps> = ({
                 const labelRadius = (barInnerR + barOuterR) / 2;
 
                 const barSize = barOuterR - barInnerR;
-                const fontSize = Math.max(8, Math.min(14, barSize / 2));
+                const fontSize = Math.max(10, Math.min(14, barSize / 2));
 
                 // Adjust label position to be inside the bar
                 const labelX = labelRadius * Math.cos(midAngleRad);
@@ -90,15 +90,24 @@ const RadialBar: React.FC<RadialBarProps> = ({
                 return (
                     <g 
                         key={`radial-bar-${index}`}
-                        className="transition-all duration-300 ease-in-out"
+                        className="transition-all duration-500 ease-in-out"
                     >
                         <path
                             d={pathD}
                             fill={entry.fill}
-                            className="transition-all duration-300 ease-in-out hover:opacity-80"
+                            className="transition-all duration-300 ease-in-out hover:opacity-80 hover:filter hover:brightness-110"
                             data-name={entry.name}
                             data-value={value}
-                        />
+                        >
+                            <animate
+                                attributeName="opacity"
+                                from="0"
+                                to="1"
+                                dur="0.5s"
+                                begin={`${index * 0.1}s`}
+                                fill="freeze"
+                            />
+                        </path>
                         {label && (
                             <text
                                 x={labelX}
@@ -106,13 +115,21 @@ const RadialBar: React.FC<RadialBarProps> = ({
                                 fill={label.fill}
                                 textAnchor="middle"
                                 dominantBaseline="middle"
-                                className={`font-medium select-none`}
+                                className="font-medium select-none transition-all duration-300 ease-in-out"
                                 style={{
                                     fontSize: `${fontSize}px`,
-                                    filter: 'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.7))',
+                                    filter: 'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.9))',
                                 }}
                             >
                                 {Math.abs(value).toFixed(2)}
+                                <animate
+                                    attributeName="opacity"
+                                    from="0"
+                                    to="1"
+                                    dur="0.5s"
+                                    begin={`${index * 0.1 + 0.2}s`}
+                                    fill="freeze"
+                                />
                             </text>
                         )}
                     </g>

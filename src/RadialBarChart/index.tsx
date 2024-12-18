@@ -27,6 +27,7 @@ const RadialBarChart: React.FC<RadialBarChartProps> = ({
     const cy = height / 2;
     const [tooltipData, setTooltipData] = useState<any>(null);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+    const scaleFactor = Math.max(0.5, Math.min(1.5, width / 730));
 
     const handleMouseMove = (event: React.MouseEvent<SVGElement>) => {
         const target = event.target as SVGElement;
@@ -58,10 +59,10 @@ const RadialBarChart: React.FC<RadialBarChartProps> = ({
     };
 
     return (
-        <div className="relative w-full flex flex-col items-center justify-center gap-4">
+        <div className="relative w-full h-full flex flex-col items-center justify-center">
             <svg
-                width={width}
-                height={height}
+                width="100%"
+                height="100%"
                 viewBox={`0 0 ${width} ${height}`}
                 className="overflow-visible"
                 onMouseMove={handleMouseMove}
@@ -98,7 +99,8 @@ const RadialBarChart: React.FC<RadialBarChartProps> = ({
             {React.Children.map(children, (child) => {
                 if (React.isValidElement(child) && child.type === Legend) {
                     return React.cloneElement(child, {
-                        items: data.map((item) => ({ color: item.fill, label: item.name }))
+                        items: data.map((item) => ({ color: item.fill, label: item.name })),
+                        scaleFactor
                     });
                 }
                 return null;
