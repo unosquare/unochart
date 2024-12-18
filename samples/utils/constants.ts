@@ -29,6 +29,12 @@ export const NAV_SECTIONS = [
     createNavSection('Radar Charts', [
         { name: 'Simple Radar Chart', path: '/simple-radar-chart' },
     ]),
+    createNavSection('Area Charts', [
+        { name: 'Simple Area Chart', path: '/simple-area-chart' },
+    ]),
+    createNavSection('Radial Bar Charts', [
+        { name: 'Simple Radial Bar Chart', path: '/simple-radial-bar-chart' },
+    ]),
 ];
 
 export const SCATTER_DATA = [
