@@ -31,7 +31,7 @@ const Home: React.FC = () => {
     ];
 
     return (
-        <div className='min-h-[calc(100vh-64px)] bg-gradient-to-br from-indigo-100 to-blue-100'>
+        <div className='min-h-[calc(100vh-64px)] bg-linear-to-br from-indigo-100 to-blue-100'>
             <div className='max-w-6xl mx-auto px-4 py-12'>
                 <div className='text-center mb-12'>
                     <h1 className='text-5xl font-extrabold text-gray-900 mb-3'>UnoChart</h1>
@@ -42,7 +42,7 @@ const Home: React.FC = () => {
                         <Link
                             key={category.path}
                             to={category.path}
-                            className='group bg-white/80 backdrop-blur-sm border border-gray-100 rounded-xl hover:shadow-xl transition-all duration-300 ease-in-out hover:-translate-y-1'
+                            className='group bg-white/80 backdrop-blur-xs border border-gray-100 rounded-xl hover:shadow-xl transition-all duration-300 ease-in-out hover:-translate-y-1'
                         >
                             <div className='p-6'>
                                 <div className='flex items-center gap-4 mb-3'>

@@ -54,14 +54,14 @@ export default function PieChartControls({
                                 type='checkbox'
                                 checked={showPolarGrid}
                                 onChange={(e) => setShowPolarGrid?.(e.target.checked)}
-                                className='form-checkbox h-5 w-5 text-blue-600 rounded transition duration-300 ease-in-out'
+                                className='form-checkbox h-5 w-5 text-blue-600 rounded-sm transition duration-300 ease-in-out'
                             />
                             <span className='text-sm font-medium'>Show Polar Grid</span>
                         </label>
                     </div>
                 )}
                 {pies.map((pie, index) => (
-                    <div key={pie.id} className='bg-gray-50 p-4 rounded-lg mb-4 shadow-sm'>
+                    <div key={pie.id} className='bg-gray-50 p-4 rounded-lg mb-4 shadow-xs'>
                         <h3 className='text-lg font-medium text-gray-800 mb-2'>Pie {index + 1} Settings</h3>
                         <div className='grid grid-cols-2 gap-4'>
                             {pie.innerRadius !== undefined && (
@@ -79,7 +79,7 @@ export default function PieChartControls({
                                         onChange={(e) =>
                                             handlePieChange(index, 'innerRadius', Number.parseInt(e.target.value, 10))
                                         }
-                                        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out'
+                                        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out'
                                     />
                                 </div>
                             )}
@@ -98,7 +98,7 @@ export default function PieChartControls({
                                         onChange={(e) =>
                                             handlePieChange(index, 'outerRadius', Number.parseInt(e.target.value, 10))
                                         }
-                                        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out'
+                                        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out'
                                     />
                                 </div>
                             )}
@@ -116,7 +116,7 @@ export default function PieChartControls({
                                                     : 'none'
                                         }
                                         onChange={(e) => handleLabelTypeChange(index, e.target.value)}
-                                        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out'
+                                        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out'
                                     >
                                         <option value='none'>None</option>
                                         <option value='percent'>Percent</option>
@@ -139,7 +139,7 @@ export default function PieChartControls({
                                         value={pie.label.join(',')}
                                         placeholder='Comma-separated labels'
                                         onChange={(e) => handleCustomLabelChange(index, e.target.value)}
-                                        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out'
+                                        className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out'
                                     />
                                 </div>
                             )}

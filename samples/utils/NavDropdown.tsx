@@ -20,7 +20,7 @@ const NavDropdown: React.FC<NavDropdownProps> = ({ category, items, currentPath 
         <div className='relative'>
             <button
                 onClick={toggleDropdown}
-                className='flex items-center space-x-1 px-4 py-2 rounded-md text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50'
+                className='flex items-center space-x-1 px-4 py-2 rounded-md text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-300 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50'
                 aria-expanded={isOpen}
                 aria-haspopup='true'
             >

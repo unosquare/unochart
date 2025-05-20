@@ -47,7 +47,7 @@ export default function RadialBarChartWrapper({
         <div className='p-6'>
             <div className='flex gap-6'>
                 <div className='w-64 shrink-0'>
-                    <div className='bg-white rounded-lg shadow-sm border border-gray-100'>
+                    <div className='bg-white rounded-lg shadow-xs border border-gray-100'>
                         <div className='p-4 border-b border-gray-100'>
                             <h3 className='font-semibold text-gray-900'>Radial Bar Chart Types</h3>
                         </div>
@@ -71,7 +71,7 @@ export default function RadialBarChartWrapper({
                 </div>
 
                 <div className='flex-1 min-w-0'>
-                    <div className='bg-white rounded-lg shadow-sm border border-gray-100 p-4'>
+                    <div className='bg-white rounded-lg shadow-xs border border-gray-100 p-4'>
                         <RadialBarChart
                             width={width}
                             height={height}
@@ -94,7 +94,7 @@ export default function RadialBarChartWrapper({
                 </div>
 
                 <div className='w-80 shrink-0'>
-                    <div className='bg-white rounded-lg shadow-sm border border-gray-100'>
+                    <div className='bg-white rounded-lg shadow-xs border border-gray-100'>
                         <RadialBarChartControls
                             width={width}
                             setWidth={setWidth}

@@ -12,7 +12,7 @@ const Legend: React.FC<LegendProps> = ({ items = [] }) => {
             {validItems.map((item, index) => (
                 <div 
                     key={`legend-item-${index}`} 
-                    className='flex items-center bg-white rounded-full px-3 py-1 shadow-sm transition-all duration-300 ease-in-out hover:shadow-md' 
+                    className='flex items-center bg-white rounded-full px-3 py-1 shadow-xs transition-all duration-300 ease-in-out hover:shadow-md' 
                     data-testid='legend-item'
                 >
                     <div
