@@ -1,6 +1,14 @@
 import type React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import type { BarPointClickEvent } from '../../samples/utils/types';
+
+export interface BarPointClickEvent<T> {
+    event: React.MouseEvent<SVGRectElement>;
+    dataKey: keyof T;
+    index: number;
+    value: number;
+    name: string;
+    entry: T;
+}
 
 interface BarProps {
     data?: Array<{ name: string; [key: string]: any }>;
@@ -69,10 +77,10 @@ const Bar: React.FC<BarProps> = ({
                                 onMouseOver(event, { name, ...rest });
                             }}
                             onMouseOut={onMouseOut}
-                            onClick={(e) => {
-                                console.log("Bar Component: rect onClick triggered!", { e, dataKey, value: entry[dataKey], entry });
-                                onClick({ event: e as React.MouseEvent<SVGRectElement>, dataKey, value: Number(value), name: entry.name, entry });
-                            }}
+                            onClick={(event) => onClick({
+                                dataKey, value: Number(value), name: entry.name, entry,
+                                event: event, index: Number(stackId)
+                            })}
                         />
                     );
                 } else {
@@ -92,10 +100,10 @@ const Bar: React.FC<BarProps> = ({
                                 onMouseOver(event, { name, ...rest });
                             }}
                             onMouseOut={onMouseOut}
-                            onClick={(e) => {
-                                console.log("Bar Component: rect onClick triggered!", { e, dataKey, value: entry[dataKey], entry });
-                                onClick({ event: e as React.MouseEvent<SVGRectElement>, dataKey, value: Number(value), name: entry.name, entry });
-                            }}
+                            onClick={(event) => onClick({
+                                dataKey, value: Number(value), name: entry.name, entry,
+                                event: event, index: Number(stackId)
+                            })}
                         />
                     );
                 }
@@ -103,7 +111,6 @@ const Bar: React.FC<BarProps> = ({
 
             const barHeight = (value / maxValue) * height;
             const barWidth = (value / maxValue) * width;
-
             return layout === 'horizontal' ? (
                 <rect
                     key={uuidv4()}
@@ -119,10 +126,10 @@ const Bar: React.FC<BarProps> = ({
                         onMouseOver(event, { name, ...rest });
                     }}
                     onMouseOut={onMouseOut}
-                    onClick={(e) => {
-                        console.log("Bar Component: rect onClick triggered!", { e, dataKey, value: entry[dataKey], entry });
-                        onClick({ event: e as React.MouseEvent<SVGRectElement>, dataKey, value: Number(value), name: entry.name, entry });
-                    }}
+                    onClick={(event) => onClick({
+                        dataKey, value: Number(value), name: entry.name, entry,
+                        event: event, index: Number(stackId)
+                    })}
                 />
             ) : (
                 <rect
@@ -139,10 +146,10 @@ const Bar: React.FC<BarProps> = ({
                         onMouseOver(event, { name, ...rest });
                     }}
                     onMouseOut={onMouseOut}
-                    onClick={(e) => {
-                        console.log("Bar Component: rect onClick triggered!", { e, dataKey, value: entry[dataKey], entry });
-                        onClick({ event: e as React.MouseEvent<SVGRectElement>, dataKey, value: Number(value), name: entry.name, entry });
-                    }}
+                    onClick={(event) => onClick({
+                        dataKey, value: Number(value), name: entry.name, entry,
+                        event: event, index: Number(stackId)
+                    })}
                 />
             );
         })}

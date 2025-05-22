@@ -1,6 +1,6 @@
 import type React from 'react';
 import PieChartWrapper from '../utils/PieChartWrapper';
-import type { PieClickEvent } from '../utils/types';
+import type { PieClickEvent } from '../../src/Pie';
 
 const PieChartExample: React.FC = () => {
     const initialPies = [{ id: 1, innerRadius: 0, outerRadius: 85, cx: '50%', cy: '50%', showLabels: true }];

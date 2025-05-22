@@ -1,4 +1,6 @@
 import type React from 'react';
+import type { LinePointClickEvent } from '../../src/Line';
+import type { PieClickEvent } from '../../src/Pie';
 
 export interface ScatterDataPoint {
     x: number;
@@ -39,14 +41,6 @@ export interface LineConfig {
     dataKey: string;
 }
 
-export interface LinePointClickEvent<T> {
-    event: React.MouseEvent<SVGGElement>;
-    dataKey: keyof T;
-    value: number;
-    index: number;
-    entry: T;
-}
-
 export interface LineChartWrapperProps {
     initialLines: LineConfig[];
     additionalComponents?: React.ReactNode[];
@@ -69,21 +63,12 @@ export interface LineChartControlsProps {
     data: Array<any>;
 }
 
-export interface BarPointClickEvent<T> {
-    event: React.MouseEvent<SVGRectElement>;
-    dataKey: keyof T;
-    value: number;
-    name: string;
-    entry: T;
-}
-
 export interface BarChartWrapperProps {
     data: DataPoint[];
     children: React.ReactNode;
     initialWidth?: number;
     initialHeight?: number;
     initialMargin?: { top: number; right: number; bottom: number; left: number };
-    onClick?: (event: BarPointClickEvent<{ name: string; [key: string]: any }>) => void;
 }
 
 export interface BarChartControlsProps {
@@ -111,14 +96,6 @@ export interface BarChartControlsProps {
     setShowLegend: (show: boolean) => void;
 }
 
-export interface PieClickEvent {
-    event: React.MouseEvent<SVGGElement>;
-    percentage: string;
-    label: string;
-    value: number;
-    entry: { name: string; value: number };
-}
-
 export interface PieData {
     id: number;
     innerRadius?: number;
@@ -137,6 +114,7 @@ export interface PieChartWrapperProps {
     initialShowPolarGrid?: boolean;
     initialWidth?: number;
     initialHeight?: number;
+    initialMargin?: { top: number, right: number, left: number, bottom: number };
     onClick?: (event: PieClickEvent) => void;
 }
 

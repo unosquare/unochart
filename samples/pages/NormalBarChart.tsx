@@ -1,7 +1,7 @@
 import type React from 'react';
 import { Bar } from '../../src';
 import BarChartWrapper from '../utils/BarChartWrapper';
-import type { BarPointClickEvent } from '../utils/types';
+import type { BarPointClickEvent } from '../../src/Bar';
 
 const data = [
     { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
@@ -22,10 +22,10 @@ const NormalBarChart: React.FC = () => {
     
     return (
         <div>
-            <BarChartWrapper data={data} onClick={handleBarClick}>
-                <Bar dataKey='pv' fill='#8884d8' />
-                <Bar dataKey='amt' fill='#82ca9d' />
-                <Bar dataKey='uv' fill='#ffc658' />
+            <BarChartWrapper data={data}>
+                <Bar dataKey='pv' fill='#8884d8' onClick={handleBarClick}/>
+                <Bar dataKey='amt' fill='#82ca9d' onClick={handleBarClick}/>
+                <Bar dataKey='uv' fill='#ffc658' onClick={handleBarClick}/>
             </BarChartWrapper>
         </div>
     );

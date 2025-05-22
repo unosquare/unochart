@@ -1,6 +1,7 @@
 import React from 'react';
 import LineChartWrapper from '../utils/LineChartWrapper';
-import type { LineConfig, LinePointClickEvent } from '../utils/types';
+import type { LineConfig } from '../utils/types';
+import type { LinePointClickEvent } from '../../src/Line';
 
 const LineChartExample = () => {
     const initialLines = [

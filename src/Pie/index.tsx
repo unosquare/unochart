@@ -1,7 +1,14 @@
 import type React from 'react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import type { PieClickEvent } from '../../samples/utils/types';
+
+export interface PieClickEvent {
+    event: React.MouseEvent<SVGGElement>;
+    percentage: string;
+    label: string;
+    value: number;
+    entry: { name: string; value: number };
+}
 
 interface PieProps {
     data: Array<{ name: string; value: number }>;

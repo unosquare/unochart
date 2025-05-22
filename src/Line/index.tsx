@@ -1,7 +1,14 @@
 import type React from 'react';
 import { useMemo } from 'react';
 import { createLineGenerator, renderPathSegments } from './utils';
-import type { LinePointClickEvent } from '../../samples/utils/types';
+
+export interface LinePointClickEvent<T> {
+    event: React.MouseEvent<SVGGElement>;
+    dataKey: keyof T;
+    value: number;
+    index: number;
+    entry: T;
+}
 
 interface LineProps<T> {
     data: Array<T>;

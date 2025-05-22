@@ -16,7 +16,6 @@ import {
     DEFAULT_WIDTH,
 } from '../constants';
 import { parseGap, roundMaxValue } from './utils';
-import type { BarPointClickEvent } from '../../samples/utils/types';
 
 interface BarChartProps {
     data: ChartData;
@@ -27,7 +26,6 @@ interface BarChartProps {
     barCategoryGap?: string | number;
     barGap?: string | number;
     layout?: 'horizontal' | 'vertical';
-    onClick?: (event: BarPointClickEvent<{ name: string; [key: string]: any }>) => void;
 }
 
 const BarChart: React.FC<BarChartProps> = ({
@@ -39,7 +37,6 @@ const BarChart: React.FC<BarChartProps> = ({
     barCategoryGap = DEFAULT_BAR_CATEGORY_GAP,
     barGap = DEFAULT_BAR_GAP,
     layout = DEFAULT_LAYOUT,
-    onClick,
 }) => {
     const [tooltipData, setTooltipData] = useState<{
         name: string;
@@ -171,6 +168,7 @@ const BarChart: React.FC<BarChartProps> = ({
             }
 
             const barProps = {
+                ...child.props,
                 data: [entry],
                 width:
                     layout === 'horizontal'
@@ -190,7 +188,7 @@ const BarChart: React.FC<BarChartProps> = ({
                 stackIdPos,
                 onMouseOver: (event: React.MouseEvent) => handleMouseOver(event, { name: entry.name }),
                 onMouseOut: handleMouseOut,
-                onClick: onClick,
+                onClick: child.props.onClick,
             };
 
             const renderedBar = React.cloneElement(child, barProps);
