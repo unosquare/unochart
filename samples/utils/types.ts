@@ -1,4 +1,6 @@
 import type React from 'react';
+import type { LinePointClickEvent } from '../../src/Line';
+import type { PieClickEvent } from '../../src/Pie';
 
 export interface ScatterDataPoint {
     x: number;
@@ -46,6 +48,7 @@ export interface LineChartWrapperProps {
     initialHeight?: number;
     initialMargin?: { top: number; right: number; bottom: number; left: number };
     withNulls?: boolean;
+    onClick?: (event: LinePointClickEvent<LineConfig>) => void;
 }
 
 export interface LineChartControlsProps {
@@ -111,6 +114,8 @@ export interface PieChartWrapperProps {
     initialShowPolarGrid?: boolean;
     initialWidth?: number;
     initialHeight?: number;
+    initialMargin?: { top: number, right: number, left: number, bottom: number };
+    onClick?: (event: PieClickEvent) => void;
 }
 
 export interface PieChartControlsProps {

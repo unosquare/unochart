@@ -159,7 +159,7 @@ const BarChart: React.FC<BarChartProps> = ({
     const renderBars = (stackComponents: React.ReactElement[], entry: any) => {
         let accumulatedHeight = 0;
 
-        return stackComponents.map((child, barIndex) => {
+        return stackComponents.map((child: React.ReactElement, barIndex) => {
             const stackId = child.props.stackId;
             const stackIdPos = stackIdPositions[stackId] ?? currentStackIdPos;
             if (!(stackId in stackIdPositions)) {
@@ -168,6 +168,7 @@ const BarChart: React.FC<BarChartProps> = ({
             }
 
             const barProps = {
+                ...child.props,
                 data: [entry],
                 width:
                     layout === 'horizontal'
@@ -187,6 +188,7 @@ const BarChart: React.FC<BarChartProps> = ({
                 stackIdPos,
                 onMouseOver: (event: React.MouseEvent) => handleMouseOver(event, { name: entry.name }),
                 onMouseOut: handleMouseOut,
+                onClick: child.props.onClick,
             };
 
             const renderedBar = React.cloneElement(child, barProps);
@@ -202,7 +204,7 @@ const BarChart: React.FC<BarChartProps> = ({
     };
 
     return (
-        <div className='relative inline-block bg-white p-4'>
+        <div className='relative inline-block bg-white p-4' >
             <svg
                 ref={svgRef}
                 width={width}
@@ -281,7 +283,7 @@ const BarChart: React.FC<BarChartProps> = ({
                     )}
                     {data.map((entry, index) => (
                         <g
-                            key={uuidv4()}
+                            key={entry.name || index}
                             transform={
                                 layout === 'horizontal'
                                     ? `translate(${index * barZoneSize + adjustedCategoryGap / 2}, 0)`

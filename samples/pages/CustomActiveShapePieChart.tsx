@@ -1,5 +1,6 @@
 import type React from 'react';
 import PieChartWrapper from '../utils/PieChartWrapper';
+import type { PieClickEvent } from '../utils/types';
 
 const CustomActiveShapePieChart: React.FC = () => {
     const initialPies = [
@@ -16,7 +17,12 @@ const CustomActiveShapePieChart: React.FC = () => {
         },
     ];
 
-    return <PieChartWrapper initialPies={initialPies} />;
+    const handleClick = (event: PieClickEvent) => {
+        const { label, value } = event;
+        console.log(`Clicked on ${label} with value ${value}`);
+    };
+
+    return <PieChartWrapper initialPies={initialPies} onClick={handleClick} />;
 };
 
 export default CustomActiveShapePieChart;

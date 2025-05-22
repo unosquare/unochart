@@ -1,5 +1,13 @@
 import type React from 'react';
-import { v4 as uuidv4 } from 'uuid';
+
+export interface BarPointClickEvent<T> {
+    event: React.MouseEvent<SVGRectElement>;
+    dataKey: keyof T;
+    index: number;
+    value: number;
+    name: string;
+    entry: T;
+}
 
 interface BarProps {
     data?: Array<{ name: string; [key: string]: any }>;
@@ -18,6 +26,7 @@ interface BarProps {
     stackIdPos?: number;
     onMouseOver?: (event: React.MouseEvent, entry: { name: string; [key: string]: any }) => void;
     onMouseOut?: () => void;
+    onClick?: (event: BarPointClickEvent<{ name: string; [key: string]: any }>) => void;
 }
 
 const Bar: React.FC<BarProps> = ({
@@ -37,6 +46,7 @@ const Bar: React.FC<BarProps> = ({
     stackIdPos = 0,
     onMouseOver = () => {},
     onMouseOut = () => {},
+    onClick = () => {},
 }) => (
     <g>
         {data.map((entry) => {
@@ -49,7 +59,7 @@ const Bar: React.FC<BarProps> = ({
                     const barHeight = ((maxValueRange - minValueRange) / (maxValue - minValue)) * height;
                     return (
                         <rect
-                            key={uuidv4()}
+                            key={`${entry.name}-${dataKey}`}
                             x={stackIdPos * (width + barGap)}
                             y={
                                 height -
@@ -59,32 +69,40 @@ const Bar: React.FC<BarProps> = ({
                             width={width}
                             height={barHeight}
                             fill={fill}
-                            className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
+                            className='transition-all duration-300 ease-in-out hover:opacity-80 hover:shadow-lg'
                             style={{ transformOrigin: 'bottom' }}
                             onMouseOver={(event) => {
                                 const { name, ...rest } = entry;
                                 onMouseOver(event, { name, ...rest });
                             }}
                             onMouseOut={onMouseOut}
+                            onClick={(event) => onClick({
+                                dataKey, value: Number(value), name: entry.name, entry,
+                                event: event, index: Number(stackId)
+                            })}
                         />
                     );
                 } else {
                     const barWidth = ((maxValueRange - minValueRange) / (maxValue - minValue)) * width;
                     return (
                         <rect
-                            key={uuidv4()}
+                            key={`${entry.name}-${dataKey}`}
                             x={((minValueRange - minValue) / (maxValue - minValue)) * width + accumulatedHeight}
                             y={stackIdPos * (height + barGap)}
                             width={barWidth}
                             height={height}
                             fill={fill}
-                            className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
+                            className='transition-all duration-300 ease-in-out hover:opacity-80 hover:shadow-lg'
                             style={{ transformOrigin: 'left' }}
                             onMouseOver={(event) => {
                                 const { name, ...rest } = entry;
                                 onMouseOver(event, { name, ...rest });
                             }}
                             onMouseOut={onMouseOut}
+                            onClick={(event) => onClick({
+                                dataKey, value: Number(value), name: entry.name, entry,
+                                event: event, index: Number(stackId)
+                            })}
                         />
                     );
                 }
@@ -92,38 +110,45 @@ const Bar: React.FC<BarProps> = ({
 
             const barHeight = (value / maxValue) * height;
             const barWidth = (value / maxValue) * width;
-
             return layout === 'horizontal' ? (
                 <rect
-                    key={uuidv4()}
+                    key={`${entry.name}-${dataKey}`}
                     x={stackIdPos * (width + barGap)}
                     y={height - barHeight - accumulatedHeight}
                     width={width}
                     height={barHeight}
                     fill={fill}
-                    className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
+                    className='transition-all duration-300 ease-in-out hover:opacity-80 hover:shadow-lg'
                     style={{ transformOrigin: 'bottom' }}
                     onMouseOver={(event) => {
                         const { name, ...rest } = entry;
                         onMouseOver(event, { name, ...rest });
                     }}
                     onMouseOut={onMouseOut}
+                    onClick={(event) => onClick({
+                        dataKey, value: Number(value), name: entry.name, entry,
+                        event: event, index: Number(stackId)
+                    })}
                 />
             ) : (
                 <rect
-                    key={uuidv4()}
+                    key={`${entry.name}-${dataKey}`}
                     x={accumulatedHeight}
                     y={stackIdPos * (height + barGap)}
                     width={barWidth}
                     height={height}
                     fill={fill}
-                    className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
+                    className='transition-all duration-300 ease-in-out hover:opacity-80 hover:shadow-lg'
                     style={{ transformOrigin: 'left' }}
                     onMouseOver={(event) => {
                         const { name, ...rest } = entry;
                         onMouseOver(event, { name, ...rest });
                     }}
                     onMouseOut={onMouseOut}
+                    onClick={(event) => onClick({
+                        dataKey, value: Number(value), name: entry.name, entry,
+                        event: event, index: Number(stackId)
+                    })}
                 />
             );
         })}

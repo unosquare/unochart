@@ -63,6 +63,7 @@ export default function BarChartWrapper({
                             barCategoryGap={barCategoryGap}
                             barGap={barGap}
                             layout={layout}
+                            //onClick={onClick}
                         >
                             {showCartesianGrid && <CartesianGrid strokeDasharray='3 3' />}
                             {showXAxis && <XAxis />}

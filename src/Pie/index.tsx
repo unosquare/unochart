@@ -2,6 +2,14 @@ import type React from 'react';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
+export interface PieClickEvent {
+    event: React.MouseEvent<SVGGElement>;
+    percentage: string;
+    label: string;
+    value: number;
+    entry: { name: string; value: number };
+}
+
 interface PieProps {
     data: Array<{ name: string; value: number }>;
     dataKey: keyof { name: string; value: number };
@@ -16,6 +24,7 @@ interface PieProps {
     endAngle?: number;
     paddingAngle?: number;
     activeShape?: boolean;
+    onClick?: (event: PieClickEvent) => void;
 }
 
 const Pie: React.FC<PieProps> = ({
@@ -30,6 +39,7 @@ const Pie: React.FC<PieProps> = ({
     endAngle = 360,
     paddingAngle = 0,
     activeShape = false,
+    onClick = () => {},
 }) => {
     const totalValue = data.reduce((acc, item) => acc + (item[dataKey] as number), 0);
     const angleRange = endAngle - startAngle;
@@ -59,14 +69,16 @@ const Pie: React.FC<PieProps> = ({
                 `;
 
                 currentAngle = nextAngle + paddingAngle;
+                const percentage = ((value / totalValue) * 100).toFixed(1);
+                const labelName = Array.isArray(label) && label[index] ? label[index] : '';
 
                 let labelText = '';
                 if (label === 'percent') {
-                    labelText = `${((value / totalValue) * 100).toFixed(1)}%`;
+                    labelText = `${percentage}%`;
                 } else if (label === 'numbers') {
                     labelText = `${value}`;
                 } else if (Array.isArray(label) && label[index]) {
-                    labelText = label[index];
+                    labelText = labelName;
                 }
 
                 const isActive = activeShape && activeIndex === index;
@@ -78,6 +90,15 @@ const Pie: React.FC<PieProps> = ({
                         onMouseEnter={() => setActiveIndex(index)}
                         onMouseLeave={() => setActiveIndex(null)}
                         className="transition-transform duration-300 ease-in-out"
+                        onClick={(event) =>
+                                onClick({
+                                    event: event,
+                                    percentage: `${percentage}%`,
+                                    value: Number(value),
+                                    label: labelName,
+                                    entry: entry,
+                                })
+                            }
                     >
                         <path
                             d={pathData}
