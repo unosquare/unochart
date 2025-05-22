@@ -1,5 +1,6 @@
 import type React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import type { BarPointClickEvent } from '../../samples/utils/types';
 
 interface BarProps {
     data?: Array<{ name: string; [key: string]: any }>;
@@ -18,6 +19,7 @@ interface BarProps {
     stackIdPos?: number;
     onMouseOver?: (event: React.MouseEvent, entry: { name: string; [key: string]: any }) => void;
     onMouseOut?: () => void;
+    onClick?: (event: BarPointClickEvent<{ name: string; [key: string]: any }>) => void;
 }
 
 const Bar: React.FC<BarProps> = ({
@@ -37,6 +39,7 @@ const Bar: React.FC<BarProps> = ({
     stackIdPos = 0,
     onMouseOver = () => {},
     onMouseOut = () => {},
+    onClick = () => {},
 }) => (
     <g>
         {data.map((entry) => {
@@ -60,12 +63,16 @@ const Bar: React.FC<BarProps> = ({
                             height={barHeight}
                             fill={fill}
                             className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
-                            style={{ transformOrigin: 'bottom' }}
+                            style={{ transformOrigin: 'bottom', pointerEvents: 'all', cursor: 'pointer' }}
                             onMouseOver={(event) => {
                                 const { name, ...rest } = entry;
                                 onMouseOver(event, { name, ...rest });
                             }}
                             onMouseOut={onMouseOut}
+                            onClick={(e) => {
+                                console.log("Bar Component: rect onClick triggered!", { e, dataKey, value: entry[dataKey], entry });
+                                onClick({ event: e as React.MouseEvent<SVGRectElement>, dataKey, value: Number(value), name: entry.name, entry });
+                            }}
                         />
                     );
                 } else {
@@ -79,12 +86,16 @@ const Bar: React.FC<BarProps> = ({
                             height={height}
                             fill={fill}
                             className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
-                            style={{ transformOrigin: 'left' }}
+                            style={{ transformOrigin: 'left', pointerEvents: 'all', cursor: 'pointer' }}
                             onMouseOver={(event) => {
                                 const { name, ...rest } = entry;
                                 onMouseOver(event, { name, ...rest });
                             }}
                             onMouseOut={onMouseOut}
+                            onClick={(e) => {
+                                console.log("Bar Component: rect onClick triggered!", { e, dataKey, value: entry[dataKey], entry });
+                                onClick({ event: e as React.MouseEvent<SVGRectElement>, dataKey, value: Number(value), name: entry.name, entry });
+                            }}
                         />
                     );
                 }
@@ -102,12 +113,16 @@ const Bar: React.FC<BarProps> = ({
                     height={barHeight}
                     fill={fill}
                     className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
-                    style={{ transformOrigin: 'bottom' }}
+                    style={{ transformOrigin: 'bottom', pointerEvents: 'all', cursor: 'pointer' }}
                     onMouseOver={(event) => {
                         const { name, ...rest } = entry;
                         onMouseOver(event, { name, ...rest });
                     }}
                     onMouseOut={onMouseOut}
+                    onClick={(e) => {
+                        console.log("Bar Component: rect onClick triggered!", { e, dataKey, value: entry[dataKey], entry });
+                        onClick({ event: e as React.MouseEvent<SVGRectElement>, dataKey, value: Number(value), name: entry.name, entry });
+                    }}
                 />
             ) : (
                 <rect
@@ -118,12 +133,16 @@ const Bar: React.FC<BarProps> = ({
                     height={height}
                     fill={fill}
                     className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
-                    style={{ transformOrigin: 'left' }}
+                    style={{ transformOrigin: 'left', pointerEvents: 'all', cursor: 'pointer' }}
                     onMouseOver={(event) => {
                         const { name, ...rest } = entry;
                         onMouseOver(event, { name, ...rest });
                     }}
                     onMouseOut={onMouseOut}
+                    onClick={(e) => {
+                        console.log("Bar Component: rect onClick triggered!", { e, dataKey, value: entry[dataKey], entry });
+                        onClick({ event: e as React.MouseEvent<SVGRectElement>, dataKey, value: Number(value), name: entry.name, entry });
+                    }}
                 />
             );
         })}

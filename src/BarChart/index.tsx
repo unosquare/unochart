@@ -16,6 +16,7 @@ import {
     DEFAULT_WIDTH,
 } from '../constants';
 import { parseGap, roundMaxValue } from './utils';
+import type { BarPointClickEvent } from '../../samples/utils/types';
 
 interface BarChartProps {
     data: ChartData;
@@ -26,6 +27,7 @@ interface BarChartProps {
     barCategoryGap?: string | number;
     barGap?: string | number;
     layout?: 'horizontal' | 'vertical';
+    onClick?: (event: BarPointClickEvent<{ name: string; [key: string]: any }>) => void;
 }
 
 const BarChart: React.FC<BarChartProps> = ({
@@ -37,6 +39,7 @@ const BarChart: React.FC<BarChartProps> = ({
     barCategoryGap = DEFAULT_BAR_CATEGORY_GAP,
     barGap = DEFAULT_BAR_GAP,
     layout = DEFAULT_LAYOUT,
+    onClick,
 }) => {
     const [tooltipData, setTooltipData] = useState<{
         name: string;
@@ -159,7 +162,7 @@ const BarChart: React.FC<BarChartProps> = ({
     const renderBars = (stackComponents: React.ReactElement[], entry: any) => {
         let accumulatedHeight = 0;
 
-        return stackComponents.map((child, barIndex) => {
+        return stackComponents.map((child: React.ReactElement, barIndex) => {
             const stackId = child.props.stackId;
             const stackIdPos = stackIdPositions[stackId] ?? currentStackIdPos;
             if (!(stackId in stackIdPositions)) {
@@ -187,6 +190,7 @@ const BarChart: React.FC<BarChartProps> = ({
                 stackIdPos,
                 onMouseOver: (event: React.MouseEvent) => handleMouseOver(event, { name: entry.name }),
                 onMouseOut: handleMouseOut,
+                onClick: onClick,
             };
 
             const renderedBar = React.cloneElement(child, barProps);
@@ -202,7 +206,7 @@ const BarChart: React.FC<BarChartProps> = ({
     };
 
     return (
-        <div className='relative inline-block bg-white p-4'>
+        <div className='relative inline-block bg-white p-4' >
             <svg
                 ref={svgRef}
                 width={width}

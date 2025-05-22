@@ -1,6 +1,7 @@
 import React from 'react';
 import ReferenceLine from '../../src/ReferenceLine';
 import LineChartWrapper from '../utils/LineChartWrapper';
+import type { LinePointClickEvent, LineConfig } from '../utils/types';
 
 const ReferenceLineChart = () => {
     const initialLines = [
@@ -12,6 +13,10 @@ const ReferenceLineChart = () => {
         <ReferenceLine key='refLine1' x='Page C' stroke='red' label='Max PV PAGE' />,
         <ReferenceLine key='refLine2' y={5800} label='Max' stroke='red' />,
     ];
+
+    const handleClick = (event: LinePointClickEvent<LineConfig>) => {
+        console.log(`Click on ${event.dataKey} with index: ${event.index} and value: ${event.value}`);
+    };
 
     return (
         <LineChartWrapper
@@ -25,6 +30,7 @@ const ReferenceLineChart = () => {
                 left: 20,
                 bottom: 5,
             }}
+            onClick={handleClick}   
         />
     );
 };

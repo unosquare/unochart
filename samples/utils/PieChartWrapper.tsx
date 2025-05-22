@@ -26,6 +26,7 @@ export default function PieChartWrapper({
     initialWidth = 730,
     initialHeight = 250,
     initialMargin = { top: 5, right: 30, left: 20, bottom: 5 },
+    onClick,
 }: PieChartWrapperProps) {
     const [pies, setPies] = useState<PieData[]>(initialPies);
     const [showPolarGrid, setShowPolarGrid] = useState(initialShowPolarGrid);
@@ -82,6 +83,7 @@ export default function PieChartWrapper({
                                     fill={pieColors[index % pieColors.length]}
                                     label={pie.showLabels ? pie.label || undefined : undefined}
                                     activeShape={pie.activeShape}
+                                    onClick={onClick}
                                 />
                             ))}
                             <Tooltip />

@@ -10,7 +10,7 @@ import XAxis from '../../src/XAxis';
 import YAxis from '../../src/YAxis';
 import LineChartControls from './LineChartControls';
 import { LINE_CONFIG, LINE_DATA, LINE_DATA_WITH_NULLS, NAV_SECTIONS } from './constants';
-import type { DataPoint, LineChartWrapperProps } from './types';
+import type { DataPoint, LineChartWrapperProps, LinePointClickEvent } from './types';
 
 const LineChartWrapper: React.FC<LineChartWrapperProps> = ({
     initialLines = LINE_CONFIG,
@@ -19,6 +19,7 @@ const LineChartWrapper: React.FC<LineChartWrapperProps> = ({
     initialHeight = 250,
     initialMargin = { top: 5, right: 30, left: 20, bottom: 5 },
     withNulls = false,
+    onClick,
 }) => {
     const [lines, setLines] = useState(initialLines);
     const [width, setWidth] = useState(initialWidth);
@@ -72,6 +73,7 @@ const LineChartWrapper: React.FC<LineChartWrapperProps> = ({
                                     strokeDasharray={line.strokeDasharray}
                                     connectNulls={line.connectNulls}
                                     label={line.label}
+                                    onClick={onClick}
                                 />
                             ))}
                             {additionalComponents}

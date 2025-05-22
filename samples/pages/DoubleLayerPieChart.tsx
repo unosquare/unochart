@@ -1,5 +1,6 @@
 import type React from 'react';
 import PieChartWrapper from '../utils/PieChartWrapper';
+import type { PieClickEvent } from '../utils/types';
 
 const PieChartExample: React.FC = () => {
     const initialPies = [
@@ -7,7 +8,12 @@ const PieChartExample: React.FC = () => {
         { id: 2, innerRadius: 60, outerRadius: 80, cx: '50%', cy: '50%', showLabels: true },
     ];
 
-    return <PieChartWrapper initialPies={initialPies} />;
+    const handleClick = (event: PieClickEvent) => {
+        const { label, value } = event;
+        console.log(`Clicked on ${label} with value ${value}`);
+    };
+
+    return <PieChartWrapper initialPies={initialPies} onClick={handleClick} />;
 };
 
 export default PieChartExample;

@@ -11,6 +11,7 @@ export default function BarChartWrapper({
     initialWidth = 600,
     initialHeight = 400,
     initialMargin = { top: 5, right: 5, bottom: 5, left: 5 },
+    onClick,
 }: BarChartWrapperProps) {
     const [width, setWidth] = useState(initialWidth);
     const [height, setHeight] = useState(initialHeight);
@@ -63,6 +64,7 @@ export default function BarChartWrapper({
                             barCategoryGap={barCategoryGap}
                             barGap={barGap}
                             layout={layout}
+                            onClick={onClick}
                         >
                             {showCartesianGrid && <CartesianGrid strokeDasharray='3 3' />}
                             {showXAxis && <XAxis />}

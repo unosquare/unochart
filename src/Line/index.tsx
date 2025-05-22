@@ -1,6 +1,7 @@
 import type React from 'react';
 import { useMemo } from 'react';
 import { createLineGenerator, renderPathSegments } from './utils';
+import type { LinePointClickEvent } from '../../samples/utils/types';
 
 interface LineProps<T> {
     data: Array<T>;
@@ -28,6 +29,7 @@ interface LineProps<T> {
     connectNulls?: boolean;
     onMouseOver?: (event: React.MouseEvent, entry: T) => void;
     onMouseOut?: () => void;
+    onClick?: (event: LinePointClickEvent<T>) => void;
     label?: boolean;
 }
 
@@ -42,6 +44,7 @@ const Line = <T,>({
     connectNulls = false,
     onMouseOver = () => {},
     onMouseOut = () => {},
+    onClick = () => {},
     label = false,
 }: LineProps<T>) => {
     const processedData = useMemo(() => data.map((d, index) => ({ ...d, index })), [data]);
@@ -70,6 +73,15 @@ const Line = <T,>({
                             fill={stroke}
                             onMouseOver={(event) => onMouseOver(event, entry)}
                             onMouseOut={onMouseOut}
+                            onClick={(event) =>
+                                onClick({
+                                    event: event,
+                                    dataKey: dataKey,
+                                    value: Number(value),
+                                    index: index,
+                                    entry: entry,
+                                })
+                            }
                             className='hover:r-5 focus:r-5 transition-all duration-300 ease-in-out'
                         />
                         {label && (
