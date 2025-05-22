@@ -60,7 +60,7 @@ const Bar: React.FC<BarProps> = ({
                     const barHeight = ((maxValueRange - minValueRange) / (maxValue - minValue)) * height;
                     return (
                         <rect
-                            key={uuidv4()}
+                            key={`${entry.name}-${dataKey}`}
                             x={stackIdPos * (width + barGap)}
                             y={
                                 height -
@@ -70,8 +70,8 @@ const Bar: React.FC<BarProps> = ({
                             width={width}
                             height={barHeight}
                             fill={fill}
-                            className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
-                            style={{ transformOrigin: 'bottom', pointerEvents: 'all', cursor: 'pointer' }}
+                            className='transition-all duration-300 ease-in-out hover:opacity-80 hover:shadow-lg'
+                            style={{ transformOrigin: 'bottom' }}
                             onMouseOver={(event) => {
                                 const { name, ...rest } = entry;
                                 onMouseOver(event, { name, ...rest });
@@ -87,14 +87,14 @@ const Bar: React.FC<BarProps> = ({
                     const barWidth = ((maxValueRange - minValueRange) / (maxValue - minValue)) * width;
                     return (
                         <rect
-                            key={uuidv4()}
+                            key={`${entry.name}-${dataKey}`}
                             x={((minValueRange - minValue) / (maxValue - minValue)) * width + accumulatedHeight}
                             y={stackIdPos * (height + barGap)}
                             width={barWidth}
                             height={height}
                             fill={fill}
-                            className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
-                            style={{ transformOrigin: 'left', pointerEvents: 'all', cursor: 'pointer' }}
+                            className='transition-all duration-300 ease-in-out hover:opacity-80 hover:shadow-lg'
+                            style={{ transformOrigin: 'left' }}
                             onMouseOver={(event) => {
                                 const { name, ...rest } = entry;
                                 onMouseOver(event, { name, ...rest });
@@ -113,14 +113,14 @@ const Bar: React.FC<BarProps> = ({
             const barWidth = (value / maxValue) * width;
             return layout === 'horizontal' ? (
                 <rect
-                    key={uuidv4()}
+                    key={`${entry.name}-${dataKey}`}
                     x={stackIdPos * (width + barGap)}
                     y={height - barHeight - accumulatedHeight}
                     width={width}
                     height={barHeight}
                     fill={fill}
-                    className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
-                    style={{ transformOrigin: 'bottom', pointerEvents: 'all', cursor: 'pointer' }}
+                    className='transition-all duration-300 ease-in-out hover:opacity-80 hover:shadow-lg'
+                    style={{ transformOrigin: 'bottom' }}
                     onMouseOver={(event) => {
                         const { name, ...rest } = entry;
                         onMouseOver(event, { name, ...rest });
@@ -133,14 +133,14 @@ const Bar: React.FC<BarProps> = ({
                 />
             ) : (
                 <rect
-                    key={uuidv4()}
+                    key={`${entry.name}-${dataKey}`}
                     x={accumulatedHeight}
                     y={stackIdPos * (height + barGap)}
                     width={barWidth}
                     height={height}
                     fill={fill}
-                    className='transition-all duration-300 ease-in-out hover:opacity-80 hover:scale-105 hover:shadow-lg'
-                    style={{ transformOrigin: 'left', pointerEvents: 'all', cursor: 'pointer' }}
+                    className='transition-all duration-300 ease-in-out hover:opacity-80 hover:shadow-lg'
+                    style={{ transformOrigin: 'left' }}
                     onMouseOver={(event) => {
                         const { name, ...rest } = entry;
                         onMouseOver(event, { name, ...rest });

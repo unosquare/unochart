@@ -283,7 +283,7 @@ const BarChart: React.FC<BarChartProps> = ({
                     )}
                     {data.map((entry, index) => (
                         <g
-                            key={uuidv4()}
+                            key={entry.name || index}
                             transform={
                                 layout === 'horizontal'
                                     ? `translate(${index * barZoneSize + adjustedCategoryGap / 2}, 0)`
